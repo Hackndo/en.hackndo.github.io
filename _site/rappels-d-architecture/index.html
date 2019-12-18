@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Rappels d'architecture - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Rappels d'architecture" />
+    <meta name="twitter:description" content="Architecture d'un ordinateur pour aller plus loin dans l'exploitation kernel" />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2016/07/kernel_3.jpg" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Rappels d’architecture" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Architecture d’un ordinateur pour aller plus loin dans l’exploitation kernel" />
+<meta property="og:description" content="Architecture d’un ordinateur pour aller plus loin dans l’exploitation kernel" />
+<link rel="canonical" href="http://localhost:4000/rappels-d-architecture/" />
+<meta property="og:url" content="http://localhost:4000/rappels-d-architecture/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:image" content="http://localhost:4000/assets/uploads/2016/07/kernel_3.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-07-07T16:12:57+02:00" />
+<script type="application/ld+json">
+{"image":"http://localhost:4000/assets/uploads/2016/07/kernel_3.jpg","@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/rappels-d-architecture/","headline":"Rappels d’architecture","dateModified":"2016-07-07T16:12:57+02:00","datePublished":"2016-07-07T16:12:57+02:00","author":{"@type":"Person","name":"Pixis"},"description":"Architecture d’un ordinateur pour aller plus loin dans l’exploitation kernel","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/rappels-d-architecture/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2016/07/kernel_3.jpg" alt="Rappels d'architecture" title="Rappels d'architecture" />
+  </div>
+  
+  <h1 class="post-title">Rappels d'architecture</h1>
+  <div class="post-info">
+      <p class="alignleft">07 Jul 2016 <a class="post-comments-count" href="http://http://localhost:4000/rappels-d-architecture/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#kernel-land"><i class="fas fa-tags"></i> Kernel Land</a><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Avant d’aller plus loin, il est nécessaire de parler rapidement de l’architecture d’un ordinateur. En effet, dans le user-land, il y a une couche d’abstraction qui permet de ne pas trop se soucier de l’architecture (quoiqu’il est nécessaire tout de même de connaitre les conventions d’appel, le nombre de bits gérés etc.), or le kernel <strong>est</strong> cette couche, donc penser être capable d’écrire des exploits corrects sans connaitre les rudiments de l’architecture d’un ordinateur n’est clairement pas imaginable.</p>
+
+<!--more-->
+
+<p>Cet article n’a pas non plus pour vocation d’être exhaustif quant à ce sujet, nous ne parlerons donc que des éléments clés qui nous intéressent de près ou de loin pour l’exploitation de vulnérabilités au sein du kernel.</p>
+
+<h2 id="processeur">Processeur</h2>
+
+<p>Un CPU a un jeu d’instruction qui lui est propre (<em>Instruction Set</em>), lui permettant de faire des opérations, des modifications dans le flot d’exécution ou encore de modifier la mémoire. Comme les accès mémoire sont relativement lents, un CPU possède des registres. Nous avons déjà parlé des registres dans l’article sur <a href="/gestion-de-la-memoire/">la gestion de la mémoire</a>. Ce sont des petites zones de mémoire au sein d’un CPU qui sont accessibles instantannément et servent à stocker des valeurs pour des calculs, pour garder des informations sur les structures en cours etc.</p>
+
+<p>En ce qui concerne les jeux d’instructions, il y a deux grands familles. Les RISC (<em>Reduced Instruction Sec Computer</em>) et les CISC (<em>Complex Instruction Set Computer</em>). Les instructions des RISC ont une taille fixe et sont exécutées en un cycle d’horloge tandis que les CISC ont des instructions de tailles variables qui sont exécutées en un ou plusieurs cycles d’horloge.</p>
+
+<p>Par ailleurs, les ordinateurs peuvent avoir un ou plusieurs CPU (<em>UniProcessor</em> UP ou <em>Symmetric MultiProcessing</em> SMP).</p>
+
+<h2 id="interruptions">Interruptions</h2>
+
+<p>Lorsqu’une série d’instructions est en cours d’exécution, il est possible qu’un événement se produise et interrompe le flot d’exécution. L’origine peut être logicielle ou matérielle.</p>
+
+<ul>
+  <li>Dans le cas des interruptions <strong>logicielles</strong>, on dit qu’elles sont synchrones puisque le même code rejoué provoquera les mêmes interruptions.</li>
+  <li>Dans le cas des interruptions <strong>matérielles</strong>, on dit qu’elles sont asynchrones puisqu’elles peuvent survenir à tout moment (un disque qui a fini son travail, un carte réseau ayant fini de recevoir un paquet etc.).</li>
+</ul>
+
+<p>Chaque type d’interruption a un numéro unique auquel est associée une routine à exécuter. Le CPU possède un registre spécial qui permet de savoir quelle routine correspond à quel numéro d’interruption. Ce registre pointe sur l’<em>Interrupt Vector Table</em>. Vous imaginez bien qu’il sera intéressant de modifier cette table…</p>
+
+<p>Comme les CPU ont deux modes d’exécution, privilégié et non privilégié, comme nous l’avons dit dans l’article d’introduction sur <a href="/le-monde-du-kernel">le monde du kernel</a>, il est possible à l’aide d’instructions fournies par le CPU dans le mode non privilégié de faire des interruptions pour exécuter du code privilégié, par exemple pour que le kernel exécute le code faillible, et ainsi exploiter la vulnérabilité.</p>
+
+<h2 id="gestion-de-la-mémoire">Gestion de la mémoire</h2>
+
+<p>L’accès à la mémoire physique peut-être fait de manière segmentée pour certains CPU, ou linéaire (la majorité de nos jours).</p>
+
+<p>Dans un adressage <strong>segmenté</strong>, il faut donner le numéro du segment puis l’offset de la donnée dans ce segment pour la récupérer, tandis que lorsqu’il est <strong>linéaire</strong>, on peut avoir un mapping 1:1 des adresses, mais on peut également avoir de la pagination (<em>paging</em>) pour avoir des zones mémoires virtuelles. Dans le cas du <em>paging</em>, c’est la MMU (<em>Memory Management Unit</em>) qui s’occupe de traduire une adresse virtuelle en une adresse physique, en passant par les tables de pages.</p>
+
+<p>Voici un schéma d’une mémoire physique segmentée</p>
+
+<p><a href="/assets/uploads/2016/07/memory_management_segmented.png"><img src="/assets/uploads/2016/07/memory_management_segmented.png" alt="memory_management_segmented" /></a></p>
+
+<p>Puis un schéma des deux types de mémoires linéaires, l’une avec le mapping 1:1 et l’autre qui utilise le système de pagination et de mémoire virtuelle</p>
+
+<p><a href="/assets/uploads/2016/07/memory_management_linear.png"><img src="/assets/uploads/2016/07/memory_management_linear.png" alt="memory_management_linear" /></a></p>
+
+<p>Cependant, comme l’opération de traduction <code class="highlighter-rouge">adresse virtuelle -&gt; adresse physique</code> est un peu coûteuse, il existe un cache appelé <em>Translation Lookaside Buffer</em> (TLB) qui garde en mémoire la correspondance entre adresses virtuelles et adresses physiques. C’est pratique par exemple lorsqu’on parcourt un tableau afin de ne pas devoir retrouver l’adresse du début du tableau en mémoire physique à chaque itération.</p>
+
+<p>Biensûr, comme chaque processus a sa propre plage de mémoire et sa propre table de pages, il faut que la TLB soit vidée à chaque changement de processus en cours d’exécution.</p>
+
+<p>Cependant, dans le cas où la mémoire est partagée (une partie pour le kernel, une partie pour le processus), même s’il y a un changment de processus, il n’est pas nécessaire de vider la TLB du kernel puisque la table de pages du kernel est répliquée pour chaque processus, et reste alors inchangée. Sa TLB est donc toujours la même.</p>
+
+<h2 id="32bits--64bits">32bits &amp; 64bits</h2>
+
+<p>Nous finirons par une petite parenthèse sur quelques particularités des CPU x86-64.</p>
+
+<ul>
+  <li>Tous les registres 32 bits (EAX, EBX, …) sont étendus à 64 bits (RAX, RBX, …)</li>
+  <li>8 nouveaux registres (R8-R15) sont créés</li>
+  <li>Un bit NX (<strong>N</strong>on e<strong>x</strong>écutable) est présent par défault pour les pages allouées afin de décider si oui ou non ce sont des zones mémoires exécutables</li>
+  <li>La convention d’appel de fonction a été modifiée : Les arguments ne sont plus passés par la stack par défault, mais par des registres.</li>
+</ul>
+
+<p>À part ces quatre grosses différences (il y en a beaucoup d’autres), la majorité des éléments que nous connaissons dans les architectures x86 restent valables.</p>
+
+<hr />
+
+<p>Au programme du prochain article, nous verrons la méthodologie permettant de développer un exploit de manière propre et méhodique.</p>
+
+<p>[ Prochain article en cours de rédaction ]</p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#kernel-land"><i class="fas fa-tags"></i> Kernel Land</a><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/rappels-d-architecture/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-0015';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

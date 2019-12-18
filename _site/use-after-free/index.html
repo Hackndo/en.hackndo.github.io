@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Use After Free - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Use After Free" />
+    <meta name="twitter:description" content="Aujourd'hui, nous allons découvrir ensemble une nouvelle zone mémoire, le tas (ou la Heap), en explicitant une vulnérabilité relativement commune dans les programmes récents, appelée use-after-free." />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2019/02/uafbanner.png" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Use After Free" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Aujourd’hui, nous allons découvrir ensemble une nouvelle zone mémoire, le tas (ou la Heap), en explicitant une vulnérabilité relativement commune dans les programmes récents, appelée use-after-free." />
+<meta property="og:description" content="Aujourd’hui, nous allons découvrir ensemble une nouvelle zone mémoire, le tas (ou la Heap), en explicitant une vulnérabilité relativement commune dans les programmes récents, appelée use-after-free." />
+<link rel="canonical" href="http://localhost:4000/use-after-free/" />
+<meta property="og:url" content="http://localhost:4000/use-after-free/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-02-24T12:02:38+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/use-after-free/","headline":"Use After Free","dateModified":"2019-02-24T12:02:38+01:00","datePublished":"2019-02-24T12:02:38+01:00","author":{"@type":"Person","name":"Pixis"},"description":"Aujourd’hui, nous allons découvrir ensemble une nouvelle zone mémoire, le tas (ou la Heap), en explicitant une vulnérabilité relativement commune dans les programmes récents, appelée use-after-free.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/use-after-free/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2019/02/uafbanner.png" alt="Use After Free" title="Use After Free" />
+  </div>
+  
+  <h1 class="post-title">Use After Free</h1>
+  <div class="post-info">
+      <p class="alignleft">24 Feb 2019 <a class="post-comments-count" href="http://http://localhost:4000/use-after-free/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a><a href="/archives/#user-land"><i class="fas fa-tags"></i> User Land</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Nous nous sommes intéressés à différentes vulnérabilités qui mettaient en jeu la pile suite à des overflows (<a href="/buffer-overflow/">Buffer Overflow</a>, <a href="/retour-a-la-libc/">Ret2Libc</a>, <a href="/return-oriented-programming">ROP</a>). Aujourd’hui, nous allons découvrir ensemble une nouvelle zone mémoire, le tas (ou la Heap), en explicitant une vulnérabilité relativement commune dans les programmes récents, appelée “use-after-free”.</p>
+
+<!--more-->
+
+<h2 id="la-heap">La Heap</h2>
+
+<p>Contrairement à la pile dont le fonctionnement a été expliqué dans <a href="https://beta.hackndo.com/fonctionnement-de-la-pile/">cet article</a>, la <em>heap</em> (le tas) est une zone mémoire utilisée pour des allocations dynamiques. Pour cela, tous les espaces mémoires dans la <em>heap</em> peuvent être utilisés à n’importe quel moment. Il n’y a plus de notion d’empilement, dépilement. N’importe quel bloc peut être alloué ou libéré à tout instant.</p>
+
+<p>On comprend assez intuitivement que ce système est beaucoup plus souple, mais qu’en contrepartie, il est plus lent et complexe, puisqu’il faut garder un état de la mémoire afin de savoir si un bloc est alloué ou non.</p>
+
+<p>Mais alors, comment alloue-t-on de la mémoire, ou comment la libère-t-on, et que se passe-t-il en réalité ?</p>
+
+<h2 id="mallocfree">Malloc/Free</h2>
+
+<p>Nous allons parler ici de deux fonctions, <code class="highlighter-rouge">malloc()</code> et <code class="highlighter-rouge">free()</code>, bien qu’il en existe d’autres (<code class="highlighter-rouge">calloc()</code> par exemple). Le principe reste le même.</p>
+
+<h3 id="malloc">Malloc</h3>
+
+<p>La fonction <code class="highlighter-rouge">malloc()</code> demande à l’OS de lui allouer un bloc mémoire d’une certaine taille. Si cette allocation est possible, alors <code class="highlighter-rouge">malloc()</code> va renvoyer un pointeur vers le début de ce bloc.</p>
+
+<p><a href="/assets/uploads/2019/02/malloc.png"><img src="/assets/uploads/2019/02/malloc.png" alt="Malloc" /></a></p>
+
+<p>En C, voici ce que le schéma ci-dessus représente.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="o">*</span><span class="n">pointeur</span><span class="p">;</span>
+<span class="n">pointeur</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">32</span><span class="p">);</span>
+<span class="cp"># D'après le schéma ci-dessus, la valeur de "pointeur" sera 0x55e700000010
+</span></code></pre></div></div>
+
+<p>L’OS va donc trouver 32 octets disponibles, et renvoyer l’adresse de ce bloc mémoire qui sera ici assigné à la variable <code class="highlighter-rouge">pointeur</code>. Le développeur peut alors utiliser cet espace mémoire pour stocker de l’information, par exemple une chaine de caractères, de la façon suivante :</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">strncpy</span><span class="p">(</span><span class="n">pointeur</span><span class="p">,</span> <span class="s">"Hello World!"</span><span class="p">,</span> <span class="mi">13</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Les caractères <code class="highlighter-rouge">['H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', '\x00']</code> seront placés dans la zone mémoire allouée par <code class="highlighter-rouge">malloc()</code>.</p>
+
+<h3 id="free">Free</h3>
+
+<p>Une fois que la mémoire allouée n’est plus utilisée, il faut penser à la libérer à l’aide de la fonction <code class="highlighter-rouge">free()</code>.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Cette zone mémoire n'est plus utile</span>
+<span class="n">free</span><span class="p">(</span><span class="n">pointeur</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Dans cet état, la variable <code class="highlighter-rouge">pointeur</code> contient toujours l’adresse de la zone mémoire utilisée précédemment, sauf que celle-ci n’est plus allouée. Si une nouvelle allocation est demandée, il y a des chances pour que cette zone mémoire soit réutilisée. Dans ce cas, <code class="highlighter-rouge">pointeur</code> pointera vers cette zone nouvellement allouée, mais dont les données n’ont plus rien à voir. Pour ne pas se retrouver dans cet état, il faut donc également penser à réinialiser le pointeur.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pointeur</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Voici un petit programme d’exemple qui montre ces différentes actions.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Deux pointeurs sont déclarés et initialisé à NULL</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">pointeurA</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">pointeurB</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+        <span class="c1">// Une zone mémoire va être allouée, et le premier pointeur va pointer dessus</span>
+        <span class="n">pointeurA</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"La variable pointeurA pointe vers %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">pointeurA</span><span class="p">);</span>
+
+        <span class="c1">// On ajoute de la donnée dans cette zone mémoire</span>
+        <span class="n">strncpy</span><span class="p">(</span><span class="n">pointeurA</span><span class="p">,</span> <span class="s">"Hello World!"</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Voici ce qui est à l'adresse %p, pointée par pointeurA : %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">pointeurA</span><span class="p">,</span> <span class="n">pointeurA</span><span class="p">);</span>
+
+        <span class="c1">// Nous n'avons plus besoin de pointeurA, nous allons donc libérer la zone mémoire</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">pointeurA</span><span class="p">);</span>
+        <span class="n">pointeurA</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"La zone mémoire a été libérée !</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+        <span class="cm">/*
+         *   [...]
+         */</span>
+
+        <span class="c1">// Plus tard dans le programme, nous avons besoin d'une nouvelle zone mémoire.</span>
+        <span class="n">pointeurB</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"La variable pointeurB pointe vers %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">pointeurB</span><span class="p">);</span>
+        <span class="c1">// Puis on la libère</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">pointeurB</span><span class="p">);</span>
+        <span class="n">pointeurB</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Une fois compilé, ce code donne la sortie suivante :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>La variable pointeurA pointe vers 0x55e703641010
+Voici ce qui est à l'adresse 0x55e703641010, pointée par pointeurA : Hello World!
+La zone mémoire a été libérée !
+La variable pointeurB pointe vers 0x55e703641010
+</code></pre></div></div>
+
+<p>On remarque une chose importante : Après libération du bloc mémoire pointé par <code class="highlighter-rouge">pointeurA</code>, lors de la nouvelle allocation, la même adresse est utilisée (<code class="highlighter-rouge">0x55f8d82d1010</code>) et assignée à <code class="highlighter-rouge">pointeurB</code>, puisque ce bloc mémoire était à nouveau libre.</p>
+
+<h2 id="use-after-free">Use-After-Free</h2>
+
+<h3 id="lerreur">L’erreur</h3>
+
+<p>Quand tout est correctement fait, il n’y a pas vraiment d’exploitation possible. Deux erreurs peuvent alors être commises par les programmeurs.</p>
+
+<ul>
+  <li>Soit ils oublient de <strong>libérer la mémoire</strong> : Dans ce cas, le programme présentera une fuite mémoire puisqu’il ne libèrera jamais de la mémoire allouée. Ce n’est pas un problème de sécurité, mais c’est tout de même une mauvaise pratique.</li>
+  <li>Soit ils oublient de <strong>réinitialiser un pointeur</strong> après une libération de la mémoire : Dans ce cas, si jamais le pointeur est utilisé plus tard pour une raison quelconque, il pointera vers une zone mémoire non initialisée, voire réutilisée pour d’autres raisons, ce qui peut faire crasher le programme, mais peut également être exploité.</li>
+</ul>
+
+<p>C’est dans ce deuxième cas qu’on appelle l’exploitation “Use after free”, puisqu’on utilise un pointeur après qu’il a été libéré, sans pour autant avoir été réinitialisé.</p>
+
+<h3 id="exemple">Exemple</h3>
+
+<p>Voici un petit bout de programme qui présente un danger potentiel. Les commentaires devraient être suffisamment explicites pour comprendre ce qu’il se passe.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Deux pointeurs admin et prénom, qui n'ont rien à voir l'un et l'autre dans le code</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">admin</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">prenom</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+        <span class="c1">// Par défaut, l'utilisateur qui lance ce programme n'est pas administrateur. C'est tout.</span>
+        <span class="n">admin</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">32</span><span class="p">);</span>
+        <span class="n">admin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="cm">/*
+         * Du code, du code, du code [...]
+         */</span>
+
+        <span class="c1">// Un moment, dans le code, la zone mémoire de admin est libérée, mais la variable admin n'est pas réinitialisée !</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">admin</span><span class="p">);</span>
+
+        <span class="cm">/*
+         * Et encore du code [...]
+         */</span>
+
+        <span class="c1">// Et puis une autre allocation de mémoire est faite.</span>
+        <span class="c1">// Sauf que comme admin a été libéré, cette nouvelle zone mémoire réutilise cet espace !</span>
+        <span class="n">prenom</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">32</span><span class="p">);</span>
+        <span class="n">strncpy</span><span class="p">(</span><span class="n">prenom</span><span class="p">,</span> <span class="s">"pixis"</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+
+        <span class="cm">/*
+         * Toujours du code [...]
+         */</span>
+        
+        <span class="c1">// Ici, admin pointe toujours vers la zone mémoire initiale, qui a été réutilisée par "prenom".</span>
+        <span class="c1">// Du coup, admin[0] vaut "p", admin[1] vaut "i", etc.</span>
+        <span class="c1">// Ainsi, d'après cette vérification, nous sommes administrateur !</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">admin</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">admin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">"Cette section est interdite !</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Zone d'administration super secrète !</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+        <span class="cm">/*
+         * Et puis du code [...]
+         */</span>
+
+        <span class="n">free</span><span class="p">(</span><span class="n">prenom</span><span class="p">);</span>
+        <span class="n">prenom</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Ce qui, à l’exécution, donne :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Zone d'administration super secrète !
+</code></pre></div></div>
+<p>Cet exemple montre clairement le problème de l’utilisation d’un pointeur après qu’il a été libéré.</p>
+
+<p>C’est évidemment un exemple un peu trivial, qui permet seulement d’illustrer le comportement du use-after-free, mais cette vulnérabilité peut être retrouvée dans des programmes qui gèrent la création et suppression d’objets, l’authentification, …</p>
+
+<p>Si par exemple une structure de ce type est manipulée :</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">user</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">isAdmin</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Il suffit qu’une instance soit allouée puis supprimée, et que suite à cela, une autre allocation écrase cette zone mémoire en faisant en sorte que l’offset correspondant à “isAdmin” soit à 1 pour que lors d’une prochaine utilisation de l’objet, l’utilisateur soit considéré comme un administrateur.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Lors d’un CTF, j’ai créé un challenge vulnérable qu’il fallait exploiter en utilisant cette technique. Le voici :</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Filename: uaf.c
+ * Author: pixis
+ * Description: Pown challenge
+ * Usage: ./uaf
+ * Compilation: gcc -fPIE -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wl,-z,now -Wl,-z,relro -o uaf uaf.c
+ **/</span>
+
+<span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+</span>
+<span class="cp">#define MAX_NAME_SIZE   16
+</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">player</span> <span class="p">{</span>
+  <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">MAX_NAME_SIZE</span><span class="p">];</span>
+  <span class="kt">int64_t</span> <span class="n">isAdmin</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">player_t</span><span class="p">;</span>
+
+<span class="kt">char</span> <span class="o">*</span><span class="n">game_title</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+
+<span class="cm">/* 
+Prevent double free
+*/</span>
+<span class="kt">int</span> <span class="n">is_player_freed</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">is_title_freed</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">Count</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">Strings</span><span class="p">[])</span>
+<span class="p">{</span>   
+    <span class="kt">char</span> <span class="n">line</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+    <span class="n">player_t</span> <span class="o">*</span><span class="n">player</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span>
+            <span class="s">"  _______ _    _ ______    _____          __  __ ______ </span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">" |__   __| |  | |  ____|  / ____|   /</span><span class="se">\\</span><span class="s">   |  </span><span class="se">\\</span><span class="s">/  |  ____|</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"    | |  | |__| | |__    | |  __   /  </span><span class="se">\\</span><span class="s">  | </span><span class="se">\\</span><span class="s">  / | |__   </span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"    | |  |  __  |  __|   | | |_ | / /</span><span class="se">\\</span><span class="s"> </span><span class="se">\\</span><span class="s"> | |</span><span class="se">\\</span><span class="s">/| |  __|  </span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"    | |  | |  | | |____  | |__| |/ ____ </span><span class="se">\\</span><span class="s">| |  | | |____ </span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"    |_|  |_|  |_|______|  </span><span class="se">\\</span><span class="s">_____/_/    </span><span class="se">\\</span><span class="s">_</span><span class="se">\\</span><span class="s">_|  |_|______|</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"                                                        </span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"                                                        </span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"Game information</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"----------------</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\t</span><span class="s">Player name</span><span class="se">\t</span><span class="s">--&gt;</span><span class="se">\t</span><span class="s">%s</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\t</span><span class="s">Game title</span><span class="se">\t</span><span class="s">--&gt;</span><span class="se">\t</span><span class="s">%s</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"Commands</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"--------</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\t</span><span class="s">set &lt;Player name&gt;</span><span class="se">\t</span><span class="s">-</span><span class="se">\t</span><span class="s">Set player's name</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\t</span><span class="s">title &lt;Game title&gt;</span><span class="se">\t</span><span class="s">-</span><span class="se">\t</span><span class="s">Set game's title</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\t</span><span class="s">del</span><span class="se">\t\t\t</span><span class="s">-</span><span class="se">\t</span><span class="s">Delete player's name</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\t</span><span class="s">login</span><span class="se">\t\t\t</span><span class="s">-</span><span class="se">\t</span><span class="s">[ADMIN AREA] Login into the game</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\t</span><span class="s">exit</span><span class="se">\t\t\t</span><span class="s">-</span><span class="se">\t</span><span class="s">Exit :(</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+            <span class="s">"&gt; "</span><span class="p">,</span>
+            <span class="n">player</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">?</span> <span class="s">"(Not set)"</span> <span class="o">:</span> <span class="n">player</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">game_title</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">?</span> <span class="s">"(Not set)"</span> <span class="o">:</span> <span class="n">game_title</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">line</span><span class="p">),</span> <span class="n">stdin</span><span class="p">)</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s">"set "</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">MAX_NAME_SIZE</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Free old player if set</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">player</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">is_player_freed</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">free</span><span class="p">(</span><span class="n">player</span><span class="p">);</span>
+                    <span class="n">is_player_freed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">player</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">player_t</span><span class="p">));</span>
+                
+                <span class="c1">// Fresh new player</span>
+                <span class="n">memset</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">player_t</span><span class="p">));</span>
+                
+                <span class="n">is_player_freed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                
+                <span class="c1">// Replace trailing \n with \0</span>
+                <span class="n">strncpy</span><span class="p">(</span><span class="n">player</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">line</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">line</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+                <span class="n">player</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">[</span><span class="n">strlen</span><span class="p">(</span><span class="n">line</span><span class="o">+</span><span class="mi">4</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+                <span class="c1">// You're not admin, duh.</span>
+                <span class="n">player</span><span class="o">-&gt;</span><span class="n">isAdmin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">"Maximum name size is %d characters</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">MAX_NAME_SIZE</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s">"title "</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Free old title if set</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">game_title</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">is_title_freed</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">free</span><span class="p">(</span><span class="n">game_title</span><span class="p">);</span>
+                <span class="n">is_title_freed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">game_title</span> <span class="o">=</span> <span class="n">strndup</span><span class="p">(</span><span class="n">line</span><span class="o">+</span><span class="mi">6</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">line</span><span class="o">+</span><span class="mi">6</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">is_title_freed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s">"del"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Free player if set</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">player</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">is_player_freed</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">free</span><span class="p">(</span><span class="n">player</span><span class="p">);</span>
+                <span class="n">is_player_freed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s">"login"</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// If you're admin, go get your cookie !</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">player</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">player</span><span class="o">-&gt;</span><span class="n">isAdmin</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="s">"Nop"</span> <span class="o">:</span> <span class="s">"Well done, you're administrator !"</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s">"exit"</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Exit nicely without memory leaks</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">player</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">is_player_freed</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">free</span><span class="p">(</span><span class="n">player</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">game_title</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">is_title_freed</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">free</span><span class="p">(</span><span class="n">game_title</span><span class="p">);</span>
+            <span class="p">}</span>
+            
+            <span class="c1">// I'm quite polite.</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"'k Bye !</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Cet article devrait vous donner toutes les billes nécessaires pour comprendre la gestion de la mémoire lors de l’allocation et libération des zones mémoires dans ce programme en vue de l’exploiter.</p>
+
+<p>J’espère que cet article pour permet de comprendre les mécanismes inhérents à cette vulnérabilité, n’hésitez pas à partager vos exemples de programmes vulnérables ou d’exploitation du programme fourni.</p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a><a href="/archives/#user-land"><i class="fas fa-tags"></i> User Land</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/use-after-free/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-00a4';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

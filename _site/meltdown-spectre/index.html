@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Attaques Meltdown & Spectre - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Attaques Meltdown & Spectre" />
+    <meta name="twitter:description" content="Cet article est une explication technique abordable des attaques Meltdown et Spectre qui j'espère permettra à d'autres de mieux comprendre les mécanismes et la portée de ces attaques." />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2018/01/spectre-meltdown.jpg" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Attaques Meltdown &amp; Spectre" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Cet article est une explication technique abordable des attaques Meltdown et Spectre qui j’espère permettra à d’autres de mieux comprendre les mécanismes et la portée de ces attaques." />
+<meta property="og:description" content="Cet article est une explication technique abordable des attaques Meltdown et Spectre qui j’espère permettra à d’autres de mieux comprendre les mécanismes et la portée de ces attaques." />
+<link rel="canonical" href="http://localhost:4000/meltdown-spectre/" />
+<meta property="og:url" content="http://localhost:4000/meltdown-spectre/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-01-10T21:45:14+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/meltdown-spectre/","headline":"Attaques Meltdown &amp; Spectre","dateModified":"2018-01-10T21:45:14+01:00","datePublished":"2018-01-10T21:45:14+01:00","author":{"@type":"Person","name":"Pixis"},"description":"Cet article est une explication technique abordable des attaques Meltdown et Spectre qui j’espère permettra à d’autres de mieux comprendre les mécanismes et la portée de ces attaques.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/meltdown-spectre/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2018/01/spectre-meltdown.jpg" alt="Attaques Meltdown & Spectre" title="Attaques Meltdown & Spectre" />
+  </div>
+  
+  <h1 class="post-title">Attaques Meltdown & Spectre</h1>
+  <div class="post-info">
+      <p class="alignleft">10 Jan 2018 <a class="post-comments-count" href="http://http://localhost:4000/meltdown-spectre/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#kernel-land"><i class="fas fa-tags"></i> Kernel Land</a><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a><a href="/archives/#hardware"><i class="fas fa-tags"></i> Hardware</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Cet article est une explication technique abordable des attaques <strong>Meltdown</strong> et <strong>Spectre</strong> qui j’espère permettra à d’autres de mieux comprendre les mécanismes et la portée de ces attaques.</p>
+
+<!--more-->
+
+<h2 id="les-mécanismes-en-jeu">Les mécanismes en jeu</h2>
+
+<p>Ces deux attaques sont différentes de celles dont nous entendons parler majoritairement. Elles touchent le matériel, ou <em>hardware</em>, et non pas des applications. Pour comprendre ces attaques, il est nécessaire de faire un petit récapitulatif sur le fonctionnement et l’optimisation d’un processeur.</p>
+
+<h3 id="fonctionnement-dun-processeur">Fonctionnement d’un processeur</h3>
+
+<p>Un processeur, ce n’est rien d’autre qu’une calculatrice. Au début, des calculs étaient envoyés à un processeur, celui-ci effectuait les calculs qu’on lui envoyait dans l’ordre, les uns après les autres, puis il retournait les résultats.</p>
+
+<p>Lorsqu’un programme est exécuté, les données à traiter sont dans la mémoire vive (qu’on appelle aussi simplemement <em>mémoire</em>), ou RAM. Pour traiter une instruction, les données nécessaires au traitement doivent être envoyées depuis la mémoire vive vers la mémoire interne du processeur pour qu’il les traite. Ensuite, le résultat est enregistré à nouveau en mémoire.</p>
+
+<p>Si le temps de traitement des données par le processeur est environ le même que le temps de récupération des données en mémoire, tout ça se coordonne très bien. En effet, pendant que le processeur traite une instruction, les données de la prochaîne instruction sont rapatriées, permettant d’avoir un flux tendu.</p>
+
+<p>Avec le temps, le matériel a évolué, et les processeurs sont devenus très, très rapides. Tellement rapides qu’ils ont largement devancé les accès en mémoire. Ainsi, aujourd’hui, le traitement d’une instruction se fait environ en 0.5 nano-seconde, tandis qu’un accès mémoire se fait en 20 nano-secondes.</p>
+
+<p>Par conséquent, si jamais le processeur traitait les instructions linéairement, il passerait la plupart de son temps à attendre les données, au lieu de travailler.</p>
+
+<p>C’est pourquoi les constructeurs se sont penchés sur le sujet afin d’optimiser le processus de traitement de leurs processeurs.</p>
+
+<p>Pour entrer un peu plus dans les détails et comprendre les optimisations, il faut savoir qu’un processeur Intel se découpe en 3 parties :</p>
+
+<ol>
+  <li>Le <em>Front-end</em>, qui récupère les instructions en mémoire, et qui les découpe en micro-instructions</li>
+  <li>L’<em>Execution Engine</em> possède différentes unités d’exécution, <em>Execution Units</em>, qui ne sont rien d’autre que des petits centres de calculs, spécialisés pour différentes tâches</li>
+  <li>Le <em>Memory Subsystem</em> permettant d’enregistrer en cache des données traitées par le processeur afin d’optimiser les futurs accès.</li>
+</ol>
+
+<p>Voici une vision (simplifiée) de ces 3 parties</p>
+
+<p><a href="/assets/uploads/2018/01/proc.png"><img src="/assets/uploads/2018/01/proc.png" alt="Processeur" /></a></p>
+
+<p>Avec ces précisions en tête, nous allons voir les 3 mécanismes d’optimisation qui entrent en jeu dans les deux attaques Meltdown et Spectre, en s’intéressant principalement au fonctionnement des processeurs Intel qui sont vulnérables pour les deux attaques.</p>
+
+<p><em>Ces optimisations existent sur la plupart des processeurs récents. Certains cependant ne les mettent pas toutes en pratique.</em></p>
+
+<h3 id="cache">Cache</h3>
+
+<p>Le premier mécanisme d’optimisation dont nous allons parler est le cache. L’idée étant qu’en principe, lorsqu’une zone mémoire est lue, il y a des grandes chances pour qu’elle soit lue à nouveau, ou qu’une zone mémoire adjacente soit lue rapidement après.</p>
+
+<p>C’est très souvent le cas, que ce soit lors de la lecture d’un fichier, ou le parcours d’un tableau de données. La plupart du temps, la lecture se fait dans l’ordre, et les zones mémoires sont contigües.</p>
+
+<p>Prenons l’exemple suivant qui illustre ce principe :</p>
+
+<p><strong>cache.c</strong></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;x86intrin.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">get_access_time</span><span class="p">(</span><span class="k">volatile</span> <span class="kt">char</span> <span class="o">*</span><span class="n">addr</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/*
+     * Une variable volatile est une variable sur laquelle aucune optimisation de compilation n'est appliquée
+     * permettant de s'assurer que les instructions suivantes seront effectuées telles qu'écrites, sans
+     * optimisation (changement dans l'ordre des opérations, par exemple).
+     */</span>
+    <span class="kt">int</span> <span class="n">time1</span><span class="p">,</span> <span class="n">time2</span><span class="p">,</span> <span class="n">junk</span><span class="p">;</span>
+    <span class="k">volatile</span> <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+
+    <span class="n">time1</span> <span class="o">=</span> <span class="n">__rdtscp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">junk</span><span class="p">);</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="o">*</span><span class="n">addr</span><span class="p">;</span>
+    <span class="n">time2</span> <span class="o">=</span> <span class="n">__rdtscp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">junk</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">time2</span> <span class="o">-</span> <span class="n">time1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">c</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="kt">char</span> <span class="n">pixis</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"hackndo"</span><span class="p">;</span>
+
+    <span class="c1">// On flush le cache pour que la chaîne ne soit pas en cache</span>
+    <span class="n">_mm_clflush</span><span class="p">(</span><span class="n">pixis</span><span class="p">);</span>
+
+    <span class="c1">//Premier accès, la chaîne n'est pas en cache    </span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Avant la mise en cache : %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">get_access_time</span><span class="p">(</span><span class="n">pixis</span><span class="p">));</span>
+
+    <span class="cm">/*
+     * Le processeur a accédé à la chaîne de caractères
+     * Ainsi, il a mis en cache la chaîne ainsi qu'un peu
+     * de mémoire avant et après. 
+     */</span>
+
+    <span class="c1">// Deuxième accès, après la mise en cache</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Après la mise en cache : %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">get_access_time</span><span class="p">(</span><span class="n">pixis</span><span class="p">));</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Une chaîne de caractères <code class="highlighter-rouge">"hackndo"</code> est enregistrée en mémoire vive. Nous vidons le cache par précaution, puis nous accédons une première fois à la chaîne. Elle est alors cherchée en mémoire vive, puis elle est mise en cache pour les prochains accès. Nous y accédons donc une deuxième fois. Voici le résultat de ce programme :</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pixis@hackndo:~/spectre-meltdown <span class="nv">$ </span>make cache
+cc     cache.c   <span class="nt">-o</span> cache
+pixis@hackndo:~/spectre-meltdown <span class="nv">$ </span>./cache 
+Avant la mise en cache : 1024
+Après la mise en cache : 230
+</code></pre></div></div>
+
+<p>Les deux valeurs sont le nombre de cycles qui se sont passés au moment de l’accès à la variable. Nous voyons les bénéfices immenses du cache qui a divisé par presque 5 le temps d’accès !</p>
+
+<h3 id="out-of-order">Out-of-order</h3>
+
+<p>Comme nous l’avons expliqué, un processeur calcule très vite, tellement vite qu’il risque d’attendre beaucoup de temps s’il devait exécuter les instructions les unes à la suite des autres.</p>
+
+<p>Pour pallier à ce problème, une deuxième optimisation a été pensée : les processeurs aujourd’hui exécutent des instructions <strong>en parallèle</strong> avec leurs différentes unités d’exécution, ou <em>Execution Unit</em>.</p>
+
+<p>Prenons un exemple simplifié :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">var_A</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="n">var_B</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span>
+<span class="n">var_C</span> <span class="o">=</span> <span class="n">e</span> <span class="o">+</span> <span class="n">f</span>
+</code></pre></div></div>
+
+<p>Dans ce cas, au lieu de faire 3 calculs les uns après les autres, avec 3 accès mémoire, le processeur peut calculer en même temps <code class="highlighter-rouge">var_A</code>, <code class="highlighter-rouge">var_B</code> et <code class="highlighter-rouge">var_C</code> dans l’ordre qu’il veut.</p>
+
+<p>Ainsi, il peut optimiser ces 3 instructions en 1 instruction :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">var_C</span><span class="p">,</span> <span class="n">var_A</span><span class="p">,</span> <span class="n">var_B</span> <span class="o">=</span> <span class="n">e</span> <span class="o">+</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span> <span class="c1"># Calcul dans le désordre, ce qui n'a pas d'importance
+</span></code></pre></div></div>
+
+<p>Le processeur a ainsi optimisé ses ressources en faisant travailler 3 unités d’exécution en même temps pour effectuer 3 calculs indépendants, au lieu de les effectuer un par un en attendant les accès mémoire.</p>
+
+<p>Il arrivera parfois que des instructions soient interdites, comme l’exemple suivant</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">var_A</span> <span class="o">=</span> <span class="n">a</span><span class="o">/</span><span class="mi">0</span>
+<span class="n">var_B</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span>
+<span class="n">var_C</span> <span class="o">=</span> <span class="n">e</span> <span class="o">+</span> <span class="n">f</span>
+</code></pre></div></div>
+
+<p>De la même manière, les 3 instructions seront potentiellement exécutées dans le désordre</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">var_C</span><span class="p">,</span> <span class="n">var_A</span><span class="p">,</span> <span class="n">var_B</span> <span class="o">=</span> <span class="n">e</span> <span class="o">+</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="o">/</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span>
+</code></pre></div></div>
+
+<p>donc les variables <code class="highlighter-rouge">var_B</code> et <code class="highlighter-rouge">var_C</code> seront potentiellement calculées avant que le processeur se rende compte qu’il y a une erreur avec <code class="highlighter-rouge">var_A</code>.</p>
+
+<p>Quand le processeur s’en rend compte, il va alors annuler les changements effectués par les instructions qui devaient suivre et qui ont été exécutées en parallèle. Cette annulation fait croire que les calculs de <code class="highlighter-rouge">var_B</code> et <code class="highlighter-rouge">var_C</code> n’ont jamais été faits. Ni vu, ni connu. À priori.</p>
+
+<h3 id="prédiction">Prédiction</h3>
+
+<p>Toujours dans l’optique d’optimiser le temps de traitement, et donc pour éviter d’attendre les accès mémoire, le processeur va tenter de faire des choix par lui même lorsqu’il arrive à des conditions dans les instructions.</p>
+
+<p>Si par exemple le code suivant est compilé</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">1000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/**
+     ** Du code ...
+     **
+     **/</span>
+
+    <span class="c1">// Condition</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">999</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// INSTRUCTIONS</span>
+    <span class="p">}</span>
+
+    <span class="cm">/**
+     ** Du code ...
+     **
+     **/</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>alors le processeur va se retrouver plusieurs fois devant une condition <code class="highlighter-rouge">if</code>. Il a alors le choix soit de continuer les instructions dans l’ordre (donc il ne prend pas la branche), soit de prendre le saut de la condition (prendre la branche).</p>
+
+<p>La plupart du temps, la condition sera vraie donc les instructions <code class="highlighter-rouge">INSTRUCTIONS</code> seront effectuées. Le <em>Branch Target Buffer</em> (BTB) enregistre toutes les branches prises lors de conditions, et le processeur s’en sert pour essayer de deviner la bonne branche à choisir pour la prochaîne apparition de la condition.</p>
+
+<p>Une fois qu’il a prédit la branche, le processeur va effectuer les instructions de cette branche avant même de savoir si sa branche est <strong>réellement</strong> la bonne branche. Bien sûr, le calcul de la condition va finir par se terminer. Si la branche était la bonne, alors les instructions continuent, et les changements effectués par les instructions exécutées en avance sont gardés.</p>
+
+<p>En revanche, si la branche prédite n’était pas la bonne, alors les changements en mémoire sont annulés, et le processeur revient en arrière pour prendre la bonne branche.</p>
+
+<p>Dans notre exemple, le processeur va prédire que la condition est vraie presque 1000 fois, et lorsque <code class="highlighter-rouge">i</code> sera égal à <code class="highlighter-rouge">999</code>, il se trompera probablement mais il aura gagné tellement de temps pour les 999 autres fois que ce mécanisme est largement payant.</p>
+
+<h2 id="les-vulnérabilités">Les vulnérabilités</h2>
+
+<p>Avec les trois principes évoqués ci-dessus, les processeurs peuvent aller plus vite que les limites matérielles imposées. Cependant, la course à la rapidité a un prix.</p>
+
+<p>Ces optimisations sont faites pour ne pas laisser de trace en mémoire RAM en cas de mauvaises prédictions, ou en cas d’erreur quand les instructions ne sont pas exécutées dans l’ordre. Seulement voilà, elles laissent tout de même des informations dans le cache.</p>
+
+<p>Ainsi, dans le cas suivant les instructions peuvent être exécutées en parallèle, comme nous l’avons vu dans l’optimisation <em>out-of-order</em></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">raise</span><span class="p">(</span><span class="n">Exception</span><span class="p">);</span>  <span class="c1">// ERREUR</span>
+<span class="n">value</span> <span class="o">=</span> <span class="n">kernel_space</span><span class="p">[</span><span class="mh">0x42</span><span class="p">];</span>
+<span class="n">junk</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Une erreur va être levée, mais les instructions suivantes vont tout de même être exécutées.</p>
+
+<p>Si le <code class="highlighter-rouge">buffer</code> n’était pas dans le cache, mais que les deux instructions sont exécutées, alors la mémoire qui se trouve à l’index <code class="highlighter-rouge">value</code> du buffer va être mise en cache puisqu’il y a eu un accès à cette zone, et que le processeur met en cache les zones mémoire accédées pour que les accès futurs soient plus rapides.</p>
+
+<p>Comme le processeur va ensuite voir qu’il y a eu une erreur, les assignations de <code class="highlighter-rouge">value</code> et de <code class="highlighter-rouge">junk</code> seront annulées, mais la mise en cache de la valeur à l’index <code class="highlighter-rouge">value</code> de <code class="highlighter-rouge">buffer</code> ne le sera pas. On a donc une trace qui est laissée.</p>
+
+<p>C’est un exemple qui s’approche de l’attaque Meltdown, démontrant que ces optimisations laissent finalement des informations, et risquent alors de faire fuiter des données sensibles.</p>
+
+<p>Nous avons le même type de trace dans le cache lorsqu’une prédiction de branche est fausse, et que les instructions qui ont été exécutées à tort écrivent dans le cache.</p>
+
+<p>Nous allons alors voir dans les chapitres suivants les deux attaques qui exploitent ce problème.</p>
+
+<h2 id="meltdown">Meltdown</h2>
+
+<p>La particularité de Meltdown est que cette attaque exploite une vulnérabilité sur certains processeurs. En effet, les instructions <em>out-of-order</em> peuvent accéder à la mémoire du noyau, alors que cela devrait être interdit. C’est donc en utilisant cette faille que l’attaque permet de récupérer les informations contenues dans l’espace d’adressage du noyau.</p>
+
+<p>Ensuite, la difficulté concernant les attaques qui touchent à la microarchitecture (tout ce qui est matériel) est de sortir les informations qui ont fuité.</p>
+
+<p>L’approche de l’attaque Meltdown se découpe en deux parties : L’exfiltration de la donnée secrète, puis la récupération de celle-ci.</p>
+
+<h3 id="exfiltrer-linformation-de-la-mémoire-réservée-au-noyau">Exfiltrer l’information de la mémoire réservée au noyau</h3>
+
+<p>La première permet de sortir l’information secrète du kernel.</p>
+
+<p><a href="/assets/uploads/2018/01/meltdown-caching.png"><img src="/assets/uploads/2018/01/meltdown-caching.png" alt="Meltdown caching" /></a></p>
+
+<p>Un buffer est construit en amont, avec plusieurs <em>sections</em> qui, quand elle sont mises en cache, le sont indépendamment les unes des autres. Nous allons prendre dans l’exemple 8 sections.</p>
+
+<p>L’idée est de trouver une valeur secrète dans le noyau entre 0 et 7, et d’accéder à l’index correspondant du buffer, pour que cet index soit mis en cache.</p>
+
+<p>Dans notre exemple, pour récupérer une valeur entre 0 et 7, il faut récupérer 3 bits d’information (ce qui donne 8 possibilités 000, 001, 010, …, 111) dans le kernel-land à une adresse donnée. Disons pour l’exemple qu’à l’adresse <code class="highlighter-rouge">0xfff7</code> de la zone mémoire du kernel, il y a les 3 bits <code class="highlighter-rouge">100</code>, ou <code class="highlighter-rouge">4</code> en décimal. C’est l’appel (<strong>1</strong>) sur le schéma. Cette valeur sera utilisée pour l’instruction suivante (<strong>2</strong>).</p>
+
+<p>Évidemment, l’accès à la zone kernel est interdite, donc une exception va se lever de type <code class="highlighter-rouge">SIGSEGV</code> (Segmentation Fault), mais comme nous avons vu que les processeurs effectuaient les instructions en parallèle, les instructions suivantes peuvent être exécutées en même temps.</p>
+
+<p>Ainsi, l’instruction qui suit va accéder à la <code class="highlighter-rouge">4</code>ème section du buffer (<strong>3</strong> sur le schéma) que nous avons préparé en amont (<code class="highlighter-rouge">4</code> étant la valeur trouvée dans la mémoire du noyau). Cette section du buffer sera alors mise en cache par le processeur (<strong>4</strong> sur le schéma).</p>
+
+<p>Le processeur va alors se rendre compte que l’accès à la zone kernel était interdit, et va annuler l’instruction que nous venons de faire, mais la trace dans le cache n’est pas supprimée.</p>
+
+<p>Le pseudo-code qui peut-être associé à cette attaque est le suivant :</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">var_secrete</span> <span class="o">=</span> <span class="n">kernel_space</span><span class="p">[</span><span class="mh">0xfff7</span><span class="p">];</span> <span class="c1">// var_secrete == 4 dans l'exemple</span>
+<span class="n">junk</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">[</span><span class="n">var_secrete</span><span class="p">];</span> <span class="c1">// Accès à l'index du buffer correspondant à la valeur récupérée</span>
+</code></pre></div></div>
+
+<h3 id="lire-linformation-exfiltrée">Lire l’information exfiltrée</h3>
+
+<p>La deuxième partie consiste à sortir cette valeur pour que l’attaquant la connaisse. En effet, pour le moment, il n’y a eu qu’une mise en cache, et il n’est pas possible de lire directement ce cache.</p>
+
+<p>Pour cela, on utilise des techniques appelées <em>cache side-channel attacks</em>. Nous utiliserons celle appelée <code class="highlighter-rouge">flush + reload</code> pour retrouver l’information.  Il en existe d’autres comme <em>Evict+Time</em> ou <em>Prime+Probe</em> que nous ne verrons pas dans cet article, mais vous pouvez aller voir <a href="http://www.cryptofails.com/post/70097430253/crypto-noobs-2-side-channel-attacks" target="blank">cet article</a> qui en parle si vous êtes curieux.</p>
+
+<p>L’attaquant va alors simplement vider le cache, puis procéder à l’attaque, pour enfin accéder à toutes les sections du buffer qu’il avait préparé en mesurant les temps d’accès à chaque section.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">// Flush</span>
+
+<span class="n">flush</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+
+<span class="c1">// Attaque</span>
+
+<span class="cm">/* Une partie du buffer va être mise en cache, comme vu précédemment */</span>
+
+<span class="c1">// Reload</span>
+
+<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"[%d] %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">access_time</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Cela donnera une sortie comme</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="mi">231</span>
+<span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="mi">229</span>
+<span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="mi">304</span>
+<span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="mi">32</span>  <span class="c1">// &lt;--- Temps d'accès le plus rapide, donc section mise en cache</span>
+<span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="mi">274</span>
+<span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="mi">299</span>
+<span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="mi">257</span>
+<span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="mi">311</span>
+</code></pre></div></div>
+
+<p>L’information est donc maintenant connue. Comme c’est la section <code class="highlighter-rouge">4</code> qui est en cache, cela signifie que c’est la valeur <code class="highlighter-rouge">4</code> qui se trouvait à l’adresse <code class="highlighter-rouge">0xfff7</code> dans le kernel.</p>
+
+<p>En bouclant sur les adresses réservées au noyau, nous pouvons ainsi lire le contenu de cette zone mémoire interdite, 3 bits par 3 bits, jusqu’à avoir tout son contenu.</p>
+
+<h3 id="en-réalité">En réalité</h3>
+
+<p>Dans notre exemple, nous avons choisi un buffer de 8 sections pour sortir les informations du noyaux 3 bits par 3 bits. Cependant, en réalité, il faut savoir que le processeur cache des <em>cache line</em>, qui sont des blocs de données d’une certaine taille, de l’ordre de 64 octets. Ces lignes de cache sont incluses dans des <em>pages</em>. Sur ma machine, une page représente 4096 octets</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pixis@hackndo:~/spectre-meltdown <span class="nv">$ </span>getconf PAGESIZE
+4096
+</code></pre></div></div>
+
+<p>Par ailleurs, il est plus intéressant de sortir les informations octet par octet, donc récupérer 8 bits à la fois. Chaque octet pouvant prendre 256 valeurs, il convient de créer un buffer d’une taille de 256 pages, chaque page représenter une donnée. Ainsi, les données sont toutes distantes d’au moins la taille d’une page. Voici un exemple d’initialisation de buffer avec ces paramètres</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define PAGE_SIZE 4096
+#define BYTE_SIZE 256
+</span>
+<span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="n">PAGE_SIZE</span><span class="o">*</span><span class="n">BYTE_SIZE</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p>Le buffer ressemblera donc à ce schéma :</p>
+
+<p><a href="/assets/uploads/2018/01/buffer-pages.png"><img src="/assets/uploads/2018/01/buffer-pages.png" alt="Buffer with pages" /></a></p>
+
+<p>Le pseudo-code que nous avions précédemment devient alors</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">var_secrete</span> <span class="o">=</span> <span class="n">kernel_space</span><span class="p">[</span><span class="mh">0xfff7</span><span class="p">];</span> <span class="c1">// var_secrete == 4 dans l'exemple précédant</span>
+<span class="n">junk</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">[</span><span class="n">var_secrete</span> <span class="o">*</span> <span class="n">PAGE_SIZE</span><span class="p">];</span> <span class="c1">// La page à l'index 4*4kB sera mise en cache </span>
+</code></pre></div></div>
+
+<p>Le principe reste exactement le même avec ces paramètres.</p>
+
+<h2 id="spectre">Spectre</h2>
+
+<p>Tandis que Meltdown utilisait une faille de certains processeurs permettant de lire les adresses du noyau, l’attaque Spectre quant à elle n’utilise pas de faille, mais seulement l’optimisation de prédiction (<em>speculative</em>) et de cache dont nous avons parlé en début d’article pour pouvoir lire n’importe quelle valeur dans le <em>user-land</em> d’un processus victime.</p>
+
+<p>L’idée de Spectre est d’entraîner le processeur à suivre un certain chemin lorsqu’une décision doit être prise en utilisant l’optimisation de prédiction, puis de profiter de cette prise de décision <em>entraînée</em> pour que le processeur prenne la branche voulue même si la condition n’est plus respectée.</p>
+
+<blockquote>
+  <p><strong>Rappel</strong></p>
+
+  <p><em>En petite digression qui sera utile pour la suite, je rappelle qu’un tableau en C est une variable qui contient l’adresse du premier élément du tableau. Donc nous avons l’égalité suivante :</em></p>
+
+  <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">array</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="p">;</span>
+<span class="n">array</span> <span class="o">==</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</code></pre></div>  </div>
+
+  <p><em>Par ailleurs, je rappelle que accéder au <code class="highlighter-rouge">ième</code> élément d’un tableau en écrivant <code class="highlighter-rouge">array[i]</code>, c’est strictement équivalent à écrire <code class="highlighter-rouge">*(array + i)</code>. En effet, le <code class="highlighter-rouge">ième</code> élément est à l’adresse <code class="highlighter-rouge">adresse_premier_element + i</code>, or <code class="highlighter-rouge">array = adresse_premier_element</code> donc le <code class="highlighter-rouge">ième</code> élément est à l’adresse <code class="highlighter-rouge">array + i</code>, et pour récupérer cet élément, on déréférence ceci, donnant <code class="highlighter-rouge">*(array + i)</code>. D’où l’égalité suivante :</em></p>
+
+  <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">array</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Hello"</span><span class="p">;</span>
+<span class="n">array</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="o">*</span><span class="p">(</span><span class="n">array</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<p>Prenons l’exemple suivant</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">len_array1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">array2</span><span class="p">[</span><span class="n">array1</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>L’attaquant aura effectué un travail en amont qui aura habitué le processeur au fait que <code class="highlighter-rouge">i</code> soit inférieur à la longueur du tableau <code class="highlighter-rouge">array1</code> donc que la condition soit vraie.</p>
+
+<p>Ainsi, à la prochaîne exécution, le processeur s’appuyant sur le <em>Branch Target Buffer</em> (BTB) se dira que, comme avant, i <em>devrait</em> être inférieur à la taille du tableau, donc avant même que la vérification soit faite, il exécutera l’instruction suivante pour gagner du temps, à savoir <code class="highlighter-rouge">var = array2[array1[i]];</code>. Seulement cette fois, l’attaquant a décidé d’utiliser un <code class="highlighter-rouge">i</code> arbitraire, qu’il contrôle, et qui est supérieur à la taille du tableau <code class="highlighter-rouge">array1</code>.</p>
+
+<p>La conséquence est que l’instruction <code class="highlighter-rouge">var = array2[array1[i]]</code> sera tout de même exécutée en <em>prédiction</em>, donc que <code class="highlighter-rouge">array1[i]</code> sera évalué, et vaudra par exemple <code class="highlighter-rouge">12</code>. Une fois cette valeur trouvée, <code class="highlighter-rouge">12</code> dans l’exemple, l’index <code class="highlighter-rouge">12</code> du tableau <code class="highlighter-rouge">array2</code> va être lu, et le contenu sera assigné à <code class="highlighter-rouge">var</code>.</p>
+
+<p>Bien entendu, le processeur va ensuite se rendre compte que le <code class="highlighter-rouge">i</code> fourni n’était pas valide, donc il va annuler les instructions qu’il a pré-exécutées, donc <code class="highlighter-rouge">var</code> n’aura finalement pas de valeur. Cependant, la zone mémoire correspondant à <code class="highlighter-rouge">array2[12]</code> (avec <code class="highlighter-rouge">12 = array1[i]</code>) aura tout de même été mise en cache, laissant une trace.</p>
+
+<p>Une fois cette mise en cache effectuée, de la même manière que pour Meltdown, la technique du <em>flush + reload</em> est utilisée pour voir quel index de <code class="highlighter-rouge">array2</code> a été mis en cache, permettant de découvrir la valeur secrète <code class="highlighter-rouge">array[i]</code> avec <code class="highlighter-rouge">i</code> étant trop grand normalement pour passer le test initial.</p>
+
+<p>Pour généraliser et trouver la valeur à n’importe quelle adresse, et à l’aide du rappel ci-dessus, nous savons que <code class="highlighter-rouge">array1[i]</code> est équivalent à <code class="highlighter-rouge">*(array1 + i)</code> ou <code class="highlighter-rouge">*(&amp;array1[0] + i)</code>. Donc si l’attaquant veut voir ce qui se passe en mémoire à l’adresse <code class="highlighter-rouge">0xbfff1234</code> par exemple, un bête calcul permet de trouver le <code class="highlighter-rouge">i</code> qu’il doit fournir</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Nous voulons ceci</span>
+<span class="o">&amp;</span><span class="p">(</span><span class="n">array1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="mh">0xbfff1234</span><span class="p">;</span>
+
+<span class="c1">// Or</span>
+<span class="o">&amp;</span><span class="p">(</span><span class="n">array1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">array1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">array1</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+
+<span class="c1">// Donc</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mh">0xbfff1234</span> <span class="o">-</span> <span class="n">array1</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Une fois ce calcul en tête, l’attaquant peut extraire n’importe quel octet de la mémoire du programme en cours, dont des zones cachées contenant des mots de passe, des clés de cryptographie ou autres secrets.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Ces deux attaques font beaucoup parler d’elles car il n’y a pas de manière évidente et simple de les patcher donc de s’en protéger.</p>
+
+<p>Concernant Meltdown, il est par exemple possible de changer totalement le mode de gestion de la mémoire en faisant en sorte que le noyau et le processus aient deux espaces d’adressage distincts, comme nous l’avions vu dans l’article <a href="/le-monde-du-kernel/">le monde du kernel</a>. Ainsi, nous pouvons passer du mode de gauche (partage de l’espace d’adressage) au mode de droite (séparation des espaces d’adressage)</p>
+
+<p><a href="/assets/uploads/2016/06/Screen-Shot-2016-06-14-at-23.30.17.png"><img src="/assets/uploads/2016/06/Screen-Shot-2016-06-14-at-23.30.17.png" alt="Différents espaces d'adressages" /></a></p>
+
+<p>Evidemment, le processeur devra souvent changer de contexte d’exécution (user - kernel), et devra alors mettre en cache beaucoup d’informations puisqu’il devra alterner entre deux espaces d’adressage indépendants, d’où les baisses de performances dont on parle.</p>
+
+<p>En ce qui concerne Spectre, il est beaucoup plus compliqué de trouver un moyen de s’en protéger. En effet, l’attaque utilise des éléments intrinsèques à l’architecture de l’ordinateur, sans utiliser de vulnérabilité, et sans accéder à des zones mémoire interdites par le matériel. Il faut donc revoir en profondeur le fonctionnement des optimisations.</p>
+
+<p>Je vous invite à lire <a href="http://blogmotion.fr/internet/securite/metldown-spectre-comprendre-16865" target="blank">le billet</a> de <a href="https://twitter.com/xhark" target="blank">@xhark</a> sur le sujet pour plus d’information sur les solutions et mises à jour. Il a fait un très bon travail de synthèse, je ne vais donc pas reprendre son travail.</p>
+
+<p>Pour plus de détails sur les attaques, je vous mets également les whitepapers ici pour <a href="https://meltdownattack.com/meltdown.pdf" target="blank">meltdown</a> et <a href="https://spectreattack.com/spectre.pdf" target="blank">spectre</a>.</p>
+
+<p>J’espère que cet article vous aide à y voir plus clair, n’hésitez toujours pas à commenter ou à me retrouver sur <a href="https://discord.gg/9At6SUZ" target="blank">Discord</a> pour plus d’informations, des remarques, des corrections, etc.</p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#kernel-land"><i class="fas fa-tags"></i> Kernel Land</a><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a><a href="/archives/#hardware"><i class="fas fa-tags"></i> Hardware</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/meltdown-spectre/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-001e';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

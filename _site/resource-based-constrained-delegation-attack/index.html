@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Resource-Based Constrained Delegation - Risques - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Resource-Based Constrained Delegation - Risques" />
+    <meta name="twitter:description" content="Cet article montre comment abuser de la délégation contrainte basée sur les ressources (resource based constrained delegation) afin de prendre le contrôle de machines." />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2019/04/rbcd_baneer.png" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Resource-Based Constrained Delegation - Risques" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Cet article montre comment abuser de la délégation contrainte basée sur les ressources (resource based constrained delegation) afin de prendre le contrôle de machines." />
+<meta property="og:description" content="Cet article montre comment abuser de la délégation contrainte basée sur les ressources (resource based constrained delegation) afin de prendre le contrôle de machines." />
+<link rel="canonical" href="http://localhost:4000/resource-based-constrained-delegation-attack/" />
+<meta property="og:url" content="http://localhost:4000/resource-based-constrained-delegation-attack/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-05-05T12:28:42+02:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/resource-based-constrained-delegation-attack/","headline":"Resource-Based Constrained Delegation - Risques","dateModified":"2019-05-05T12:28:42+02:00","datePublished":"2019-05-05T12:28:42+02:00","author":{"@type":"Person","name":"Pixis"},"description":"Cet article montre comment abuser de la délégation contrainte basée sur les ressources (resource based constrained delegation) afin de prendre le contrôle de machines.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/resource-based-constrained-delegation-attack/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2019/04/rbcd_baneer.png" alt="Resource-Based Constrained Delegation - Risques" title="Resource-Based Constrained Delegation - Risques" />
+  </div>
+  
+  <h1 class="post-title">Resource-Based Constrained Delegation - Risques</h1>
+  <div class="post-info">
+      <p class="alignleft">05 May 2019 <a class="post-comments-count" href="http://http://localhost:4000/resource-based-constrained-delegation-attack/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Cet article montre comment abuser de la délégation contrainte basée sur les ressources (resource-based constrained delegation) afin de prendre le contrôle de machines.</p>
+
+<!--more-->
+
+<p>Il repose sur du contenu d’excellente qualité. J’ai tenté de résumer avec des mots simples une petite partie du travail de <a href="https://twitter.com/elad_shamir">Elad Shamir</a>. Son article <a href="https://shenaniganslabs.io/2019/01/28/Wagging-the-Dog.html">Wagging the Dog: Abusing Resource-Based Constrained Delegation to Attack Active Directory</a> est incroyable de par ses recherches. D’autres articles ont suivi, notamment celui de <a href="https://twitter.com/_dirkjan">Dirk-jan</a> (<a href="https://dirkjanm.io/worst-of-both-worlds-ntlm-relaying-and-kerberos-delegation/">The worst of both worlds: Combining NTLM Relaying and Kerberos delegation </a>) ou celui de <a href="https://twitter.com/harmj0y">Harmj0y</a> (<a href="https://www.harmj0y.net/blog/activedirectory/a-case-study-in-wagging-the-dog-computer-takeover/">A Case Study in Wagging the Dog: Computer Takeover</a>), me permettant d’assembler toutes les pièces et de rédiger cet article.</p>
+
+<p>Vous êtes prêts ? Let’s dive in.</p>
+
+<h2 id="rappels--resource-based-constrained-delegation">Rappels : Resource-Based Constrained Delegation</h2>
+
+<p>Dans cet article, le terme “Resource-Based” sera utilisé pour parler de cette délégation.</p>
+
+<p>Contrairement à la <a href="/unconstrained-delegation-attack">délégation complète</a>, la délégation Resource-Based est un poil plus compliquée. L’idée générale est que ce sont les ressources de fin de chaine qui décident si oui ou non un service peut s’authentifier auprès d’elles en tant qu’un autre utilisateur. Ces ressources ont donc une liste de comptes en lesquels elles ont confiance. Si une ressource fait confiance au compte <code class="highlighter-rouge">WEBSERVER$</code>, alors quand un utilisateur s’authentifiera auprès de <code class="highlighter-rouge">WEBSERVER$</code>, il pourra lui même s’authentifier auprès de cette ressource en tant que l’utilisateur.</p>
+
+<p>En revanche, si un autre utilisateur s’authentifie auprès d’un compte qui ne fait pas partie de la liste de confiance du service (par exemple <code class="highlighter-rouge">FILESERVER$</code> ou <code class="highlighter-rouge">Sql_SVC</code> dans le schéma ci-dessous), ce compte ne pourra pas se faire passer pour cet utilisateur auprès du service.</p>
+
+<p><a href="/assets/uploads/2019/02/resource_based_constrained_delegation_schema.png"><img src="/assets/uploads/2019/02/resource_based_constrained_delegation_schema.png" alt="Resource Based Constrained Delegation" /></a></p>
+
+<p>Concrètement, comme expliqué dans l’<a href="/constrained-unconstrained-delegation/#kerberos-constrained-delegation">article sur la délégation</a>, la ressource finale, à droite sur le schéma, a un attribut appelé <code class="highlighter-rouge">msDS-AllowedToActOnBehalfOfOtherIdentity </code> qui contient la liste des comptes en lesquels elle a confiance.</p>
+
+<p>Par ailleurs, pour que cette délégation fonctionne, l’attribut <code class="highlighter-rouge">ADS_UF_NOT_DELEGATED</code> de l’utilisateur ne doit pas être positionné. C’est un attribut qui permet d’interdire la délégation en vue de protéger le compte des attaques liées à la délégation.</p>
+
+<p>Notons également que pour relayer l’authentification d’un utilisateur, le compte de service “relai” (<code class="highlighter-rouge">WEBSERVER$</code> dans le schéma) doit avoir un TGS provenant de l’utilisateur.</p>
+
+<p><strong>Si l’utilisateur s’authentifie via Kerberos</strong>, aucun soucis, le service “relai” est en possession du TGS de l’utilisateur, donc le mécanisme (<strong>S4U2Proxy</strong>) est simple, le compte de service envoie le TGS de l’utilisateur au contrôleur de domaine pour que celui-ci lui renvoie un TGS valide pour accéder à la ressource désirée (si bien sûr le compte de service fait partie de la liste de confiance de la ressource).</p>
+
+<p><a href="/assets/uploads/2019/02/resource_based_constrained_delegation_schema_detailed.png"><img src="/assets/uploads/2019/02/resource_based_constrained_delegation_schema_detailed.png" alt="Resource Based Constrained Delegation Detailed" /></a></p>
+
+<p>En revanche, <strong>si l’utilisateur s’authentifie d’une autre manière</strong> (NTLM par exemple), le compte de service n’a pas reçu de TGS. Il va alors devoir faire une première demande pour avoir un TGS transférable au nom de l’utilisateur, c’est le mécanisme <strong>S4U2Self</strong>, puis il utilisera ce TGS transférable pour faire le processus expliqué juste avant, <strong>S4U2Proxy</strong>.</p>
+
+<p><a href="/assets/uploads/2019/02/s4u2self.png"><img src="/assets/uploads/2019/02/s4u2self.png" alt="S4U2Self" /></a></p>
+
+<h2 id="comportement-by-design">Comportement “by design”</h2>
+
+<p>Maintenant que ces rappels sont faits, il est intéressant de creuser un peu. En effet, on se rend compte que le mécanisme <strong>S4U2Self</strong> peut être assez dangereux, parce qu’un service peut finalement demander un TGS <strong>au nom de n’importe quel utilisateur</strong>. Dans le processus normal, il demande un TGS au nom de l’utilisateur qui s’est authentifié auprès de lui, mais rien ne l’oblige à se limiter à ce compte.</p>
+
+<p>Heureusement, cette possibilité de demander des TGS transférables au nom de n’importe qui (S4U2Self) n’est possible que pour les comptes ayant l’attribut <code class="highlighter-rouge">TrustedToAuthForDelegation</code> de positionné, ce qui n’est pas un attribut positionné par défaut, et qu’on trouve rarement en entreprise.</p>
+
+<p>Plus précisemment, <strong>tous les comptes de service peuvent faire un S4U2Self</strong>, mais seuls ceux avec l’attribut <code class="highlighter-rouge">TrustedToAuthForDelegation</code> recevront un TGS <strong>transférable</strong>, condition à priori nécessaire pour S4U2Proxy (cf. <a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-sfu/ad98268b-f75b-42c3-b09b-959282770642">la documentation Microsoft</a>).</p>
+
+<p>Ainsi, par exemple, lors d’une délégation contrainte (<strong>pas</strong> Resource-Based), si un compte machine demande un TGS via S4U2Self sans avoir l’attribut <code class="highlighter-rouge">TrustedToAuthForDelegation</code>, ce compte recevra un TGS <strong>non transférable</strong>, et lors de la demande de TGS pour une ressource (S4U2Proxy), ce sera refusé puisque ce TGS ne peut pas être transféré.</p>
+
+<p>En revanche, et <strong>c’est là que c’est super incroyable</strong>, dans le cas de la délégation <strong>Resource-Based</strong>, si de la même manière un compte machine demande un TGS via S4U2Self sans avoir l’attribut <code class="highlighter-rouge">TrustedToAuthForDelegation</code>, ce compte recevra un TGS <strong>qui sera toujours non transférable</strong>, mais lors de la demande de TGS pour une ressource (S4U2Proxy), cette demande <strong>SERA ACCEPTÉE</strong> (cf. encore <a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-sfu/c6f6f8b3-1209-487b-881d-d0908a413bb7">la documentation Microsoft</a>).</p>
+
+<p><a href="/assets/uploads/2019/04/s4u2selfok.png"><img src="/assets/uploads/2019/04/s4u2selfok.png" alt="S4U2Self without transferable" /></a></p>
+
+<p>Dans cet exemple, le <code class="highlighter-rouge">SERVEUR1$</code> n’a pas l’attribut <code class="highlighter-rouge">TrustedToAuthForDelegation</code> de positionné, mais il est déclaré dans la liste de confiance de <code class="highlighter-rouge">Service B</code>. Lors de sa demande de TGS pour un utilisateur lambda via S4U2Self, le contrôleur de domaine lui envoie un TGS <strong>non transférable</strong>, cependant en passant ce TGS à la requête S4U2Proxy afin de récupérer un TGS pour utiliser le <code class="highlighter-rouge">Service B</code>, il n’y a aucun soucis, ça fonctionne, et <code class="highlighter-rouge">SERVEUR1$</code> peut utiliser <code class="highlighter-rouge">Service B</code> en tant que l’utilisateur choisi.</p>
+
+<p>Au cas où ce n’est toujours pas clair, ça veut dire que <code class="highlighter-rouge">SERVEUR1$</code> peut s’authentifier auprès de <code class="highlighter-rouge">Service B</code> en tant que <strong>n’importe quel utilisateur</strong>.</p>
+
+<p>Et ouais.</p>
+
+<h2 id="attribut-machine-account-quota">Attribut Machine-Account-Quota</h2>
+
+<p>Pour pouvoir décrire un chemin d’attaque complet, il faut également parler de l’attribut <a href="https://docs.microsoft.com/en-us/windows/desktop/adschema/a-ms-ds-machineaccountquota">msds-MachineAccountQuota</a> qui est positionné sur le domaine. Cet attribut décrit le nombre de comptes machine qu’un utilisateur du domaine peut créer. Cet attribut vaut 10 par défaut. Cela signifie que, par défaut, un utilisateur peut joindre 10 machines au domaine, ou qu’il peut créer 10 comptes machine, en choisissant notamment leur nom et leur mot de passe.</p>
+
+<p>Ce comportement peut être modifié <a href="https://social.technet.microsoft.com/wiki/contents/articles/5446.active-directory-how-to-prevent-authenticated-users-from-joining-workstations-to-a-domain.aspx">par GPO</a>, mais voilà, par défaut, c’est 10.</p>
+
+<p>Cet ajout peut être fait directement dans les paramètres d’une machine Windows, mais également via LDAP. Cette fonctionnalité est notamment disponible dans l’outil <a href="https://github.com/Kevin-Robertson/Powermad">Powermad</a> de <a href="https://twitter.com/kevin_robertson">Kévin Robertson</a>.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">New-MachineAccount</span><span class="w"> </span><span class="nt">-MachineAccount</span><span class="w"> </span><span class="nx">NOUVELLEMACHINE</span><span class="w"> </span><span class="nt">-Password</span><span class="w"> </span><span class="err">$</span><span class="p">(</span><span class="nf">ConvertTo-SecureString</span><span class="w"> </span><span class="s2">"Hackndo123+!"</span><span class="w"> </span><span class="nt">-AsPlainText</span><span class="w"> </span><span class="nt">-Force</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Cette fonctionnalité est importante parce que dans les histoires de délégation, les comptes concernés sont des comptes de service, c’est à dire des comptes avec un ou plusieurs SPN. Un utilisateur du domaine n’a pas d’attribut SPN, mais il peut créer un compte machine qui lui possède par défaut plusieurs SPN.</p>
+
+<h2 id="exploitation">Exploitation</h2>
+
+<p>Nous avons maintenant tous les éléments en main pour décrire un chemin d’attaque. Il en existe d’autres, bien sûr, mais ce chemin permet d’assembler toutes les pièces du puzzle.</p>
+
+<p>Nous nous plaçons dans le cas d’une position <em>man-in-the-middle</em> en utilisant le fait que IPv6 est majoritairement activé dans les réseaux d’entreprise, et que d’un point de vue OS, c’est ce protocole qu’il faut utiliser en priorité, avant IPv4. Un attaquant peut alors se positionner en serveur DHCP IPv6 et répondre aux équipements environnants.</p>
+
+<p><a href="/assets/uploads/2019/04/mitm6_wpad.png"><img src="/assets/uploads/2019/04/mitm6_wpad.png" alt="MITM6 Wpad" /></a></p>
+
+<p>Par ailleurs, il est possible de relayer une authentification HTTP d’une machine en une authentification LDAPS vers une autre. Nous relaierons les connexions vers le contrôleur de domaine.</p>
+
+<p>Lorsque la machine <code class="highlighter-rouge">DESKTOP-01</code> va se connecter au réseau (reboot, branchement du cable réseau), le compte <code class="highlighter-rouge">DESKTOP-01$</code> va se connecter en HTTP à notre machine du fait de notre position <em>man-in-the-middle</em>. C’est à ce moment que le relai va être effectif.</p>
+
+<p>Deux actions vont être effectuées via LDAPS, en utilisant cette authentification relayée, en tant que <code class="highlighter-rouge">DESKTOP-01$</code>.</p>
+
+<ol>
+  <li>Un compte machine <code class="highlighter-rouge">HACKNDO$</code> va être créé, puisque le compte <code class="highlighter-rouge">DESKTOP-01$</code> est un compte du domaine, et a le droit d’ajouter 10 comptes machine au domaine, par défaut.</li>
+  <li>Le compte machine <code class="highlighter-rouge">DESKTOP-01$</code> a le droit de modifier certains de ses attributs, dont l’attribut <code class="highlighter-rouge">msDS-AllowedToActOnBehalfOfOtherIdentity</code>, qui est la liste des machines de confiance pour la délégation “Resource-Based”. On va donc modifier cet attribut pour ajouter <code class="highlighter-rouge">HACKNDO$</code> à cette liste de confiance.</li>
+</ol>
+
+<p><a href="/assets/uploads/2019/04/relai_ldap.png"><img src="/assets/uploads/2019/04/relai_ldap.png" alt="Relai LDAP" /></a></p>
+
+<p>Maintenant, nous avons la main sur le compte <code class="highlighter-rouge">HACKNDO$</code>, puisque nous avons choisi son nom et son mot de passe lors de la création, et ce compte a la confiance de <code class="highlighter-rouge">DESKTOP-01$</code>.</p>
+
+<p>Il suffit alors de se connecter en tant que <code class="highlighter-rouge">HACKNDO$</code>, faire une demande de TGS au nom d’un administrateur via <code class="highlighter-rouge">S4U2Self</code>. Le contrôleur de domaine va nous répondre avec un TGS <strong>non transférable</strong>. Nous demandons ensuite un TGS pour utiliser le service <code class="highlighter-rouge">CIFS</code> de <code class="highlighter-rouge">DESKTOP-01</code> (<code class="highlighter-rouge">CIFS/DESKTOP-01</code>) en fournissant le TGS précédemment demandé (S4U2Proxy). Comme nous l’avons vu au début, bien qu’il ne soit pas transférable, il est tout de même accepté, et le contrôleur de domaine nous envoie un TGS en tant qu’administrateur pour utiliser le service <code class="highlighter-rouge">CIFS</code> de <code class="highlighter-rouge">DESKTOP-01</code>.</p>
+
+<p>Voici un petit schéma récapitulatif :</p>
+
+<p><a href="/assets/uploads/2019/04/process_complete_relay.png"><img src="/assets/uploads/2019/04/process_complete_relay.png" alt="Processus complet" /></a></p>
+
+<p>Il est possible de répéter l’opération pour demander un TGS en vue de pouvoir gérer les services. Ainsi, en envoyant un exécutable de type “reverse-shell” sur la machine avec le ticket <code class="highlighter-rouge">CIFS</code>, puis en créant et démarrant un service utilisant cet executable à l’aide d’un ticket <code class="highlighter-rouge">SCHEDULE</code>, il est possible de prendre la main sur la machine en tant que SYSTEM.</p>
+
+<h2 id="résumé">Résumé</h2>
+
+<p>L’opération étant un peu complexe, voici les différentes étapes résumées :</p>
+
+<ol>
+  <li>Ajouter une machine <code class="highlighter-rouge">M</code> au domaine (via un relai d’authentification, via un compte de domaine déjà possédé, …)</li>
+  <li>Ajouter cette machine <code class="highlighter-rouge">M</code> à la liste de confiance de la cible <code class="highlighter-rouge">C</code> (i.e. l’ajouter à l’attribut <code class="highlighter-rouge">msDS-AllowedToActOnBehalfOfOtherIdentity</code> en relayant l’authentification de la machine cible, puisqu’elle a le droit de changer son propre attribut)</li>
+  <li>Faire une demande de TGS pour un ticket au nom d’un administrateur via S4U2Self</li>
+  <li>Une fois en possession de ce ticket, l’envoyer au contrôleur de domaine pour demander un TGS vers la cible <code class="highlighter-rouge">C</code> via S4U2Proxy.</li>
+  <li>Enjoy ce nouveau ticket valide, en tant que l’administrateur choisi. D’autres tickets peuvent être demandés avec l’étape 4.</li>
+</ol>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>La délégation “Resource-Based” est un procédé complexe, tellement complexe que des problématiques de sécurité sont introduites dans l’implémentation de la fonctionnalité.</p>
+
+<p>Ce qu’il faut finalement retenir, c’est qu’il est possible de prendre la main sur une machine lorsqu’on a la possibilité de modifier sa liste de confiance dans le cadre de la délégation basée sur les ressources.</p>
+
+<p>Pour s’en prémunir, plusieurs actions sont possibles. Tout d’abord, il faut implémenter le <a href="https://support.microsoft.com/en-us/help/4034879/how-to-add-the-ldapenforcechannelbinding-registry-entry">channel binding</a> au niveau de LDAP afin d’empêcher le relai vers LDAPS. Ensuite, il faut limiter la possibilité de création de comptes machine sur le domaine à des groupes définis d’utilisateurs. Enfin, en lien avec cet exemple, IPv6 devrait être désactivé dans les réseaux d’entreprise, puisqu’il ne répond à aucun besoin.</p>
+
+<p>Cet article étant relativement dense, il serait tout à fait normal que des points ne soient pas tout à fait clairs. Si vous avez des questions, n’hésitez pas à les poser en commentaire ou sur <a href="https://discord.gg/9At6SUZ" target="blank">Discord</a>. Vous pouvez toujours suivre la sortie de nouveaux articles sur mon twitter <a href="https://twitter.com/HackAndDo" target="blank">@hackanddo</a>.</p>
+
+<p>Enfin, n’hésitez pas à faire un tour sur les ressources citées, notamment l’article de <a href="https://twitter.com/elad_shamir">Elad Shamir</a> qui est un travail de recherche complet et super intéressant.</p>
+
+<h2 id="ressources">Ressources</h2>
+
+<ul>
+  <li><a href="https://shenaniganslabs.io/2019/01/28/Wagging-the-Dog.html">Wagging the Dog: Abusing Resource-Based Constrained Delegation to Attack Active Directory</a> par <a href="https://twitter.com/elad_shamir">Elad Shamir</a></li>
+  <li><a href="https://dirkjanm.io/worst-of-both-worlds-ntlm-relaying-and-kerberos-delegation/">The worst of both worlds: Combining NTLM Relaying and Kerberos delegation </a> par <a href="https://twitter.com/_dirkjan">Dirk-jan</a></li>
+  <li><a href="https://www.harmj0y.net/blog/activedirectory/a-case-study-in-wagging-the-dog-computer-takeover/">A Case Study in Wagging the Dog: Computer Takeover</a> par <a href="https://twitter.com/harmj0y">Harmj0y</a></li>
+</ul>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/resource-based-constrained-delegation-attack/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-00ad';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

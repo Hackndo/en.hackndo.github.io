@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        BloodHound - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="BloodHound" />
+    <meta name="twitter:description" content="BloodHound est un outil permettant de cartographier un environnement Active Directory en le représentant sous forme de graphe. Cette représentation offre alors toute la puissance de la théorie des graphes pour découvrir des chemins d'attaque qui auraient été autrement difficiles voire impossibles à détecter." />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2019/07/bloodhound.png" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="BloodHound" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="BloodHound est un outil permettant de cartographier un environnement Active Directory en le représentant sous forme de graphe. Cette représentation offre alors toute la puissance de la théorie des graphes pour découvrir des chemins d’attaque qui auraient été autrement difficiles voire impossibles à détecter." />
+<meta property="og:description" content="BloodHound est un outil permettant de cartographier un environnement Active Directory en le représentant sous forme de graphe. Cette représentation offre alors toute la puissance de la théorie des graphes pour découvrir des chemins d’attaque qui auraient été autrement difficiles voire impossibles à détecter." />
+<link rel="canonical" href="http://localhost:4000/bloodhound/" />
+<meta property="og:url" content="http://localhost:4000/bloodhound/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-30T16:12:41+02:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/bloodhound/","headline":"BloodHound","dateModified":"2019-07-30T16:12:41+02:00","datePublished":"2019-07-30T16:12:41+02:00","author":{"@type":"Person","name":"Pixis"},"description":"BloodHound est un outil permettant de cartographier un environnement Active Directory en le représentant sous forme de graphe. Cette représentation offre alors toute la puissance de la théorie des graphes pour découvrir des chemins d’attaque qui auraient été autrement difficiles voire impossibles à détecter.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/bloodhound/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2019/07/bloodhound.png" alt="BloodHound" title="BloodHound" />
+  </div>
+  
+  <h1 class="post-title">BloodHound</h1>
+  <div class="post-info">
+      <p class="alignleft">30 Jul 2019 <a class="post-comments-count" href="http://http://localhost:4000/bloodhound/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>BloodHound est un outil permettant de cartographier un environnement Active Directory en le représentant sous forme de graphe. Cette représentation offre alors toute la puissance de la théorie des graphes pour découvrir des chemins d’attaque qui auraient été autrement difficiles voire impossibles à détecter.</p>
+
+<!--more-->
+
+<h2 id="active-directory">Active Directory</h2>
+
+<p>En environnement Active Directory, la gestion des droits est complexe, très complexe. Il n’est pas rare qu’un utilisateur fasse partie d’un groupe, qui fait partie de 10 groupes, et que l’un des groupes ait le droit de modifier une GPO qui s’applique à une OU, dans laquelle se trouve des utilisateurs avec des droits d’administration sur un groupe de machines, etc. On pourrait trouver des déclinaisons de droits à l’infini.</p>
+
+<p>Le soucis, c’est qu’en tant qu’administrateur d’un système d’information complexe, ces délégations de droits sont extrêmement complexes à détecter. En effet, l’administrateur regarde les listes de droits qu’a un utilisateur ou un groupe sur un objet en particulier. Il existe parfois plusieurs dizaines de droits différents qui peuvent être appliqués sur un objet.</p>
+
+<p>Voici un exemple d’une liste d’ACE (Access Control Entry) que l’on peut trouver sur un objet “GPO”.</p>
+
+<p><a href="../assets/uploads/2019/07/acl_complexity.png"><img src="../assets/uploads/2019/07/acl_complexity.png" alt="ACL Complexity" /></a></p>
+
+<p>La barre de défilement à droite montre que le nombre d’entrées possibles est très important. Imaginez alors qu’il y a des entrées comme celles-ci sur tous les objets de l’Active Directory, que certains droits peuvent s’appliquer via délégation, qu’il y a des groupes inclus dans d’autres groupes, héritant des droits des groupes parents, etc.</p>
+
+<p>C’est là qu’entre en jeu l’outil <a href="https://github.com/BloodHoundAD/BloodHound">BloodHound</a>. Quand la vision en mode liste des droits est un calvaire, la vision en mode graphe apporte quant à elle une clarté et un recul extrêmement valorisants.</p>
+
+<h2 id="bloodhound">BloodHound</h2>
+
+<p>BloodHound est un outil développé par <a href="https://twitter.com/_wald0">@wald0</a>, <a href="https://twitter.com/harmj0y">@Harmj0y</a> et <a href="https://twitter.com/cptjesus">@CptJesus</a>, dont j’ai parlé dans l’article sur les <a href="/gpo-abuse-with-edit-settings/">GPO</a>. L’idée de cet outil est d’analyser un environnement Active Directory en énumérant les différents objets de l’environnement, et en les liant avec des relations. Par exemple, si un utilisateur <code class="highlighter-rouge">support-account</code> est membre du groupe <code class="highlighter-rouge">support</code>, l’utilisateur sera lié par la relation <code class="highlighter-rouge">MemberOf</code> au groupe.</p>
+
+<p><a href="/assets/uploads/2019/07/MemberOf.png"><img src="/assets/uploads/2019/07/MemberOf.png" alt="MemberOf" /></a></p>
+
+<p>C’est une visualisation assez claire d’une appartenance, mais l’outil ne s’arrête pas là. Il permet de voir également que le groupe <code class="highlighter-rouge">support</code> fait partie du groupe <code class="highlighter-rouge">DOMAIN ADMINS</code>, donc par héritage, le compte <code class="highlighter-rouge">support</code> est un administrateur de domaine.</p>
+
+<p><a href="/assets/uploads/2019/07/memberOfNested.png"><img src="/assets/uploads/2019/07/memberOfNested.png" alt="memberOfNested" /></a></p>
+
+<p>Et en fait, ce n’est pas tout, si on demande de lister l’ensemble des groupes auxquels appartient <code class="highlighter-rouge">support</code>, on se rend compte qu’il appartient finalement à beaucoup d’autres groupes !</p>
+
+<p><a href="/assets/uploads/2019/07/MemberOfDelegated.png"><img src="/assets/uploads/2019/07/MemberOfDelegated.png" alt="MemberOfDelegated" /></a></p>
+
+<p>Bien entendu, il existe bien d’autres “relations” entre les objets. A l’heure de cet article, voici la liste des relations disponibles.</p>
+
+<p><a href="/assets/uploads/2019/07/edges.png"><img src="/assets/uploads/2019/07/edges.png" alt="edges" /></a></p>
+
+<p>On notera par exemple <code class="highlighter-rouge">AdminTo</code>, <code class="highlighter-rouge">HasSession</code>, <code class="highlighter-rouge">GenericAll</code> ou encore <code class="highlighter-rouge">AddAllowedToAct</code>.</p>
+
+<p>Nous avons donc un ensemble d’objets liés entre eux par des relations. Il est alors possible de trouver des chemins en utilisant la théorie des graphes.</p>
+
+<h2 id="théorie-des-graphes">Théorie des graphes</h2>
+
+<p>La <a href="https://fr.wikipedia.org/wiki/Th%C3%A9orie_des_graphes">théorie de graphes</a> s’appuie sur une représentation “graphe” des données. C’est un modèle constitué de noeuds (ici les objets de l’Active Directory) et d’arêtes (ici les relations entre les objets).</p>
+
+<p><a href="/assets/uploads/2019/07/graphe_example.png"><img src="/assets/uploads/2019/07/graphe_example.png" alt="graphe_example" /></a></p>
+
+<p>Les arêtes peuvent être orientées ou non. Dans le cas de BloodHound, elles le sont toujours. Cela signifie que pour aller d’un noeud A à un noeud B, il faut qu’ils soient reliés par une arête allant de A vers B. L’autre sens ne fonctionne pas.</p>
+
+<p><a href="/assets/uploads/2019/07/oriented_edge.png"><img src="/assets/uploads/2019/07/oriented_edge.png" alt="oriented_edge" /></a></p>
+
+<p>Une fois que nous avons ces noeuds reliés par des arêtes, nous pouvons chercher des chemins particuliers pour partir d’un noeud de départ et arriver à un noeud de destination, en passant par tout un ensemble de noeuds. Il existe souvent plusieurs chemins possibles, et la théorie des graphes permet de trouver les chemins les plus courts pour relier deux points particuliers.</p>
+
+<p>Ainsi, le graphe suivant est constitué de 7 noeuds et 9 arêtes.</p>
+
+<p><a href="/assets/uploads/2019/07/graphe_before.png"><img src="/assets/uploads/2019/07/graphe_before.png" alt="graphe_before" /></a></p>
+
+<p>Si nous avons réussi à prendre la main sur le noeud le plus à gauche, et que nous souhaitons atteindre le noeud le plus à droite, car c’est le noeud <code class="highlighter-rouge">Administrateur de domaine</code>, la théorie des graphes permet de trouver le chemin le plus court entre les deux.</p>
+
+<p><a href="/assets/uploads/2019/07/graphe_after.png"><img src="/assets/uploads/2019/07/graphe_after.png" alt="graphe_after" /></a></p>
+
+<p>Un attaquant ayant cette information saura comment se déplacer dans le réseau pour atteindre son objectif en un minimum d’étapes.</p>
+
+<p>Prenons comme exemple un environnement Active Directory. Il est composé d’un grand nombre de noeuds.</p>
+
+<p><a href="/assets/uploads/2019/07/all_nodes.png"><img src="/assets/uploads/2019/07/all_nodes.png" alt="All nodes" /></a></p>
+
+<p>Si nous compromettons l’utilisateur <code class="highlighter-rouge">JDOE</code>, voici le chemin le plus court pour atteindre le groupe <code class="highlighter-rouge">DOMAIN ADMINS</code>.</p>
+
+<p><a href="/assets/uploads/2019/07/ad_shortest_path.png"><img src="/assets/uploads/2019/07/ad_shortest_path.png" alt="ad_shortest_path" /></a></p>
+
+<p>Comme on peut le voir, le chemin “le plus court” est finalement long, ce qui laisse présager une grande complexité des droits dans ce système d’information. Utiliser BloodHound permet, malgré cette complexité, d’extraire simplement et clairement un chemin d’attaque depuis un utilisateur qui à priori n’avait pas de droits particuliers.</p>
+
+<p>Pour pouvoir traiter ces informations en mode graphe, BloodHound utilise la base de données “Neo4j”, orientée graphe pour stocker les informations récoltées.</p>
+
+<h2 id="fonctionnement">Fonctionnement</h2>
+
+<p>L’outil BloodHound manipule plusieurs données, récoltées par différentes techniques.</p>
+
+<p>D’abord, afin de récolter les informations relatives à l’annuaire, il est nécessaire de les demander à un contrôleur de domaine. En effet, si nous sommes en possession d’un compte de domaine, même s’il n’a aucun droit particuliers, nous pouvons parcourir l’ensemble des utilisateurs, des machines, des GPO, lire les ACL, et d’autres informations.</p>
+
+<p>Par ailleurs, jusqu’à récemment, il était possible de demander aux différentes machines la liste de leurs groupes locaux, ce qui permettait de savoir qui était administrateur local de quelle machine en corrélant cette information avec l’appartenance des utilisateurs aux différents groupes.</p>
+
+<p>Ensuite, nous sommes en mesure d’énumérer les sessions distantes sur les machines via la commande <code class="highlighter-rouge">net session \\computer</code>. Un exemple de sortie de cette commande est la suivante :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net session \\computer
+
+Computer      User name                Client type  Opens   Idle time
+---------------------------------------------------------------------
+\\SOURCE      SUPPORT-ACCOUNT          Windows 7    1       00:00:13
+</code></pre></div></div>
+<p>Cette commande permet de savoir que l’utilisateur <code class="highlighter-rouge">SUPPORT-ACCOUNT</code> a demandé une ressource sur <code class="highlighter-rouge">computer</code> depuis le host <code class="highlighter-rouge">SOURCE</code>. Cette information permet d’affirmer que <code class="highlighter-rouge">SUPPORT-ACCOUNT</code> a en ce moment une session active sur <code class="highlighter-rouge">SOURCE</code>. C’est une information importante puisqu’elle indique que le secret d’authentification de <code class="highlighter-rouge">support-account</code> est présent dans la mémoire de <strong>lsass</strong> sur la machine <code class="highlighter-rouge">SOURCE</code>.</p>
+
+<p>Ces différentes informations (non exhaustives) sont récoltées via le collecteur <a href="https://github.com/BloodHoundAD/SharpHound">SharpHound</a>, et sont enregistrées sous un format <code class="highlighter-rouge">json</code> dans différents fichiers.</p>
+
+<p><a href="/assets/uploads/2019/07/list_files.png"><img src="/assets/uploads/2019/07/list_files.png" alt="list_files" /></a></p>
+
+<p>Ces fichiers sont ensuite importés dans BloodHound qui les stocke dans la base de données Neo4j. Une fois l’import terminé, l’interface graphique BloodHound permet de visualiser rapidement ces données via des requêtes préparées ou des requêtes personnalisées.</p>
+
+<p><a href="/assets/uploads/2019/07/prebuilt_queries.png"><img src="/assets/uploads/2019/07/prebuilt_queries.png" alt="prebuilt_queries" /></a></p>
+
+<p>Il est également possible de directement envoyer les requêtes dans l’interface de Neo4j, ce qui peut être utile pour extraire des données sous forme de tableau, par exemple.</p>
+
+<p><a href="/assets/uploads/2019/07/neo4j_interface.png"><img src="/assets/uploads/2019/07/neo4j_interface.png" alt="neo4j_interface" /></a></p>
+
+<h2 id="requêtes">Requêtes</h2>
+
+<p>Au dela des requêtes proposées par BloodHound, il est possible d’écrire ses propres requêtes. Je ne vais pas écrire ici un tutoriel à ce sujet, pour la raison suivante : <a href="https://twitter.com/cptjesus">CptJesus</a> a écrit l’article <a href="https://blog.cptjesus.com/posts/introtocypher">BloodHound: Intro to Cypher</a> dans lequel il décrit en détail le fonctionnement des requêtes dans BloodHound et dans Neo4j. Elles sont appelées “Cypher Queries”.</p>
+
+<p>Vous pouvez également aller lire le papier de <a href="https://twitter.com/SadProcessor">SadProcessor</a> appelé <a href="https://www.ernw.de/download/BloodHoundWorkshop/ERNW_DogWhispererHandbook.pdf">The Dog Whisperer’s Handbook</a> qui présente BloodHound et introduit le langage de requête.</p>
+
+<p>Je vous laisse ainsi le soin d’aller lire ces articles afin de comprendre le fonctionnement de ce langage.</p>
+
+<p>Sachez cependant qu’il est possible d’activer le mode “debug” dans BloodHound permettant d’afficher les requêtes effectuées lorsque vous cliquez sur un bouton dans l’interface graphique.</p>
+
+<p><a href="/assets/uploads/2019/07/debug_mode.png"><img src="/assets/uploads/2019/07/debug_mode.png" alt="debug_mode" /></a></p>
+
+<p>Cette requête peut ensuite être rejouée dans Neo4j si besoin.</p>
+
+<p>Pour tout de même montrer un exemple de requête, voici à quoi ça ressemble :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH p=(n:User {name:"SUPPORT-ACCOUNT@ADSEC.LOCAL"})-[r:MemberOf*1..]-&gt;(g:Group) RETURN p
+</code></pre></div></div>
+
+<p>Cette requête permet de lister la hiérarchie des groupes auxquels appartient l’utilisateur <code class="highlighter-rouge">support-account</code>. Pour cela, elle peut être découpée en 2 parties.</p>
+
+<p>La première partie <code class="highlighter-rouge">MATCH</code> indique ce que l’on recherche. Ce qu’on trouve entre parenthèse indique les noeuds, et entre crochets les relations.</p>
+
+<p>Nous cherchons donc un noeud <code class="highlighter-rouge">n</code> de type <code class="highlighter-rouge">User</code> ayant une relation <code class="highlighter-rouge">r</code> de type <code class="highlighter-rouge">MemberOf</code> vers un noeud <code class="highlighter-rouge">g</code> de type <code class="highlighter-rouge">Group</code>. Le contenu entre accolades permet d’appliquer un filtre, ici un filtre sur le nom <code class="highlighter-rouge">SUPPORT-ACCOUNT@ADSEC.LOCAL</code>.</p>
+
+<p>Dans la partie relation entre crochets, nous indiquons que cette relation doit être présente une ou plusieurs fois (<code class="highlighter-rouge">*1..</code>).</p>
+
+<p>La deuxième partie <code class="highlighter-rouge">RETURN</code> indique ce que nous souhaitons retourner suite à la recheche. Ici, nous souhaitons retourner la relation dans son ensemble, que nous avons assignée à la variable <code class="highlighter-rouge">p</code>.</p>
+
+<p><a href="/assets/uploads/2019/07/query_result.png"><img src="/assets/uploads/2019/07/query_result.png" alt="query_result" /></a></p>
+
+<p>Nous aurions pu décider de seulement lister les groupes, sans lister les relations. Pour cela, il suffit de seulement retourner les noeuds <code class="highlighter-rouge">g</code>.</p>
+
+<p><a href="/assets/uploads/2019/07/query_result_g.png"><img src="/assets/uploads/2019/07/query_result_g.png" alt="query_result_g" /></a></p>
+
+<p>Pour des requêtes plus complexes, les liens donnés précédemment vous permettront de creuser le sujet.</p>
+
+<h2 id="tips--tricks">Tips &amp; tricks</h2>
+
+<p>Voici une liste de quelques petites astuces ou informations qui peuvent être importantes ou utiles.</p>
+
+<h3 id="dark-mode">Dark mode</h3>
+
+<p>La première, et de loin la plus importante, c’est le mode sombre de l’interface graphique !</p>
+
+<p><a href="/assets/uploads/2019/07/dark_mode.png"><img src="/assets/uploads/2019/07/dark_mode.png" alt="dark_mode" /></a></p>
+
+<p>Ce mode permet d’avoir une interface sombre et classe, ce qui est super agréable. Voilà, c’est beau, mais c’est tout.</p>
+
+<h3 id="clic-droit">Clic droit</h3>
+
+<p>Lorsqu’il y a une relation entre deux noeuds, vous pouvez faire un “clic droit” sur la relation, et une pop-up vous affichera un grand nombre d’informations extrêmement utiles.</p>
+
+<p>Vous ne savez pas comment exploiter le lien <code class="highlighter-rouge">GenericAll</code> ?</p>
+
+<p><a href="/assets/uploads/2019/07/genericall_link.png"><img src="/assets/uploads/2019/07/genericall_link.png" alt="genericall_link" /></a></p>
+
+<p>Pas de problème, un clic droit sur le lien permet d’afficher la bulle d’aide.</p>
+
+<p><a href="/assets/uploads/2019/07/help_modal.png"><img src="/assets/uploads/2019/07/help_modal.png" alt="help_modal" /></a></p>
+
+<p>Elle contient toutes les informations nécessaires pour prendre la main sur la machine de destination.</p>
+
+<h3 id="owned">Owned</h3>
+
+<p>Lors de l’avancement de votre test d’intrusion, vous allez compromettre des machines, des utilisateurs, des groupes. Afin de ne pas perdre le fil, vous pouvez marquer les objets comme “owned” après un clic droit sur ceux-ci.</p>
+
+<p><a href="/assets/uploads/2019/07/owned.png"><img src="/assets/uploads/2019/07/owned.png" alt="owned" /></a></p>
+
+<p>Une icône marquera ces objets par la suite.</p>
+
+<p><a href="/assets/uploads/2019/07/owned_object.png"><img src="/assets/uploads/2019/07/owned_object.png" alt="owned_object" /></a></p>
+
+<p>Si vous tentez de compromettre un objet en particulier, vous pouvez maintenant demander le chemin d’attaque le plus court depuis vos cibles déjà compromises.</p>
+
+<p><a href="/assets/uploads/2019/07/shortestpath_owned.png"><img src="/assets/uploads/2019/07/shortestpath_owned.png" alt="shortestpath_owned" /></a></p>
+
+<h3 id="filtres">Filtres</h3>
+
+<p>Si vous ne voulez pas afficher certains chemins parce qu’il y a des relations que vous ne savez pas exploiter, ou parce que vous n’avez pas le temps, ou toutes autres raisons, vous pouvez décider de décocher les relations pour qu’elles n’apparaissent plus dans vos requêtes. Pour cela, il suffit de cliquer sur le bouton de filtre, à droite de la barre de recherche, et de cocher et décocher les éléments qui vous intéressent.</p>
+
+<p><a href="/assets/uploads/2019/07/edge_filtering.png"><img src="/assets/uploads/2019/07/edge_filtering.png" alt="Edge Filtering" /></a></p>
+
+<h3 id="raccourcis">Raccourcis</h3>
+
+<p>Il existe quelques raccourcis qui peuvent être utiles lors de l’utilisation de BloodHound. Si vous en connaissez d’autres, n’hésitez pas à les partager.</p>
+
+<ul>
+  <li><strong>CTRL</strong> : Permet de changer le mode d’affichage du nom des noeuds. En appuyant sur la touche, soit vous afficherez toujours les noeuds, soit vous les afficherez lorsqu’il n’y en a pas trop (la limite peut être définie dans les réglages), soit vous les cachez en permanence, ce qui peut être utile pour anonymiser les captures d’écran.</li>
+  <li><strong>CTRL+SHIFT+I</strong> : Affiche les outils développeurs. Si vous avez un bug dans l’interface, la console javascript permettra souvent de comprendre l’origine du problème.</li>
+  <li><strong>CTRL+R</strong> : Recharge l’affichage.</li>
+</ul>
+
+<h3 id="edition">Edition</h3>
+
+<p>Lors de la collecte, votre machine a été collectée et vous ne souhaitez pas la voir apparaitre ? Vous vous êtes connecté sur une machine, mais le lien “HasSession” de l’administrateur de domaine n’est plus effectif puisque cette machine a redémarré, effaçant les identifiants tant attendus ? Au contraire, un autre utilisateur s’est connecté sur cette machine ?</p>
+
+<p>Une fois que les données ont été importées dans BloodHound, elles ne sont pas figées. Vous pouvez les modifier à votre guise, soit via un clic droit sur un objet ou une relation pour les supprimer, soit via un clic droit dans l’arrière plan pour ajouter un noeud ou une relation.</p>
+
+<p><a href="/assets/uploads/2019/07/add_edge.png"><img src="/assets/uploads/2019/07/add_edge.png" alt="Add edge" /></a></p>
+
+<h3 id="notes--captures-décran">Notes &amp; Captures d’écran</h3>
+
+<p>De la même manière, vous pouvez sauvegarder des informations sur des objets de l’Active Directory en cliquant sur ceux-ci et en allant dans la section “Notes” dans l’interface de BloodHound.</p>
+
+<p><a href="/assets/uploads/2019/07/notes_pictures.png"><img src="/assets/uploads/2019/07/notes_pictures.png" alt="notes_pictures" /></a></p>
+
+<h3 id="bloodhound-analytics">BloodHound Analytics</h3>
+
+<p>Enfin, la même équipe qui a développé BloodHound a également mis à disposition des outils permettant de faire des statistiques sur une extraction BloodHound. Ils sont disponibles sur <a href="https://github.com/BloodHoundAD/BloodHound-Tools/">leur Github</a>, notamment le template <code class="highlighter-rouge">bloodhoundanalytics.pbix</code> qui utilise <code class="highlighter-rouge">PowerBI</code>.</p>
+
+<p>Voici un exemple pris du <a href="https://twitter.com/_wald0/status/1139672785389703168">tweet</a> de Wald0, qui montre un tableau PowerBI en utilisant le template fourni sur le Github.</p>
+
+<p><a href="/assets/uploads/2019/07/PowerBi_result.png"><img src="/assets/uploads/2019/07/PowerBi_result.png" alt="PowerBI" /></a></p>
+
+<p>Le résultat est superbe, et très explicite pour le management.</p>
+
+<h2 id="aller-plus-loin">Aller plus loin</h2>
+
+<p>Une <a href="https://www.youtube.com/watch?v=lxd2rerVsLo">présentation</a> a été faite à la BSides par les trois auteurs en 2016 pour présenter BloodHound.</p>
+
+<p>Les auteurs de l’outil sont également présents sur le <a href="http://bloodhoundhq.slack.com/">Slack</a> dédié. Il y a une grande communauté présente sur ce Slack prête à vous accueillir et à répondre à vos questions. Il y a même un channel #french !</p>
+
+<p>BloodHound n’est pas le seul outil dans son genre. Nous avons un outil franco-français appelé <a href="https://github.com/ANSSI-FR/AD-control-paths">AD Control Paths</a> développé par l’ANSSI. Une <a href="https://www.sstic.org/2014/presentation/chemins_de_controle_active_directory/">présentation</a> a été faite au SSTIC à ce sujet et le PDF associé est très intéressant. Je vous invite vivement à la lire.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Tant que les équipes de défense réfléchiront en mode liste et les attaquants en mode graphe, ces derniers auront une longueur d’avance. C’est pourquoi <strong>BloodHound</strong> peut également être utilisé en tant qu’outil de défense. Il suffit de lancer une collecte d’information régulièrement et de préparer quelques requêtes pour vérifier l’état de l’Active Directory et pour monitorer son évolution.</p>
+
+<p>BloodHound présente finalement une nouvelle approche pour visualiser les données dans un environnement Active Directory. La modélisation en mode graphe permet de comprendre les relations et intrications complexes des objets et relations dans le système d’information, pour en ressortir des chemins d’attaque ou des comportement anormaux.</p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/resource-based-constrained-delegation-attack/">
+            Resource-Based Constrained Delegation - Risques
+            <small>05 May 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/bloodhound/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-00af';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

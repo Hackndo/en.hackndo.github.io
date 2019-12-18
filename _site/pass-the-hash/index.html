@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Pass the Hash - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Pass the Hash" />
+    <meta name="twitter:description" content="La technique du Pass the Hash est extrêmement utilisée lors de mouvement latéral, composante essentielle dans une attaque. Nous allons détailler comment cette technique fonctionne, quelles sont ses possibilités et ses limites." />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2019/09/pass_the_hash.png" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Pass the Hash" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="La technique du Pass the Hash est extrêmement utilisée lors de mouvement latéral, composante essentielle dans une attaque. Nous allons détailler comment cette technique fonctionne, quelles sont ses possibilités et ses limites." />
+<meta property="og:description" content="La technique du Pass the Hash est extrêmement utilisée lors de mouvement latéral, composante essentielle dans une attaque. Nous allons détailler comment cette technique fonctionne, quelles sont ses possibilités et ses limites." />
+<link rel="canonical" href="http://localhost:4000/pass-the-hash/" />
+<meta property="og:url" content="http://localhost:4000/pass-the-hash/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-12-18T00:01:21+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/pass-the-hash/","headline":"Pass the Hash","dateModified":"2019-12-18T00:01:21+01:00","datePublished":"2019-12-18T00:01:21+01:00","author":{"@type":"Person","name":"Pixis"},"description":"La technique du Pass the Hash est extrêmement utilisée lors de mouvement latéral, composante essentielle dans une attaque. Nous allons détailler comment cette technique fonctionne, quelles sont ses possibilités et ses limites.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/pass-the-hash/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2019/09/pass_the_hash.png" alt="Pass the Hash" title="Pass the Hash" />
+  </div>
+  
+  <h1 class="post-title">Pass the Hash</h1>
+  <div class="post-info">
+      <p class="alignleft">18 Dec 2019 <a class="post-comments-count" href="http://http://localhost:4000/pass-the-hash/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Durant les tests d’intrusion internes, le mouvement latéral est une composante essentielle pour l’auditeur afin de chercher des informations en vue d’élever ses privilèges sur le système d’information. La technique dite du <strong>Pass the Hash</strong> est extrêmement utilisée dans cette situation pour devenir administrateur sur un ensemble de machines. Nous allons détailler ici le fonctionnement de cette technique.</p>
+
+<!--more-->
+
+<h2 id="protocole-ntlm">Protocole NTLM</h2>
+
+<p>Le protocole NTLM est un protocole d’authentification utilisé dans les environnement Microsoft. Il permet notamment à un utilisateur de prouver qui il est auprès d’un serveur pour pouvoir utiliser un service proposé par ce serveur.</p>
+
+<blockquote>
+  <p>Note : Dans cet article, le terme “serveur” est employé dans le sens client/serveur. Le “serveur” peut très bien être un poste de travail.</p>
+</blockquote>
+
+<p><a href="/assets/uploads/2019/09/NTLM_Basic.png"><img src="/assets/uploads/2019/09/NTLM_Basic.png" alt="NTLM" /></a></p>
+
+<p>Deux cas de figure peuvent se présenter :</p>
+
+<ul>
+  <li>Soit l’utilisateur utilise les identifiants d’un compte local du serveur, auquel cas le serveur possède le secret de l’utilisateur dans sa base locale et il pourra authentifier l’utilisateur;</li>
+  <li>Soit, dans un environnement Active Directory, l’utilisateur utilise un compte de domaine lors de l’authentification, et le serveur devra alors dialoguer avec le contrôleur de domaine pour vérifier les informations fournies par l’utilisateur.</li>
+</ul>
+
+<p>Dans les deux cas, l’authentification commence par une phase de <strong>challenge/réponse</strong> (ou stimulation/réponse) entre le client et le serveur.</p>
+
+<h3 id="challenge---réponse">Challenge - Réponse</h3>
+
+<p>Le principe du challenge/réponse est utilisé pour que le serveur vérifie que l’utilisateur connaisse le secret du compte avec lequel il s’authentifie, sans pour autant faire transiter le mot de passe sur le réseau. C’est ce qu’on appelle une <a href="https://fr.wikipedia.org/wiki/Preuve_%C3%A0_divulgation_nulle_de_connaissance">preuve à divulgation nulle de connaissance</a>. Trois étapes composent cet échange :</p>
+
+<ol>
+  <li><strong>Négotiation</strong> : Le client indique au serveur qu’il veut s’authentifier auprès de lui (<a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/b34032e5-3aae-4bc6-84c3-c6d80eadf7f2">NEGOTIATE_MESSAGE</a>).</li>
+  <li><strong>Challenge</strong> : Le serveur envoie un challenge au client. Ce n’est rien d’autre qu’une valeur aléatoire de 64 bits qui change à chaque demande d’authentification (<a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/801a4681-8809-4be9-ab0d-61dcfe762786">CHALLENGE_MESSAGE</a>).</li>
+  <li><strong>Réponse</strong> : Le client chiffre le challenge précédemment reçu en utilisant une version hashée de son mot de passe comme clé, et renvoie cette version chiffrée au serveur, avec son nom d’utilisateur et éventuellement son domaine (<a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/033d32cc-88f9-4483-9bf2-b273055038ce">AUTHENTICATE_MESSAGE</a>).</li>
+</ol>
+
+<p><a href="/assets/uploads/2019/09/NTLM_Challenge_Response.png"><img src="/assets/uploads/2019/09/NTLM_Challenge_Response.png" alt="NTLM Challenge Response" /></a></p>
+
+<p>Voici une capture d’écran de mon lab. On voit que l’utilisateur <strong>Administrateur</strong> tente de se connecter sur la machine <strong>LKAPP01.lion.king</strong></p>
+
+<p><a href="/assets/uploads/2019/11/ntlm_authentication_ws.png"><img src="/assets/uploads/2019/11/ntlm_authentication_ws.png" alt="NTLM Challenge Response" /></a></p>
+
+<p>Les échanges NTLM sont encadrés en rouge en haut, et dans la partie basse se trouvent les informations contenues dans la réponse du serveur <code class="highlighter-rouge">CHALLENGE_MESSAGE</code>. On y trouve notamment le challenge.</p>
+
+<p>Suite à ces échanges, le serveur est en possession de deux choses :</p>
+
+<ol>
+  <li>Le challenge qu’il a envoyé au client</li>
+  <li>La réponse du client qui a été chiffrée avec son secret</li>
+</ol>
+
+<p>Pour finaliser l’authentification, il ne reste plus au serveur qu’à vérifier la validité de la réponse envoyée par le client. Mais juste avant ça, faisons un petit point sur le secret du client.</p>
+
+<h3 id="secret-dauthentification">Secret d’authentification</h3>
+
+<p>Nous avons dit que le client utilise comme clé une version hashée de son mot de passe, et ce pour la raison suivante : Eviter de stocker les mots de passe des utilisateurs en clair sur le serveur. C’est donc un condensat du mot de passe qui est enregistré à la place. Ce condensat est aujourd’hui le <strong>hash NT</strong>, qui n’est rien d’autre que le résultat de la fonction <a href="https://fr.wikipedia.org/wiki/MD4">MD4</a>, sans sel, rien.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hashNT = MD4(password)
+</code></pre></div></div>
+
+<p>Donc pour résumer, lorsque le client s’authentifie, il utilise l’empreinte MD4 de son mot de passe pour chiffrer le challenge. Voyons alors ce qu’il se passe du côté du serveur, une fois cette réponse reçue.</p>
+
+<h2 id="authentification">Authentification</h2>
+
+<p>Comme expliqué tout à l’heure, il existe deux scénarios différents. Le premier est que le compte utilisé pour l’authentification est un compte local, c’est à dire que le serveur a connaissance de ce compte, et il a une copie du secret du compte. Le deuxième est qu’un compte de domaine est utilisé, auquel cas le serveur n’a pas connaissance de ce compte ou son secret. Il devra déléguer l’authentification au contrôleur de domaine.</p>
+
+<h3 id="compte-local">Compte local</h3>
+
+<p>Dans le cas où l’authentification se fait avec un compte local, le serveur va chiffrer le challenge qu’il a envoyé au client avec la clé secrète de l’utilisateur, ou plutôt avec le hash MD4 du secret de l’utilisateur. Il vérifiera ainsi si le résultat de son opération est égal à la réponse du client, prouvant que l’utilisateur possède le bon secret. Le cas contraire, la clé utilisée par l’utilisateur n’est pas la bonne puisque le chiffrement du challenge ne donne pas celui attendu.</p>
+
+<p>Pour pouvoir effectuer cette opération, le serveur a besoin de stocker les utilisateurs locaux et le condensat de leur secret. Le nom de cette base de donnée est la <strong>SAM</strong> (Security Accounts Manager). La SAM peut être trouvée dans la base de registre, notamment avec l’outil <code class="highlighter-rouge">regedit</code> mais uniquement lorsqu’on y accède en tant que <strong>SYSTEM</strong>. On peut l’ouvrir en tant que <strong>SYSTEM</strong> avec <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/psexec">psexec</a> :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psexec.exe -i -s regedit.exe
+</code></pre></div></div>
+
+<p><a href="/assets/uploads/2019/11/SAM_registry.png"><img src="/assets/uploads/2019/11/SAM_registry.png" alt="SAM in registry" /></a></p>
+
+<p>Une copie se trouve également sur disque à l’emplacement <code class="highlighter-rouge">C:\Windows\System32\SAM</code>.</p>
+
+<p>Elle contient donc les utilisateurs locaux et le condensat de leur mot de passe, mais aussi la liste des groupes locaux. Enfin si on veut être précis, elle contient une version chiffrée des condensats. Mais comme toutes les informations pour les déchiffrer sont également dans la base de registres (SAM et SYSTEM), on peut faire le raccourci, et dire que c’est bien le condensat qui est stocké. Si vous voulez voir comment le déchiffrement fonctionne, vous pouvez aller voir <a href="https://github.com/SecureAuthCorp/impacket/blob/master/impacket/examples/secretsdump.py#L1124">le code de secretsdump.py</a> ou <a href="https://github.com/gentilkiwi/mimikatz/blob/master/mimikatz/modules/kuhl_m_lsadump.c">celui de Mimikatz</a>.</p>
+
+<p>On peut d’ailleurs très bien sauvegarder les bases de données SAM et SYSTEM pour extraire la base des condensats des utilisateurs.</p>
+
+<p>D’abord on enregistre les deux bases de données dans un fichier</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reg.exe save hklm\sam save.save
+reg.exe save hklm\system system.save
+</code></pre></div></div>
+
+<p>Ensuite, on peut utiliser <a href="https://github.com/SecureAuthCorp/impacket/blob/master/examples/secretsdump.py">secretsdump.py</a> pour extraire les hash</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>secretsdump.py <span class="nt">-sam</span> sam.save <span class="nt">-system</span> system.save LOCAL
+</code></pre></div></div>
+
+<p><a href="/assets/uploads/2019/11/extract_nt_hashes.png"><img src="/assets/uploads/2019/11/extract_nt_hashes.png" alt="SAM verification" /></a></p>
+
+<p>Donc pour résumer, voici le processus de vérification.</p>
+
+<p><a href="/assets/uploads/2019/11/SAM_verification.png"><img src="/assets/uploads/2019/11/SAM_verification.png" alt="SAM verification" /></a></p>
+
+<p>Comme le serveur envoie un challenge (<strong>1</strong>) et que le client chiffre ce challenge avec le hash de son secret puis le renvoie au serveur, avec son nom d’utilisateur (<strong>2</strong>), le serveur va chercher le hash du mot de passe de l’utilisateur dans sa base SAM (<strong>3</strong>). Une fois en possession de ce condensat, il va lui aussi chiffrer le challenge précédemment envoyé avec ce hash (<strong>4</strong>), et il pourra ainsi confronter son résultat à celui renvoyé par l’utilisateur. Si c’est le même (<strong>5</strong>) alors l’utilisateur est bien authentifié ! Le cas contraire, l’utilisateur n’a pas fourni le bon secret.</p>
+
+<h3 id="compte-de-domaine">Compte de domaine</h3>
+
+<p>Dans le cas où l’authentification se fait avec un compte du domaine, le hash NT de l’utilisateur n’est plus stocké sur le serveur, mais sur le contrôleur de domaine. Le serveur auprès duquel veut s’authentifier l’utilisateur reçoit alors la réponse à son challenge, mais il n’est pas en mesure de vérifier si cette réponse est valide. Il va déléguer cette tâche au contrôleur de domaine.</p>
+
+<p>Pour cela, il va utiliser le service <strong>Netlogon</strong>, service qui est capable d’établir une connexion sécurisée avec le contrôleur de domaine. Cette connexion sécurisée s’appelle <strong>Secure Channel</strong>. Elle est possible puisque le serveur possède son propre mot de passe, et le contrôleur de domaine connait le hash de ce mot de passe. Ils peuvent alors, de la même manière, effectuer un challenge/réponse pour s’échanger une clé de session et communiquer de manière sécurisée.</p>
+
+<p>Je ne vais pas rentrer dans les détails, mais l’idée est donc que le serveur va envoyer différents éléments au contrôleur de domaine dans une structure appelée <a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/e17b03b8-c1d2-43a1-98db-cf8d05b9c6a8">NETLOGON_NETWORK_INFO</a>:</p>
+
+<ul>
+  <li>Le nom d’utilisateur du client (Identity)</li>
+  <li>Le challenge envoyé précédemment au client (LmChallenge)</li>
+  <li>La réponse au challenge envoyée par le client (NtChallengeResponse)</li>
+</ul>
+
+<blockquote>
+  <p>Je ne parle pas de LmChallengeResponse puisque dans cet article, je m’intéresse seulement au hash NT, pas au hash LM qui est complètement obsolète.</p>
+</blockquote>
+
+<p>Le contrôleur de domaine va chercher le hash NT de l’utilisateur dans sa base de données. Pour le contrôleur de domaine, ce n’est pas dans la SAM, puisque c’est un compte du domaine qui s’authentifie. Cette fois-ci c’est dans un fichier appelé <strong>NTDS.DIT</strong>, qui est la base de données de tous les utilisateurs. Une fois le hash NT récupéré, il va calculer la réponse attendue avec ce hash et le challenge, et va confronter ce résultat à la réponse du client.</p>
+
+<p>Un message sera ensuite envoyé au serveur (<a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/bccfdba9-0c38-485e-b751-d4de1935781d">NETLOGON_VALIDATION_SAM_INFO4</a>) indiquant si oui ou non le client est authentifié, et il enverra également tout un tas d’informations concernant l’utilisateur. Ce sont d’ailleurs les mêmes informations que celles qu’on retrouve dans le <a href="https://beta.hackndo.com/kerberos-silver-golden-tickets/#pac">PAC</a> lors d’une <a href="https://beta.hackndo.com/kerberos/">authentification Kerberos</a>.</p>
+
+<p>Donc pour résumer, voici le processus de vérification avec un contrôleur de domaine.</p>
+
+<p><a href="/assets/uploads/2019/11/DC_verification.png"><img src="/assets/uploads/2019/11/DC_verification.png" alt="SAM verification" /></a></p>
+
+<p>De la même manière que tout à l’heure, le serveur envoie un challenge (<strong>1</strong>) et le client chiffre ce challenge avec le hash de son secret puis le renvoie au serveur, accompagné de son nom d’utilisateur et le nom du domaine (<strong>2</strong>). Cette fois-ci, le serveur va envoyer ces informations au contrôleur de domaine dans un <strong>Secure Channel</strong> à l’aide du service <strong>Netlogon</strong> (<strong>3</strong>). Une fois en possession de ces informations, le contrôleur de domaine va lui aussi chiffrer le challenge en utilisant le hash de l’utilisateur, trouvé dans sa base de données (<strong>4</strong>), et il pourra ainsi confronter son résultat à celui renvoyé par l’utilisateur. Si c’est le même (<strong>5</strong>) alors l’utilisateur est bien authentifié. Le cas contraire, l’utilisateur n’a pas fourni le bon secret. Dans les deux cas, le contrôleur de domaine transmet l’information au serveur (<strong>6</strong>).</p>
+
+<h2 id="limites-du-hash-nt">Limites du hash NT</h2>
+
+<p>Si vous avez bien suivi, vous aurez compris qu’en fait, le mot de passe en clair n’est jamais utilisé dans ces échanges, mais bien la version hashée du mot de passe, appelé hash NT. Ce hash est un condensat simple du mot de passe en clair.</p>
+
+<p>Donc en fait, si on y réfléchit bien, <strong>voler le mot de passe en clair ou voler le hash revient exactement au même</strong>. Comme c’est le hash qui est utilisé pour répondre au challenge/réponse, être en possession du hash permet de s’authentifier auprès d’un serveur. Avoir le mot de passe en clair n’est absolument pas utile.</p>
+
+<p>Finalement, on peut même dire qu’<strong>avoir le hash NT revient à avoir le mot de passe en clair</strong>, dans la majorité des cas.</p>
+
+<h2 id="pass-the-hash">Pass the Hash</h2>
+
+<p>On comprend donc bien que si un attaquant connait le hash NT d’un administrateur local d’une machine, il peut tout à fait s’authentifier auprès de cette machine en utilisant ce condensat. De la même manière, s’il possède le hash NT d’un utilisateur de domaine qui fait partie d’un groupe d’administration local d’une machine, il peut également s’authentifier auprès de cette machine en tant qu’administrateur local.</p>
+
+<h3 id="administrateur-local-du-parc">Administrateur local du parc</h3>
+
+<p>Maintenant, plaçons nous dans un environnement d’entreprise : Un nouveau collaborateur arrive, et un poste lui est fourni. Le département informatique ne s’amuse pas à installer et configurer depuis zéro un système Windows pour chaque collaborateur. Non, l’informaticien est paresseux, et s’il peut automatiser, il automatise.</p>
+
+<p>Ce qui est très courant est le scénario suivant : Une version du système Windows est installée et configurée pour répondre à tous les besoins de base d’un nouveau collaborateur. Cette version de base appelée <strong>master</strong> est enregistrée dans un coin, et une copie de cette version est fournie à chaque nouvel arrivant.</p>
+
+<p>Cela implique que le compte administrateur local <strong>est le même</strong> sur tous les postes qui ont bénéficié du même <strong>master</strong>.</p>
+
+<p>Vous voyez où je veux en venir ? Si jamais un seul de ces postes est compromis et que l’attaquant extrait le hash NT de l’administrateur du poste, comme tous les autres postes ont le même compte d’admin avec le même mot de passe, et bien ils auront également le même hash NT. L’attaquant peut alors utiliser le hash trouvé sur le poste compromis et le rejouer sur tous les autres postes pour s’authentifier dessus.</p>
+
+<p>C’est ce qu’on appelle passer le hash, ou plus communément la technique du <strong>Pass the hash</strong>.</p>
+
+<p><a href="/assets/uploads/2019/11/pass-the-hash-schema.png"><img src="/assets/uploads/2019/11/pass-the-hash-schema.png" alt="Pass the hash" /></a></p>
+
+<p>Prenons un exemple, nous avons trouvé que le hash NT de l’utilisateur <code class="highlighter-rouge">Administrateur</code> est <code class="highlighter-rouge">20cc650a5ac276a1cfc22fbc23beada1</code>. Nous pouvons le rejouer sur une autre machine en espérant que cette machine ait été configurée de la même manière. Cet exemple utilise l’outil <a href="https://github.com/SecureAuthCorp/impacket/blob/master/examples/psexec.py">psexec.py</a> de la suite <a href="https://github.com/SecureAuthCorp/impacket">Impacket</a>.</p>
+
+<p><a href="/assets/uploads/2019/11/pass-the-hash-local.png"><img src="/assets/uploads/2019/11/pass-the-hash-local.png" alt="PTH Local" /></a></p>
+
+<p>Bingo, ce hash fonctionne également sur la nouvelle machine, et nous avons la main dessus.</p>
+
+<h3 id="compte-de-domaine-à-privilèges">Compte de domaine à privilèges</h3>
+
+<p>Il existe une autre manière d’utiliser la technique du <strong>Pass the hash</strong>. Imaginons que pour l’administration du parc à distance, il existe un groupe “HelpDesk” dans l’Active Directory. Pour que les membres de ce groupe puissent intervenir sur les machines des utilisateurs, le groupe est ajouté au groupe local “Administrateurs” de chaque machine. Ce groupe local contient les entités ayant les droits d’administration sur la machine.</p>
+
+<p>On peut d’ailleurs les lister avec la commande suivante</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Machine française</span>
+net localgroup Administrateurs
+
+<span class="c"># ~Reste du monde</span>
+net localgroup Administrators
+</code></pre></div></div>
+
+<p>On obtiendra alors un résultat comme celui-ci :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Nom alias       Administrateur
+Commentaire     Les membres du groupe Administrateurs disposent d'un accès complet et illimité à l'ordinateur et au domaine
+
+Membres
+
+-------------------------
+Administrateur
+ADSEC\Admins du domaine
+ADSEC\HelpDesk
+</code></pre></div></div>
+
+<p>Nous avons donc le groupe du domaine <code class="highlighter-rouge">ADSEC\HelpDesk</code> qui fait partie des administrateurs de la machine. Si jamais un attaquant vole le hash NT d’un des membres de ce groupe, il peut tout à fait demander à s’authentifier sur les machines ayant <code class="highlighter-rouge">ADSEC\HelpDesk</code> dans la liste des administrateurs.</p>
+
+<p>L’avantage par rapport au compte local, c’est que quelque soit le master utilisé pour mettre en place les machines, le groupe sera ajouté par <a href="/gpo-abuse-with-edit-settings/#group-policy-object">GPO</a> à la configuration de la machine. Les chances sont plus grandes pour que ce compte ait des droits d’administration plus étendus, indépendamment des OS et des mises en service des machines.</p>
+
+<p>Lors de la demande d’authentification, le serveur va donc déléguer l’authentification au contrôleur de domaine, et si l’authentification réussit, alors le contrôleur de domaine va envoyer au serveur des informations sur l’utilisateur telles que son nom, <strong>la liste des groupes auxquels il appartient</strong>, la date d’expiration de son mot de passe etc.</p>
+
+<p>Le serveur va donc savoir que l’utilisateur fait partie du groupe <strong>HelpDesk</strong>, et lui donnera un accès administrateur.</p>
+
+<p>Prenons un nouvel exemple, nous avons trouvé que le hash NT de l’utilisateur <code class="highlighter-rouge">jsnow</code> est <code class="highlighter-rouge">89db9cd74150fc8d8559c3c19768ca3f</code>. Ce compte fait partie du groupe <code class="highlighter-rouge">HelpDesk</code> qui est administrateur local de toutes les machines du parc. Rejouons alors son hash sur une autre machine.</p>
+
+<p><a href="/assets/uploads/2019/11/pass-the-hash-domain.png"><img src="/assets/uploads/2019/11/pass-the-hash-domain.png" alt="PTH Domain" /></a></p>
+
+<p>De la même manière, l’authentification a fonctionné et nous sommes administrateur de la cible.</p>
+
+<h2 id="automatisation">Automatisation</h2>
+
+<p>Maintenant que nous avons compris le fonctionnement de l’authentification NTLM, et pourquoi un hash NT pouvait être utilisé pour s’authentifier auprès d’autres machines, il serait utile de pouvoir automatiser la connexion sur les différentes cibles pour récupérer autant d’informations que possible en parallélisant les tâches.</p>
+
+<p>Pour cela, l’outil <a href="https://github.com/byt3bl33d3r/CrackMapExec">CrackMapExec</a> est idéal. Il prend en entrée une liste de machines cibles, des identifiants, avec un mot de passe en clair ou un hash NT, et il peut exécuter des commandes sur les cibles pour lesquelles l’authentification a fonctionné.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Compte local d'administration</span>
+crackmapexec smb <span class="nt">--local-auth</span> <span class="nt">-u</span> Administrateur <span class="nt">-H</span> 20cc650a5ac276a1cfc22fbc23beada1 10.10.0.1 <span class="nt">-x</span> <span class="nb">whoami</span>
+
+<span class="c"># Compte de domaine</span>
+crackmapexec smb <span class="nt">-u</span> jsnow <span class="nt">-H</span> 89db9cd74150fc8d8559c3c19768ca3f <span class="nt">-d</span> adsec.local  10.10.0.1 <span class="nt">-x</span> <span class="nb">whoami</span>
+</code></pre></div></div>
+
+<p>Voici un exemple dans lequel l’utilisateur <code class="highlighter-rouge">simba</code> est administrateur de tous les postes de travail.</p>
+
+<p><a href="/assets/uploads/2019/11/crackmapexec.png"><img src="/assets/uploads/2019/11/crackmapexec.png" alt="SAM verification" /></a></p>
+
+<p>Le Pass the hash a été effectué sur quelques machines qui sont alors compromises. Un argument a été passé à CrackMapExec pour énumérer les utilisateurs actuellement connectés sur ces machines.</p>
+
+<p>Avoir la liste des utilisateurs connectés, c’est bien, mais avoir leur mot de passe ou leur hash NT (ce qui est pareil), c’est mieux ! Pour ça, j’ai développé l’outil <a href="https://github.com/hackndo/lsassy">lsassy</a> dont je parle dans l’article <a href="/remote-lsass-dump-passwords/#nouveaux-outils">Extraction des secrets de lsass à distance</a>. Et en pratique, et bien ça donne ça :</p>
+
+<p><a href="/assets/uploads/2019/11/crackmapexec_lsassy.png"><img src="/assets/uploads/2019/11/crackmapexec_lsassy.png" alt="Lsassy verification" /></a></p>
+
+<p>Nous récupérons tous les hash NT des utilisateurs connectés. Ceux des comptes machine ne sont pas affichés puisque nous sommes déjà administrateur de ces machines, ils ne nous sont donc pas utiles.</p>
+
+<h2 id="limites-du-pass-the-hash">Limites du Pass the hash</h2>
+
+<p>Le Pass the hash est une technique qui fonctionne toujours lorsque l’authentification NTLM est acceptée par le serveur. Cependant, il existe des méchanismes dans Windows qui limitent ou peuvent limiter les actions d’administration.</p>
+
+<p>En effet, sur Windows, la gestion des droits est effectuée à l’aide de jetons de sécurité (<em>Access tokens</em>) qui permettent de savoir qui a le droit de faire quoi. Les membres du groupe “Administrateurs” possèdent deux tokens. Un avec les droits d’un utilisateur standard, et un autre avec les droits administrateur. Par défaut, lorsqu’un administrateur exécute une tâche, elle est effectuée dans le contexte limité, standard. Si en revanche des actions d’administration doivent être exécutées, alors Windows affiche cette fenêtre très connue appelée <strong>UAC</strong> (<em>User Account Control</em> ou Contrôle de Compte Utilisateur)</p>
+
+<p><a href="/assets/uploads/2019/11/uac_prompt.png"><img src="/assets/uploads/2019/11/uac_prompt.png" alt="Lsassy verification" /></a></p>
+
+<p>L’utilisateur est averti que les droits d’administration sont demandés par l’application.</p>
+
+<p>Quid alors des actions d’administration effectuées à distance ? Et bien deux cas sont possibles.</p>
+
+<ul>
+  <li>Soit elles sont demandées par un compte <strong>du domaine</strong> qui fait partie du groupe “Administrateurs” de la machine, auquel cas l’UAC n’est pas activé pour ce compte, et il peut faire ses tâches d’administration.</li>
+  <li>Soit elles sont demandées par un compte <strong>local</strong> qui fait partie du groupe “Administrateurs” de la machine, et dans ce cas, l’UAC est activé dans certains cas, mais pas tous.</li>
+</ul>
+
+<p>Pour comprendre le deuxième cas, faisons le point sur deux clés de registre un peu méconnues, mais qui ont pourtant un rôle essentiel lorsque des actions d’administration tentent d’être effectuées suite à une authentification NTLM avec un compte local d’administration.</p>
+
+<h3 id="localaccounttokenfilterpolicy">LocalAccountTokenFilterPolicy</h3>
+
+<p>Cette première clé de registre se trouve ici dans la base :</p>
+
+<blockquote>
+  <p>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System</p>
+</blockquote>
+
+<p>Elle peut avoir deux valeurs, <code class="highlighter-rouge">0</code> ou <code class="highlighter-rouge">1</code>.</p>
+
+<p>Par défaut, elle n’est pas présente, ce qui implique qu’elle vaut <code class="highlighter-rouge">0</code>.</p>
+
+<ul>
+  <li>Si elle vaut <code class="highlighter-rouge">0</code>, valeur par défaut donc, alors seul le compte administrateur natif (RID 500) est en mesure d’effectuer des actions d’administration sans que l’UAC ne l’embête. Les autres comptes d’administration, donc ceux créés par les utilisateurs et ensuite ajoutés en tant qu’administrateurs locaux, ne pourront pas faire d’action d’administration à distance puisque l’UAC sera activée, et ils ne pourront pas valider la boite de dialogue à distance.</li>
+  <li>Si elle vaut <code class="highlighter-rouge">1</code>, alors <strong>tous</strong> les comptes dans le groupe “Administrateurs” peuvent faire des actions d’administration à distance, natif ou non.</li>
+</ul>
+
+<p>Donc pour résumer, voici les deux cas :</p>
+
+<ul>
+  <li><strong>LocalAccountTokenFilterPolicy = 0</strong> : Seul le compte “Administrateur” RID 500 peut faire des actions d’administration à distance</li>
+  <li><strong>LocalAccountTokenFilterPolicy = 1</strong> : Tous les comptes dans le groupe “Administrateurs” peuvent faire des actions d’administration à distance</li>
+</ul>
+
+<h3 id="filteradministratortoken">FilterAdministratorToken</h3>
+
+<p>Cette deuxième clé de registre se trouve au même endroit dans la base de registre :</p>
+
+<blockquote>
+  <p>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System</p>
+</blockquote>
+
+<p>Elle peut également avoir les valeurs <code class="highlighter-rouge">0</code> ou <code class="highlighter-rouge">1</code></p>
+
+<p>Par défault, elle vaut aussi <code class="highlighter-rouge">0</code>.</p>
+
+<ul>
+  <li>Si elle vaut <code class="highlighter-rouge">0</code>, valeur par défaut donc, alors le compte administrateur natif (RID 500) est en mesure d’effectuer des actions d’administration sans que l’UAC ne l’embête. Cette clé ne concerne pas les autres comptes.</li>
+  <li>Si elle vaut <code class="highlighter-rouge">1</code>, alors le compte administrateur natif (RID 500) est également soumis à l’UAC, et il n’est plus en mesure d’effectuer des tâches d’administration à distance, <strong>sauf</strong> si la première clé dont on a parlé vaut <code class="highlighter-rouge">1</code>.</li>
+</ul>
+
+<p>Donc pour résumer, voici les deux cas :</p>
+
+<ul>
+  <li><strong>FilterAdministratorToken = 0</strong> : Le compte natif Administrateur peut faire des actions d’administration à distance</li>
+  <li><strong>FilterAdministratorToken = 1</strong> : Le compte natif Administrateur <strong>ne peut pas</strong> faire des actions d’administration à distance, sauf si <code class="highlighter-rouge">LocalAccountTokenFilterPolicy</code> vaut <code class="highlighter-rouge">1</code></li>
+</ul>
+
+<h3 id="résumé">Résumé</h3>
+
+<p>Voici un petit tableau résumé. Pour chaque combinaison des deux clés de registre, ce tableau indique si les actions d’administration à distance sont possibles avec un compte administrateur natif et avec un compte administrateur non natif. Les valeurs en gras sont les valeurs par défaut.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">LocalAccountTokenFilterPolicy</th>
+      <th style="text-align: center">FilterAdministratorToken</th>
+      <th style="text-align: center">Administrateuf natif (RID 500)</th>
+      <th style="text-align: center">Administrateuf non natif</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><strong>0</strong></td>
+      <td style="text-align: center"><strong>0</strong></td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>0</strong></td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center"><strong>0</strong></td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Je précise encore une fois que ces informations concernent les actions d’administration. En effet, il est toujours possible de s’authentifier auprès de la machine, quelles que soient les valeurs des clés de registres. Voici un petit programme utilisant la librairie impacket qui permet de comprendre ce point :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">impacket.smbconnection</span> <span class="kn">import</span> <span class="n">SMBConnection</span><span class="p">,</span> <span class="n">SMB_DIALECT</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">SMBConnection</span><span class="p">(</span><span class="s">"192.168.1.122"</span><span class="p">,</span> <span class="s">"192.168.1.122"</span><span class="p">)</span>
+
+<span class="s">"""
+Dans un premier temps, nous nous authentifions en tant que
+"Administrateur" sur la machine distante. Une authentification
+NTLM va être effectuée, et comme se sont les bonnes informations,
+nous serons authentifiés sur la machine distante.
+"""</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">"Administrateur"</span><span class="p">,</span> <span class="s">"S3cUr3d+"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Logged in !"</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Loggon failure"</span><span class="p">)</span>
+    <span class="nb">exit</span><span class="p">()</span>
+
+<span class="s">"""
+Nous nous plaçons dans le cas où :
+LocalAccountTokenFilterPolicy = 0
+FilterAdministratorToken = 1
+D'après le tableau précédant, le compte administrateur natif
+n'est pas en mesure d'effectuer des actions d'administration,
+telle qu'accéder au partage réseau C$.
+"""</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">connectTree</span><span class="p">(</span><span class="s">"C$"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Access granted !"</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Access denied"</span><span class="p">)</span>
+    <span class="nb">exit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Si nous le lançons, voici le résultat :</p>
+
+<p><a href="/assets/uploads/2019/11/test_admin_access.png"><img src="/assets/uploads/2019/11/test_admin_access.png" alt="Lsassy verification" /></a></p>
+
+<p>Cela confirme bien que l’authentification a fonctionné, mais que le contexte d’administration demandé a été refusé puisque l’UAC est activé pour le compte, puisqu’imposé par la clé <strong>FilterAdministratorToken</strong> dans cet exemple.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>L’authentification NTLM est aujourd’hui encore beaucoup utilisée en entreprise. D’expérience, je n’ai encore jamais vu d’environnement ayant réussi à désactiver NTLM sur l’ensemble de son parc. La technique du Pass the hash reste donc très efficace.</p>
+
+<p>Cette technique est inhérente au protocole NTLM, cependant il est possible de limiter les dégats en évitant d’avoir le même mot de passe d’administration locale sur tous les postes. La solution <a href="https://blogs.technet.microsoft.com/arnaud/2015/11/25/local-admin-password-solution-laps/">LAPS</a> de Microsoft est une solution parmi d’autres pour gérer automatiquement les mots de passe des administrateurs en faisant en sorte que ce mot de passe (donc aussi le hash NT) soit différent sur tous les postes.</p>
+
+<p>Par ailleurs, mettre en place une <a href="https://www.sstic.org/media/SSTIC2017/SSTIC-actes/administration_en_silo/SSTIC2017-Article-administration_en_silo-bordes.pdf">administration en SILO</a> permet d’éviter les élévations de privilèges au sein du système d’information. Des administrateurs dédiés à des zones de criticité différentes (bureautique, serveur, contrôleurs de domaine, …) se connectent uniquement sur leur zone, et ne peuvent pas accéder à une zone différente. Si ce type d’administration est mise en place et qu’une machine d’une zone est compromise, l’attaquant ne pourra pas utiliser les identifiants trouvés pour atteindre une autre zone.</p>
+
+<p>Enfin, bien positionner les clés de registre dont nous avons parlé dans le dernier paragraphe permet de limiter les actions des administrateurs.</p>
+
+<p>Une partie de ces recommandations est indiquée dans le <a href="https://www.ssi.gouv.fr/uploads/2017/01/guide_hygiene_informatique_anssi.pdf">Guide d’hygiène informatique</a> publié par l’ANSSI.</p>
+
+<p>En attendant, cette technique a encore de beaux jours devant elle !</p>
+
+<p>Si vous avez des questions, n’hésitez pas à les poser ici ou sur <a href="https://discord.gg/9At6SUZ">Discord</a> et je me ferai une joie de tenter d’y répondre. De la même manière, si vous voyez des coquilles, je suis tout ouïe. A la prochaine !</p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/resource-based-constrained-delegation-attack/">
+            Resource-Based Constrained Delegation - Risques
+            <small>05 May 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/pass-the-hash/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-00b1';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

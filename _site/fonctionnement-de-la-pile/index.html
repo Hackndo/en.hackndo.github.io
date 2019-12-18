@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Fonctionnement de la pile - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Fonctionnement de la pile" />
+    <meta name="twitter:description" content="Article sur le fonctionnement de la pile, ou stack au sein des ordinateurs." />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2015/01/stack.jpg" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Fonctionnement de la pile" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Article sur le fonctionnement de la pile, ou stack au sein des ordinateurs." />
+<meta property="og:description" content="Article sur le fonctionnement de la pile, ou stack au sein des ordinateurs." />
+<link rel="canonical" href="http://localhost:4000/fonctionnement-de-la-pile/" />
+<meta property="og:url" content="http://localhost:4000/fonctionnement-de-la-pile/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:image" content="http://localhost:4000/assets/uploads/2015/01/stack.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-01-13T00:00:00+01:00" />
+<script type="application/ld+json">
+{"image":"http://localhost:4000/assets/uploads/2015/01/stack.jpg","@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/fonctionnement-de-la-pile/","headline":"Fonctionnement de la pile","dateModified":"2015-01-13T00:00:00+01:00","datePublished":"2015-01-13T00:00:00+01:00","author":{"@type":"Person","name":"Pixis"},"description":"Article sur le fonctionnement de la pile, ou stack au sein des ordinateurs.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/fonctionnement-de-la-pile/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2015/01/stack.jpg" alt="Fonctionnement de la pile" title="Fonctionnement de la pile" />
+  </div>
+  
+  <h1 class="post-title">Fonctionnement de la pile</h1>
+  <div class="post-info">
+      <p class="alignleft">13 Jan 2015 <a class="post-comments-count" href="http://http://localhost:4000/fonctionnement-de-la-pile/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#user-land"><i class="fas fa-tags"></i> User Land</a><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>La pile (dont on a parlé dans l’article sur la <a href="/gestion-de-la-memoire/">gestion de la mémoire</a> a une structure <strong>LIFO</strong> (Last In, First Out).</p>
+
+<!--more-->
+
+<h2 id="lifo">LIFO</h2>
+
+<p>Cela veut dire que le dernier élément qui est placé sur la pile sera le premier élément à être dépilé. Pour mieux comprendre, on peut imaginer une pile d’assiette. Si on empile des assiettes les unes sur les autres, il faudra enlever la dernière assiette posée, puis l’avant-dernière etc. pour pouvoir récupérer la première assiette posée. C’est le même principe.</p>
+
+<p>Contrairement à la pile d’assiette, la stack empile ses éléments vers le bas. Donc ce qu’on appelle le haut de la stack, c’est finalement l’adresse la plus basse de la stack. <strong>Plus on empile des valeurs dans la stack, plus les adresses diminuent</strong>. C’est déroutant, mais on s’y fait rapidement !</p>
+
+<p><img src="/assets/uploads/2015/03/img_54f6e3d3da5b8.png?w=640&quot; alt=&quot;&quot; data-recalc-dims=&quot;1" alt="img" /></p>
+
+<h2 id="stackframe">Stackframe</h2>
+
+<p>Cette structure LIFO est finalement extrêmement utile. En effet, lors de l’appel d’une fonction, toutes les données nécessaires pour l’exécution de la fonction, ainsi que pour le retour à l’état initial sont empilées. Une fois la fonction terminée, il faut donc retourner à la ligne suivant son appel, et ceci se fait en dépilant tout ce qui a été précédemment empilé, laissant intact le reste de la pile et les autres éventuelles stack frames. Voici un schéma qui tente de résumer mes propos :</p>
+
+<p><a href="/assets/uploads/2015/01/img_54b4159f5c27f.png"><img src="/assets/uploads/2015/01/img_54b4159f5c27f.png" alt="img_54b4159f5c27f" /></a></p>
+
+<p>Nous avons vu dans un article sur la <a href="/gestion-de-la-memoire/">gestion de la mémoire</a> ce qu’étaient les stack frame (vous savez, ces informations stockées sur la pile lors de l’appel d’une fonction pour enregistrer le contexte d’exécution ainsi que les variables passées à la fonction). Et bien le registre <code class="highlighter-rouge">ESP</code> garde en mémoire l’adresse du haut de la pile (donc l’adresse la plus basse, puisque plus la pile grandit, plus les nouvelles adresses sont basses). Il est donc mis à jour à chaque modification de la pile (ajout d’une valeur ou suppression de la dernière valeur). Le registre <code class="highlighter-rouge">EBP</code> garde en mémoire l’adresse du début de la stack frame. Ainsi, la stack frame courante se situe entre l’adresse contenue dans <code class="highlighter-rouge">EBP</code> et l’adresse contenue dans <code class="highlighter-rouge">ESP</code>.</p>
+
+<p>Voici un schéma qui illustre le rôle des registres <code class="highlighter-rouge">EBP</code> et <code class="highlighter-rouge">ESP</code> :</p>
+
+<p><img src="/assets/uploads/2015/01/LIFO_EBP_ESP.jpg" alt="img" /></p>
+
+<p>Ce que nous venons de voir est vrai tant qu’on reste dans la même stack frame. Cependant, que se passe-t-il lorsqu’il y a un appel à une nouvelle fonction ? Une fois cette nouvelle fonction terminée, comment le processeur revient-il à l’état précédent ? C’est ce que nous allons voir tout de suite.</p>
+
+<h2 id="prologue---épilogue">Prologue - Épilogue</h2>
+
+<p><em>Pour être en mesure de bien comprendre la suite de cet article, des notions de base d’assembleur sont utiles. Même s’il est possible de suivre sans aucune connaissance, il est fortement conseillé de lire l’article <a href="/assembleur-notions-de-base/">Notions de base sur l’assembleur</a> qui vous donnera les bases nécessaires pour une meilleure compréhension.</em></p>
+
+<p>Considérons le programme fonction.c suivant :</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">reponse</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">result</span><span class="p">;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">reponse</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">42</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Après compilation, on désassemble la fonction <code class="highlighter-rouge">main</code> pour voir les instructions assembleur qui la compose</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hackndo@becane<span class="nv">$ </span>gcc fonction.c <span class="nt">-o</span> fonction
+hackndo@becane<span class="nv">$ </span>gdb <span class="nt">-q</span> fonction
+Reading symbols from /home/hackndo/fonction...<span class="o">(</span>no debugging symbols found<span class="o">)</span>...done.
+<span class="o">(</span>gdb<span class="o">)</span> disas main
+Dump of assembler code <span class="k">for function </span>main:
+    0x080483a5 &lt;+0&gt;:     push   ebp
+    0x080483a6 &lt;+1&gt;:     mov    ebp,esp
+    0x080483a8 &lt;+3&gt;:     sub    esp,0x1c
+    0x080483ab &lt;+6&gt;:     mov    DWORD PTR <span class="o">[</span>esp+0x8],0x2a
+    0x080483b3 &lt;+14&gt;:    mov    DWORD PTR <span class="o">[</span>esp+0x4],0x8
+    0x080483bb &lt;+22&gt;:    mov    DWORD PTR <span class="o">[</span>esp],0x4
+    0x080483c2 &lt;+29&gt;:    call   0x8048394
+    0x080483c7 &lt;+34&gt;:    mov    DWORD PTR <span class="o">[</span>ebp-0x4],eax
+    0x080483ca &lt;+37&gt;:    leave
+    0x080483cb &lt;+38&gt;:    ret
+End of assembler dump.
+</code></pre></div></div>
+
+<p>Si vous n’avez pas eu le temps de regarder l’article sur les notions de base d’assembleur, rappelons rapidement le rôle des commandes que nous avons utilisées.</p>
+
+<p>La commande <code class="highlighter-rouge">gcc</code> (<strong>G</strong>NU <strong>C</strong>ompiler <strong>C</strong>ollection) est une commande sous Linux qui permettait de compiler des programmes écrits en C historiquement, mais qui maintenant permet de compiler des programmes dans différents langages (C, C++, Java…).</p>
+
+<p><strong>gdb</strong> (<strong>G</strong>NU Project <strong>D</strong>e<strong>b</strong>ugger) est un debugger puissant, totalement en ligne de commande. Il permet, entre autre, de désassembler un programme, de le lancer, de le mettre en pause pendant son exécution, de lire la mémoire, la modifier pendant l’exécution et j’en passe. Vous pouvez également lire l’article <a href="/introduction-a-gdb/">Introduction à GDB</a> pour mieux comprendre son fonctionnement.</p>
+
+<p><strong>Astuce</strong>: Lorsque nous sommes dans une session gdb, il est possible de lui passer un grand nombre de commandes. Comme certaines d’entre elles peuvent avoir des noms très longs, ou peuvent être appelées extrêmement souvent, certaines abréviations peuvent être utilisées. Par exemple, la commande permettant d’avoir des informations sur les registres est <strong>info registers</strong> mais elle peut être lancée en utilisant la simple commande <strong>i r</strong>.</p>
+
+<p>Pour désassembler une fonction d’un programme chargé dans gdb, nous lui passons la commande <code class="highlighter-rouge">disassemble function</code>. Ici nous souhaitons désassembler la fonction <code class="highlighter-rouge">main</code>, donc nous lançons la commande <code class="highlighter-rouge">disas main</code>, sachant que <code class="highlighter-rouge">disas</code> est un alias de <code class="highlighter-rouge">disassemble</code>, comme nous venons de l’expliquer.</p>
+
+<p>On remarque différentes choses. Tout d’abord, on voit l’appel à la fonction <code class="highlighter-rouge">reponse</code> à la ligne <code class="highlighter-rouge">+29</code> (adresse <code class="highlighter-rouge">0x080483c2</code>) avec l’instruction <code class="highlighter-rouge">call</code>. Ensuite on remarque sur les 3 lignes précédentes qui sont l’ajout sur la pile des arguments qui seront envoyés à cette fonction : Sont placés le 3ème argument, puis le deuxième et enfin le premier.</p>
+
+<p>Une fois que nous arrivons à l’instruction <code class="highlighter-rouge">call</code>, regardons l’état de la pile :</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> x/8xw <span class="nv">$esp</span>
+0xbffffc9c:    0x00000004    0x00000008    0x0000002a    0x080483eb
+0xbffffcac:    0xb7fd6ff4    0x080483e0    0x00000000    0xbffffd38
+</code></pre></div></div>
+
+<p>Pour pouvoir lire ces informations, je vous rappelle que la pile grandit vers les adresses basses. La première ligne que nous pouvons lire commence par <code class="highlighter-rouge">0xbffffc9c</code> suivie de 4 groupes de 4 octets. Le premier groupe est bien à l’adresse <code class="highlighter-rouge">0xbffffc9c</code>, le groupe suivant 4 octets plus loin est donc à <code class="highlighter-rouge">0xbffffca0</code>, ensuite le groupe est à <code class="highlighter-rouge">0xbffffca4</code> et enfin le dernier groupe de la première ligne est à l’adresse <code class="highlighter-rouge">0xbffffca8</code>. On passe alors à la ligne suivante, et on avance encore une fois de 4 octets, ce qui nous donne bien l’adresse <code class="highlighter-rouge">0xbffffcac</code> et ainsi de suite.</p>
+
+<p>Le registre ESP pointe vers le “haut” de la pile, donc vers l’adresse <code class="highlighter-rouge">0xbffffc9c</code>. Comme nous nous sommes préparés à l’appel de la fonction, le sommet de la pile (pointé par <code class="highlighter-rouge">ESP</code>) est composé des arguments qui sont passés à la fonction. On voit bien les valeurs 4, 8 et 42 (<code class="highlighter-rouge">0x2a</code> en hexadécimal).</p>
+
+<p>La pile est donc dans l’état suivant :</p>
+
+<p><a href="/assets/uploads/2015/03/gestion_pile1.png"><img src="/assets/uploads/2015/03/gestion_pile1.png" alt="etat de la pile" /></a></p>
+
+<p>Les arguments sont donc enregistrés sur la pile. Mais une fois que le programme rentre dans la fonction, il va devoir se souvenir d’où il vient. Et pour cela, il va falloir qu’il enregistre le registre <code class="highlighter-rouge">EIP</code> (c’est le registre qui a en mémoire l’adresse de l’instruction courante). On ne voit cependant pas d’instruction <code class="highlighter-rouge">PUSH EIP</code> dans le code, tout simplement pour la raison suivante (qu’il est impératif de retenir), c’est que l’instruction <code class="highlighter-rouge">call</code> est un alias des deux instructions suivantes :</p>
+
+<div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">push</span> <span class="n">EIP</span>
+<span class="k">jmp</span> <span class="o">&lt;</span><span class="n">adresse</span> <span class="n">de</span> <span class="n">la</span> <span class="n">fonction</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>Donc si nous avançons d’une instruction pour entrer dans la fonction, la valeur de EIP est poussée sur la pile, et nous obtenons :</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> stepi
+0x08048394 <span class="k">in </span>reponse <span class="o">()</span>
+
+<span class="o">(</span>gdb<span class="o">)</span> x/8x <span class="nv">$esp</span>
+    0xbffffc98:    0x080483c7    0x00000004    0x00000008    0x0000002a
+    0xbffffca8:    0x080483eb    0xb7fd6ff4    0x080483e0    0x00000000
+</code></pre></div></div>
+
+<p>On voit arriver l’adresse <code class="highlighter-rouge">0x080483c7</code> en haut de la pile.  Vous remarquez ce que c’est ? Oui, c’est l’adresse de l’instruction qui suit le <code class="highlighter-rouge">call</code> dans le <code class="highlighter-rouge">main</code>. Au moment de rentrer dans la fonction, le processeur enregistre la prochaine instruction à suivre une fois qu’il sortira de la fonction dans laquelle il vient d’entrer.</p>
+
+<p>Avec cette sauvegarde de l’EIP, nous avons donc une représentation de la pile comme suit :</p>
+
+<p><a href="/assets/uploads/2015/03/gestion_pile2.png"><img src="/assets/uploads/2015/03/gestion_pile2.png" alt="etat de la pile" /></a></p>
+
+<p>Voilà, nous avons fait le <code class="highlighter-rouge">jump</code>. Nous sommes à la première instruction de la fonction <code class="highlighter-rouge">reponse()</code></p>
+
+<p>Mais du coup cette nouvelle fonction doit avoir un espace à elle sur la stack. Sa stack frame doit être dissociée de celle de la fonction <code class="highlighter-rouge">main</code>.</p>
+
+<p>En effet, rappelons que chaque fonction possède sa propre <em>stack frame</em>. Lorsqu’une fonction est appelée, elle va se réserver un espace sur le dessus de la pile. En dessous de cet espace se trouve la <em>stack frame</em> de la fonction appelante. Quand la fonction en cours sera terminée, il faudra pouvoir revenir à la fonction appelante.</p>
+
+<p>Pour cela, chaque fonction possède ce qu’on appelle un <strong>prologue</strong> et un <strong>épilogue</strong>. Le prologue permet de sauvegarder les informations de la fonction appelante et de réserver l’espace sur la pile dont aura besoin la fonction, tandis que l’épilogue permet de restituer ces informations sauvegardées pour que la fonction appelante puisse reprendre son cours d’exécution comme si rien ne s’était passé.</p>
+
+<p>Prenons le code de la fonction <code class="highlighter-rouge">reponse</code> pour voir en détail comment cela fonctionne.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> disas reponse
+Dump of assembler code <span class="k">for function </span>reponse:
+    0x08048394 &lt;+0&gt;:    push   ebp
+    0x08048395 &lt;+1&gt;:    mov    ebp,esp
+    0x08048397 &lt;+3&gt;:    mov    eax,DWORD PTR <span class="o">[</span>ebp+0xc]
+    0x0804839a &lt;+6&gt;:    mov    edx,DWORD PTR <span class="o">[</span>ebp+0x8]
+    0x0804839d &lt;+9&gt;:    lea    eax,[edx+eax<span class="k">*</span>1]
+    0x080483a0 &lt;+12&gt;:   add    eax,DWORD PTR <span class="o">[</span>ebp+0x10]
+    0x080483a3 &lt;+15&gt;:   pop    ebp
+    0x080483a4 &lt;+16&gt;:   ret
+End of assembler dump.
+</code></pre></div></div>
+
+<p>Le prologue de cette fonction est constitué des lignes <code class="highlighter-rouge">+0</code> et <code class="highlighter-rouge">+1</code>.</p>
+
+<p>On voit dans l’ordre que <code class="highlighter-rouge">EBP</code> est poussé sur la pile avec <code class="highlighter-rouge">PUSH EBP</code>, permettant de sauvegarder le registre <code class="highlighter-rouge">EBP</code> sur la pile, registre qui pointait vers le début de la stack frame précédente. A la ligne <code class="highlighter-rouge">+1</code>, la valeur de <code class="highlighter-rouge">ESP</code> est copiée dans <code class="highlighter-rouge">EBP</code>. A ce moment là, <code class="highlighter-rouge">EBP</code> et <code class="highlighter-rouge">ESP</code> pointent vers la même case mémoire. C’est normal, nous venons de commencer la stack frame de la fonction appelée, et elle n’a encore rien mis dessus. Donc le début et la fin sont confondus !</p>
+
+<p>D’ailleurs, si on regarde l’évolution des registres <code class="highlighter-rouge">EBP</code> et <code class="highlighter-rouge">ESP</code> ainsi que de la pile lors de l’exécution des premières instructions de la fonction <code class="highlighter-rouge">reponse()</code> on obtient ceci :</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>gdb<span class="o">)</span> disas reponse
+Dump of assembler code <span class="k">for function </span>reponse:
+<span class="o">=&gt;</span> 0x08048394 &lt;+0&gt;:     push   ebp
+   0x08048395 &lt;+1&gt;:     mov    ebp,esp
+   0x08048397 &lt;+3&gt;:     mov    eax,DWORD PTR <span class="o">[</span>ebp+0xc]
+   0x0804839a &lt;+6&gt;:     mov    edx,DWORD PTR <span class="o">[</span>ebp+0x8]
+   0x0804839d &lt;+9&gt;:     lea    eax,[edx+eax<span class="k">*</span>1]
+   0x080483a0 &lt;+12&gt;:    add    eax,DWORD PTR <span class="o">[</span>ebp+0x10]
+   0x080483a3 &lt;+15&gt;:    pop    ebp
+   0x080483a4 &lt;+16&gt;:    ret
+End of assembler dump.
+
+<span class="o">(</span>gdb<span class="o">)</span> i r <span class="nv">$ebp</span> <span class="nv">$esp</span>
+ebp            0xbffffcb8    0xbffffcb8
+esp            0xbffffc98    0xbffffc98
+
+<span class="o">(</span>gdb<span class="o">)</span> <span class="k">continue
+</span>Continuing.
+
+Breakpoint 1, 0x08048397 <span class="k">in </span>reponse <span class="o">()</span>
+
+<span class="o">(</span>gdb<span class="o">)</span> disas reponse
+Dump of assembler code <span class="k">for function </span>reponse:
+   0x08048394 &lt;+0&gt;:     push   ebp
+   0x08048395 &lt;+1&gt;:     mov    ebp,esp
+<span class="o">=&gt;</span> 0x08048397 &lt;+3&gt;:     mov    eax,DWORD PTR <span class="o">[</span>ebp+0xc]
+   0x0804839a &lt;+6&gt;:     mov    edx,DWORD PTR <span class="o">[</span>ebp+0x8]
+   0x0804839d &lt;+9&gt;:     lea    eax,[edx+eax<span class="k">*</span>1]
+   0x080483a0 &lt;+12&gt;:    add    eax,DWORD PTR <span class="o">[</span>ebp+0x10]
+   0x080483a3 &lt;+15&gt;:    pop    ebp
+   0x080483a4 &lt;+16&gt;:    ret
+End of assembler dump.
+
+<span class="o">(</span>gdb<span class="o">)</span> x/8xw <span class="nv">$esp</span>
+0xbffffc94:    0xbffffcb8    0x080483c7    0x00000004    0x00000008
+0xbffffca4:    0x0000002a    0x080483eb    0xb7fd6ff4    0x080483e0
+
+<span class="o">(</span>gdb<span class="o">)</span> i r <span class="nv">$ebp</span> <span class="nv">$esp</span>
+ebp            0xbffffc94    0xbffffc94
+esp            0xbffffc94    0xbffffc94
+</code></pre></div></div>
+
+<p>Reprenons ce code pas à pas : Nous sommes au début des instructions de la fonction, près à exécuter le <code class="highlighter-rouge">push ebp</code>. On voit que <code class="highlighter-rouge">EBP</code> contient l’adresse <code class="highlighter-rouge">0xbffffcb8</code> et esp contient <code class="highlighter-rouge">0xbffffc98</code>. On retrouve bien le <code class="highlighter-rouge">ESP</code> qu’on avait représenté sur le dernier schéma. Ensuite, nous avançons de deux instructions. On regarde alors <code class="highlighter-rouge">EBP</code> et <code class="highlighter-rouge">ESP</code>. Ils sont bien égaux, comme prévus. On a poussé l’ancienne valeur de <code class="highlighter-rouge">EBP</code> sur la pile, ce qui a décalé de le haut de la pile de 4 octets. Le haut de la pile vaut donc <code class="highlighter-rouge">0xbffffc98 - 4</code> donc <code class="highlighter-rouge">0xbffffc94</code>. Ensuite, on affecte <code class="highlighter-rouge">ESP</code> à <code class="highlighter-rouge">EBP</code>. <code class="highlighter-rouge">ESP</code> valant maintenant <code class="highlighter-rouge">0xbffffc94</code>, <code class="highlighter-rouge">EBP</code> prend la même valeur, comme le montre la dernière commande de cette séquence. Voici un dernier schéma qui représente l’état actuel de la pile :</p>
+
+<p><a href="/assets/uploads/2015/03/gestion_pile3.png"><img src="/assets/uploads/2015/03/gestion_pile3.png" alt="etat de la pile" /></a></p>
+
+<p>Voilà pour l’explication de ces lignes dans gdb. Ensuite nous avons quelques instructions qui permettent d’effectuer le calcul demandé, puis nous arrivons aux deux dernières lignes, qui sont <code class="highlighter-rouge">pop ebp</code> et <code class="highlighter-rouge">ret</code>.</p>
+
+<p>La première va permettre de replacer le pointeur <code class="highlighter-rouge">EBP</code> sur le début de la stack frame de la fonction appelante, tandis que le deuxième permet de <code class="highlighter-rouge">POP EIP</code> (donc renvoyer la sauvegarde de <code class="highlighter-rouge">EIP</code> dans le registre <code class="highlighter-rouge">EIP</code>) pour reprendre le cours de l’instruction qui était à la suite de l’appel de fonction. Cette routine peut se résumer très sommairement au schéma suivant :</p>
+
+<p><a href="/assets/uploads/2015/03/img_54f62a66a6700.png"><img src="/assets/uploads/2015/03/img_54f62a66a6700.png" alt="img_54f62a66a6700" /></a></p>
+
+<p>Le programme est lu instruction par instruction (<strong>1</strong>). Lors d’un <code class="highlighter-rouge">call</code> (<strong>2</strong>), on empile l’instruction en cours (<code class="highlighter-rouge">EIP</code> est pushée sur la pile), puis on saute à l’adresse donnée par le <code class="highlighter-rouge">call</code>. Ici, les instructions de la fonction sont exécutées les unes à la suite des autres jusqu’au <code class="highlighter-rouge">RET</code> (<strong>3</strong>) qui va récupérer la valeur de <code class="highlighter-rouge">EIP</code> enregistrée précédemment, afin de revenir à là où le programme en était (<strong>4</strong>), sans perdre le fil !</p>
+
+<p>Magique, non ?</p>
+
+<p>Avec cette compréhension un peu plus détaillée, vous êtes à même de comprendre le concept du buffer overflow, expliqué dans l’article <a href="/buffer-overflow/">Buffer Overflow</a></p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#user-land"><i class="fas fa-tags"></i> User Land</a><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/fonctionnement-de-la-pile/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-000E';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

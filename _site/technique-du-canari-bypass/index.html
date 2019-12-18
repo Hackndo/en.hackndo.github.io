@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Technique du Canari : Bypass - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Technique du Canari : Bypass" />
+    <meta name="twitter:description" content="Explication du canary, et comment le bypasser quand il utilise des forks" />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2015/09/9537298100_c67c2e1071_b.jpg" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Technique du Canari : Bypass" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Explication du canary, et comment le bypasser quand il utilise des forks" />
+<meta property="og:description" content="Explication du canary, et comment le bypasser quand il utilise des forks" />
+<link rel="canonical" href="http://localhost:4000/technique-du-canari-bypass/" />
+<meta property="og:url" content="http://localhost:4000/technique-du-canari-bypass/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:image" content="http://localhost:4000/assets/uploads/2015/09/9537298100_c67c2e1071_b.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-09-15T00:00:00+02:00" />
+<script type="application/ld+json">
+{"image":"http://localhost:4000/assets/uploads/2015/09/9537298100_c67c2e1071_b.jpg","@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/technique-du-canari-bypass/","headline":"Technique du Canari : Bypass","dateModified":"2015-09-15T00:00:00+02:00","datePublished":"2015-09-15T00:00:00+02:00","author":{"@type":"Person","name":"Pixis"},"description":"Explication du canary, et comment le bypasser quand il utilise des forks","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/technique-du-canari-bypass/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2015/09/9537298100_c67c2e1071_b.jpg" alt="Technique du Canari : Bypass" title="Technique du Canari : Bypass" />
+  </div>
+  
+  <h1 class="post-title">Technique du Canari : Bypass</h1>
+  <div class="post-info">
+      <p class="alignleft">15 Sep 2015 <a class="post-comments-count" href="http://http://localhost:4000/technique-du-canari-bypass/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#user-land"><i class="fas fa-tags"></i> User Land</a><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Salut, aujourd’hui j’ai travaillé sur un binaire qui avait une technique qui permettait de limiter les dégâts causés par un buffer overflow. Cela s’appelle <strong>Stack-Smashing Protector</strong> (appelée aussi SSP). C’est une extention de gcc. Dans le cas du binaire que j’ai étudié, pour se protéger des buffer overflows, gcc ajoute une valeur secrète sur la stack, appelée <strong>canari</strong>, juste avant l’adresse contenue dans EBP. Un dépassement de tampon est en général utilisé pour réécrire EIP, qui se trouve être juste derrière l’adresse contenue dans EBP. Donc si jamais cela se passait, la valeur secrète serait également réécrite. Une vérification de cette valeur est effectuée avant de sortir de la fonction, et si elle a été modifiée, alors le programme s’arrête brutalement et nous jette des tomates à la figure.</p>
+
+<!--more-->
+
+<p>Les figures suivantes illustrent les deux issues possibles.</p>
+
+<p><img src="/assets/uploads/2015/09/canari_ok.png" alt="Canary ok" /></p>
+
+<p><img src="/assets/uploads/2015/09/canari_ko.png" alt="Canary ko" /></p>
+
+<h2 id="exemple">Exemple</h2>
+
+<p>Nous allons voir ici un exemple de ce type de protection. Pour cela, nous allons reprendre le programme utilisé dans l’<a href="../buffer-overflow/">article sur le buffer overflow</a></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+</span>
+<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+    <span class="n">strcpy</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="n">arg</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">buffer</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">"binary </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">else</span> <span class="n">func</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Cependant, cette fois-ci, nous allons le compiler d’une différente manière, pour que cette protection soit mise en place</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gcc <span class="nt">-Wall</span> <span class="nt">-m32</span> <span class="nt">-fstack-protector</span> -o canari canari.c
+</code></pre></div></div>
+
+<p>Nous avons maintenant un binaire qui possède cette protection. L’outil <a href="http://www.trapkit.de/tools/checksec.sh" target="blank">check.sh</a> nous permet de nous en assurer :</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>./checksec.sh <span class="nt">--file</span> canari
+RELRO      STACK CANARY   NX           PIE      RPATH      RUNPATH      FILE
+No RELRO   Canary found   NX enabled   No PIE   No RPATH   No RUNPATH   canari
+</code></pre></div></div>
+
+<p>Essayons alors de provoquer un bête overflow</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>./canari <span class="si">$(</span>perl <span class="nt">-e</span> <span class="s1">'print "A"x100'</span><span class="si">)</span>
+
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+<span class="k">***</span> stack smashing detected <span class="k">***</span>: ./canari terminated
+</code></pre></div></div>
+
+<p>Ouch. Voilà, on s’est pris la tomate. Au moins, c’est clair, nous ne pouvons plus badiner avec la pile. Snif.</p>
+
+<p>Mais alors, il s’est passé quoi exactement ? Regardons à quoi ressemble notre nouveau binaire dans gdb</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gdb <span class="nt">-q</span> canari
+Reading symbols from /home/betezed/blog/exemples/canari...<span class="o">(</span>no debugging symbols found<span class="o">)</span>...done.
+gdb-peda<span class="nv">$ </span>disas main
+Dump of assembler code <span class="k">for function </span>main:
+ 0x080484f3 &lt;+0&gt;:  push ebp
+ 0x080484f4 &lt;+1&gt;:  mov ebp,esp
+ 0x080484f6 &lt;+3&gt;:  and esp,0xfffffff0
+ 0x080484f9 &lt;+6&gt;:  sub esp,0x10
+ 0x080484fc &lt;+9&gt;:  cmp DWORD PTR <span class="o">[</span>ebp+0x8],0x2
+ 0x08048500 &lt;+13&gt;: je 0x8048510 &lt;main+29&gt;
+ 0x08048502 &lt;+15&gt;: mov DWORD PTR <span class="o">[</span>esp],0x80485c0
+ 0x08048509 &lt;+22&gt;: call 0x8048380 &lt;puts@plt&gt;
+ 0x0804850e &lt;+27&gt;: jmp 0x8048520 &lt;main+45&gt;
+ 0x08048510 &lt;+29&gt;: mov eax,DWORD PTR <span class="o">[</span>ebp+0xc]
+ 0x08048513 &lt;+32&gt;: add eax,0x4
+ 0x08048516 &lt;+35&gt;: mov eax,DWORD PTR <span class="o">[</span>eax]
+ 0x08048518 &lt;+37&gt;: mov DWORD PTR <span class="o">[</span>esp],eax
+ 0x0804851b &lt;+40&gt;: call 0x80484ac 
+ 0x08048520 &lt;+45&gt;: mov eax,0x0
+ 0x08048525 &lt;+50&gt;: leave 
+ 0x08048526 &lt;+51&gt;: ret 
+End of assembler dump.
+gdb-peda<span class="nv">$ </span>disas func
+Dump of assembler code <span class="k">for function </span>func:
+ 0x080484ac &lt;+0&gt;:  push ebp
+ 0x080484ad &lt;+1&gt;:  mov ebp,esp
+ 0x080484af &lt;+3&gt;:  sub esp,0x78
+ 0x080484b2 &lt;+6&gt;:  mov eax,DWORD PTR <span class="o">[</span>ebp+0x8]
+ 0x080484b5 &lt;+9&gt;:  mov DWORD PTR <span class="o">[</span>ebp-0x5c],eax
+ 0x080484b8 &lt;+12&gt;: mov eax,gs:0x14
+ 0x080484be &lt;+18&gt;: mov DWORD PTR <span class="o">[</span>ebp-0xc],eax
+ 0x080484c1 &lt;+21&gt;: xor eax,eax
+ 0x080484c3 &lt;+23&gt;: mov eax,DWORD PTR <span class="o">[</span>ebp-0x5c]
+ 0x080484c6 &lt;+26&gt;: mov DWORD PTR <span class="o">[</span>esp+0x4],eax
+ 0x080484ca &lt;+30&gt;: lea eax,[ebp-0x4c]
+ 0x080484cd &lt;+33&gt;: mov DWORD PTR <span class="o">[</span>esp],eax
+ 0x080484d0 &lt;+36&gt;: call 0x8048370 &lt;strcpy@plt&gt;
+ 0x080484d5 &lt;+41&gt;: lea eax,[ebp-0x4c]
+ 0x080484d8 &lt;+44&gt;: mov DWORD PTR <span class="o">[</span>esp],eax
+ 0x080484db &lt;+47&gt;: call 0x8048380 &lt;puts@plt&gt;
+ 0x080484e0 &lt;+52&gt;: mov eax,DWORD PTR <span class="o">[</span>ebp-0xc]
+ 0x080484e3 &lt;+55&gt;: xor eax,DWORD PTR gs:0x14
+ 0x080484ea &lt;+62&gt;: je 0x80484f1 &lt;func+69&gt;
+ 0x080484ec &lt;+64&gt;: call 0x8048360 &lt;__stack_chk_fail@plt&gt;
+ 0x080484f1 &lt;+69&gt;: leave 
+ 0x080484f2 &lt;+70&gt;: ret 
+End of assembler dump.
+gdb-peda<span class="nv">$ </span>
+</code></pre></div></div>
+
+<p>Bon, nous avons les versions désassemblées de la fonction <code class="highlighter-rouge">main</code> et de la fonction <code class="highlighter-rouge">func</code>. La fonction <code class="highlighter-rouge">main</code> ne semble pas avoir été modifiée. En revanche, la fonction <code class="highlighter-rouge">func</code> a une fin assez étrange :</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x080484e0 &lt;+52&gt;: mov eax,DWORD PTR <span class="o">[</span>ebp-0xc]
+0x080484e3 &lt;+55&gt;: xor eax,DWORD PTR gs:0x14
+0x080484ea &lt;+62&gt;: je 0x80484f1 &lt;func+69&gt;
+0x080484ec &lt;+64&gt;: call 0x8048360 &lt;__stack_chk_fail@plt&gt;
+</code></pre></div></div>
+
+<p>Nous remarquons ces 4 lignes qui ne sont pas habituelles. Une valeur est prise sur la pile, juste avant <code class="highlighter-rouge">EBP</code>, puis elle est comparée à une valeur située sur le segment gs à l’adresse <code class="highlighter-rouge">0x14</code>. Ce segment est propre au processus en cours d’exécution. C’est en fait la valeur secrète dont nous parlions tout à l’heure, générée aléatoirement à chaque exécution. Pour nous en convaincre, plaçons un breakpoint à l’adresse <code class="highlighter-rouge">0x080484e3</code> pour voir le contenu de <code class="highlighter-rouge">EAX</code> lorsque le comportement est normal (Donc que nous n’avons pas réécrit le canari)</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gdb-peda<span class="nv">$ </span>r
+...
+gdb-peda<span class="nv">$ </span>i r eax
+eax 0xdad6e600 0xdad6e600
+gdb-peda<span class="nv">$ </span>
+gdb-peda<span class="nv">$ </span>r
+...
+gdb-peda<span class="nv">$ </span>i r eax
+eax 0x9a9c0100 0x9a9c0100
+</code></pre></div></div>
+
+<p>On voit que deux canaris sont générés d’une exécution à l’autre, et n’ont aucun rapport entre eux. Mais comme nous n’avons rien modifié à ce niveau là, les instructions suivantes :</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x080484e3 &lt;+55&gt;: xor eax,DWORD PTR gs:0x14
+ 0x080484ea &lt;+62&gt;: je 0x80484f1 &lt;func+69&gt;
+</code></pre></div></div>
+
+<p>comparent ce canari avec la valeur originale. Comme elle n’est pas modifiée, le xor donne la valeur 0 et le jump <code class="highlighter-rouge">JE</code> est pris, sautant l’appel à <code class="highlighter-rouge">__stack_chk_fail</code>, donc évitant le lancé de tomates.</p>
+
+<p>Maintenant, tentons un buffer overflow</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gdb-peda<span class="nv">$ </span>r <span class="si">$(</span>perl <span class="nt">-e</span> <span class="s1">'print "A"x100'</span><span class="si">)</span>
+...
+
+gdb-peda<span class="nv">$ </span>i r eax
+eax 0x41414141 0x41414141
+</code></pre></div></div>
+
+<p>Et voilà, nous avons remplacé le canari. Malheur ! Si nous exécutons les quelques instructions qui suivent</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gdb-peda<span class="nv">$ </span>ni
+gdb-peda<span class="nv">$ </span>ni
+
+<span class="o">[</span><span class="nt">-------------------------------------code-------------------------------------</span><span class="o">]</span>
+   0x80484e0 &lt;func+52&gt;: mov eax,DWORD PTR <span class="o">[</span>ebp-0xc]
+   0x80484e3 &lt;func+55&gt;: xor eax,DWORD PTR gs:0x14
+   0x80484ea &lt;func+62&gt;: je 0x80484f1 &lt;func+69&gt;
+<span class="o">=&gt;</span> 0x80484ec &lt;func+64&gt;: call 0x8048360 &lt;__stack_chk_fail@plt&gt;
+   0x80484f1 &lt;func+69&gt;: leave 
+   0x80484f2 &lt;func+70&gt;: ret 
+   0x80484f3 :    push ebp
+   0x80484f4 &lt;main+1&gt;:  mov ebp,esp
+</code></pre></div></div>
+
+<p>Comme attendu, nous ne prenons pas le saut <code class="highlighter-rouge">JE</code> à la ligne <code class="highlighter-rouge">func+62</code> et tombons tout droit dans le <code class="highlighter-rouge">call</code> à <code class="highlighter-rouge">__stack_chk_fail</code> qui termine notre programme.</p>
+
+<h2 id="exploitation">Exploitation</h2>
+
+<p>MAIS nous n’allons pas nous laisser faire.</p>
+
+<p>Le canari est généré aléatoirement pour chaque processus au run-time, souvent en piochant des octets dans <code class="highlighter-rouge">/dev/urandom</code> (Autant dire que je vous souhaite bon courage si vous essayez de prédire ce que va être généré). Donc on ne peut pas essayer de le bruteforcer, à priori !</p>
+
+<p>En effet, il y a un cas dans lequel nous pouvons nous en sortir sans trop de difficultés, c’est celui que j’ai rencontré :</p>
+
+<p>Si le binaire est un serveur qui accepte des connexions entrantes, deux cas se présentent.</p>
+
+<ul>
+  <li>Soit <strong>le binaire effectue un <code class="highlighter-rouge">fork()</code></strong> lorsqu’il reçoit une connexion, donc le processus est littéralement dupliqué, la valeur du canari comprise.</li>
+  <li>Soit <strong>le binaire effectue un <code class="highlighter-rouge">fork()</code> puis un <code class="highlighter-rouge">execve()</code></strong>. Lorsque <code class="highlighter-rouge">execve()</code> est appelé, les sections text, data,  bss et la pile du processus qui fait cet appel sont remplacées par les sections du programme qui est chargé en mémoire. Donc le canari est renouvelé.</li>
+</ul>
+
+<p>Dans le premier cas, nous comprenons bien ce que cela implique : Le canari a été généré une fois lorsque le serveur a été lancé, et à chaque fois que nous nous connectons, cette valeur est copiée dans notre fork sans être modifiée. Intéressant !</p>
+
+<p>Il suffit alors de remplir le buffer suffisamment pour ne remplacer que la première valeur du canari. Les chances sont faibles pour que ce soit la bonne valeur. Cependant, il n’y a que 256 possibilités (valeur maximale d’un octet). Donc en un maximum de 256 essais, nous pouvons trouver le premier caractère du canari.</p>
+
+<p>Pour des systèmes 32 bits, le canari a une taille de 4 octets, tandis que pour les systèmes 64 bits, le canari a une taille de 8 octets. Cela signifie que pour un système 32 bits, il faut un maximum de 4*256 = 1024 tentatives pour trouver le canari, et 2048 tentatives pour un système 64 bits. Et ça, c’est très faisable !</p>
+
+<p>Voici un schéma qui résume ce brute force pour un système 32 bits :</p>
+
+<p><img src="/assets/uploads/2015/09/bf_canari1.png" alt="Bruteforce Canari" /></p>
+
+<p>Dans le premier dessin en haut à gauche, nous voyons le buffer qui s’arrête juste avant le canari, ce dernier ayant une valeur qui nous est encore inconnue. Nous ajoutons alors un octet au buffer <code class="highlighter-rouge">\x00</code> pour écraser le premier octet du canari. Mais comme ce n’est pas le bon octet, le programme se ferme. Nous essayons alors l’octet suivant <code class="highlighter-rouge">\x01</code> mais le programme se ferme à nouveau. Lorsque nous essayons <code class="highlighter-rouge">\xCA</code>, cette fois-ci tout va bien. Nous avons découvert le premier octet secret ! Nous passons alors au deuxième octet (deuxième colonne dans ce schéma), et ainsi de suite jusqu’à découvrir le Canari dans sa totalité !</p>
+
+<p>Une fois cette valeur découverte, il ne reste plus qu’à faire une exploitation de buffer overflow classique. Pour cela, je vous conseille de lire l’article sur <a href="/buffer-overflow/">les buffer overflows</a> ou celui sur <a href="/retour-a-la-libc/">le retour à la libc</a></p>
+
+<p>À vos claviers !</p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#user-land"><i class="fas fa-tags"></i> User Land</a><a href="/archives/#linux"><i class="fas fa-tags"></i> Linux</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/technique-du-canari-bypass/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-0002';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

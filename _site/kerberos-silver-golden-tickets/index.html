@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Silver & Golden Tickets - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Silver & Golden Tickets" />
+    <meta name="twitter:description" content="Maintenant que nous avons vu le fonctionnement du protocole Kerberos en environnement Active Directory, nous allons découvrir ensemble les notions de Silver Ticket et Golden Ticket" />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2019/02/goldenticket.png" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Silver &amp; Golden Tickets" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Maintenant que nous avons vu le fonctionnement du protocole Kerberos en environnement Active Directory, nous allons découvrir ensemble les notions de Silver Ticket et Golden Ticket" />
+<meta property="og:description" content="Maintenant que nous avons vu le fonctionnement du protocole Kerberos en environnement Active Directory, nous allons découvrir ensemble les notions de Silver Ticket et Golden Ticket" />
+<link rel="canonical" href="http://localhost:4000/kerberos-silver-golden-tickets/" />
+<meta property="og:url" content="http://localhost:4000/kerberos-silver-golden-tickets/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-03-02T15:58:17+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/kerberos-silver-golden-tickets/","headline":"Silver &amp; Golden Tickets","dateModified":"2019-03-02T15:58:17+01:00","datePublished":"2019-03-02T15:58:17+01:00","author":{"@type":"Person","name":"Pixis"},"description":"Maintenant que nous avons vu le fonctionnement du protocole Kerberos en environnement Active Directory, nous allons découvrir ensemble les notions de Silver Ticket et Golden Ticket","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/kerberos-silver-golden-tickets/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2019/02/goldenticket.png" alt="Silver & Golden Tickets" title="Silver & Golden Tickets" />
+  </div>
+  
+  <h1 class="post-title">Silver & Golden Tickets</h1>
+  <div class="post-info">
+      <p class="alignleft">02 Mar 2019 <a class="post-comments-count" href="http://http://localhost:4000/kerberos-silver-golden-tickets/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Maintenant que nous avons vu le fonctionnement du <a href="/kerberos">protocole Kerberos</a> en environnement Active Directory, nous allons découvrir ensemble les notions de Silver Ticket et Golden Ticket. Pour bien comprendre comment ils fonctionnent, il est nécessaire de faire un zoom sur le PAC (<em>Privilege Attribute Certificate</em>).</p>
+
+<!--more-->
+
+<h2 id="pac">PAC</h2>
+
+<p>Le PAC est en quelque sorte une extension du protocole Kerberos utilisée par Microsoft pour la bonne gestion des droits dans un Active Directory. En effet, seul le KDC connait les droits de chacuns des objets. Il est donc nécessaire pour lui de transmettre ces informations aux différents services afin qu’ils puissent créer des jetons de sécurité adaptés aux utilisateurs qui utilisent ces services.</p>
+
+<p><em>En réalité, Microsoft utilise un champ existant dans les tickets pour y stocker des informations sur l’utilisateur. Ce champ est “authorization-data”. Ce n’est donc pas une extension au sens propre du terme.</em></p>
+
+<p>Dans le PAC se trouvent beaucoup d’informations concernant l’utilisateur, telles que son nom, son ID, les groupes auxquels il appartient, les informations de sécurité qui lui sont associées etc. Voici un résumé d’un PAC trouvé dans un TGT. Il a été simplifié pour faciliter sa compréhension.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AuthorizationData item
+    ad-type: AD-Win2k-PAC (128)
+        Type: Logon Info (1)
+            PAC_LOGON_INFO: 01100800cccccccce001000000000000000002006a5c0818...
+                Logon Time: Aug 17, 2018 16:25:05.992202600 Romance Daylight Time
+                Logoff Time: Infinity (absolute time)
+                PWD Last Set: Aug 16, 2018 14:13:10.300710200 Romance Daylight Time
+                PWD Can Change: Aug 17, 2018 14:13:10.300710200 Romance Daylight Time
+                PWD Must Change: Infinity (absolute time)
+                Acct Name: pixis
+                Full Name: pixis
+                Logon Count: 7
+                Bad PW Count: 2
+                User RID: 1102
+                Group RID: 513
+                GROUP_MEMBERSHIP_ARRAY
+                    Referent ID: 0x0002001c
+                    Max Count: 2
+                    GROUP_MEMBERSHIP:
+                        Group RID: 1108
+                        Attributes: 0x00000007
+                            .... .... .... .... .... .... .... .1.. = Enabled: The enabled bit is SET
+                            .... .... .... .... .... .... .... ..1. = Enabled By Default: The ENABLED_BY_DEFAULT bit is SET
+                            .... .... .... .... .... .... .... ...1 = Mandatory: The MANDATORY bit is SET
+                    GROUP_MEMBERSHIP:
+                        Group RID: 513
+                        Attributes: 0x00000007
+                            .... .... .... .... .... .... .... .1.. = Enabled: The enabled bit is SET
+                            .... .... .... .... .... .... .... ..1. = Enabled By Default: The ENABLED_BY_DEFAULT bit is SET
+                            .... .... .... .... .... .... .... ...1 = Mandatory: The MANDATORY bit is SET
+                User Flags: 0x00000020
+                User Session Key: 00000000000000000000000000000000
+                Server: DC2016
+                Domain: HACKNDO
+                SID pointer:
+                    Domain SID: S-1-5-21-3643611871-2386784019-710848469  (Domain SID)
+                User Account Control: 0x00000210
+                    .... .... .... ...0 .... .... .... .... = Don't Require PreAuth: This account REQUIRES preauthentication
+                    .... .... .... .... 0... .... .... .... = Use DES Key Only: This account does NOT have to use_des_key_only
+                    .... .... .... .... .0.. .... .... .... = Not Delegated: This might have been delegated
+                    .... .... .... .... ..0. .... .... .... = Trusted For Delegation: This account is NOT trusted_for_delegation
+                    .... .... .... .... ...0 .... .... .... = SmartCard Required: This account does NOT require_smartcard to authenticate
+                    .... .... .... .... .... 0... .... .... = Encrypted Text Password Allowed: This account does NOT allow encrypted_text_password
+                    .... .... .... .... .... .0.. .... .... = Account Auto Locked: This account is NOT auto_locked
+                    .... .... .... .... .... ..1. .... .... = Don't Expire Password: This account DOESN'T_EXPIRE_PASSWORDs
+                    .... .... .... .... .... ...0 .... .... = Server Trust Account: This account is NOT a server_trust_account
+                    .... .... .... .... .... .... 0... .... = Workstation Trust Account: This account is NOT a workstation_trust_account
+                    .... .... .... .... .... .... .0.. .... = Interdomain trust Account: This account is NOT an interdomain_trust_account
+                    .... .... .... .... .... .... ..0. .... = MNS Logon Account: This account is NOT a mns_logon_account
+                    .... .... .... .... .... .... ...1 .... = Normal Account: This account is a NORMAL_ACCOUNT
+                    .... .... .... .... .... .... .... 0... = Temp Duplicate Account: This account is NOT a temp_duplicate_account
+                    .... .... .... .... .... .... .... .0.. = Password Not Required: This account REQUIRES a password
+                    .... .... .... .... .... .... .... ..0. = Home Directory Required: This account does NOT require_home_directory
+                    .... .... .... .... .... .... .... ...0 = Account Disabled: This account is NOT disabled
+</code></pre></div></div>
+
+<p>Ce PAC se trouve dans les tickets générés pour un utilisateur (TGT ou TGS) et est chiffré soit avec la clé du KDC, soit avec celle du service demandé. L’utilisateur n’a donc pas la main sur ces informations, il ne peut pas modifier ses propres droits, groupes, etc.</p>
+
+<p>Cette structure est très importante car c’est elle qui permet à un utilisateur d’accéder (ou non) à un service, à une ressource, d’effectuer certaines actions.</p>
+
+<p><a href="/assets/uploads/2019/02/pac.png"><img src="/assets/uploads/2019/02/pac.png" alt="PAC" /></a></p>
+
+<p>Le PAC peut être considéré comme le badge de sécurité de l’utilisateur : Il peut l’utiliser pour ouvrir des portes, mais il ne peut pas ouvrir des portes auxquelles il n’a pas accès.</p>
+
+<h2 id="silver-ticket">Silver Ticket</h2>
+
+<p>Lorsqu’un client a besoin d’utiliser un service, il demande au KDC (Key Distribution Center) un TGS (<em>Ticket Granting Service</em>). Ce processus passe par les deux demandes <a href="/kerberos/#krb_tgs_req">KRB_TGS_REQ</a> et <a href="/kerberos/#krb_tgs_rep">KRB_TGS_REP</a>.</p>
+
+<p>Pour rappel, voici à quoi ressemble schématiquement un TGS.</p>
+
+<p><a href="/assets/uploads/2019/02/tgs.png"><img src="/assets/uploads/2019/02/tgs.png" alt="TGS" /></a></p>
+
+<p>Il est chiffré avec le hash NTLM du compte responsable du service (compte machine ou compte utilisateur). Ainsi, si un attaquant parvient à extraire le mot de passe ou le hash NTLM d’un compte de service, il peut alors forger un ticket de service (TGS) en choisissant les informations qu’il veut mettre dedans afin d’accéder à ce service, sans passer par le KDC. C’est l’attaquant qui construit ce ticket dans son coin, comme un grand. C’est ce ticket forgé qui est appelé <strong>Silver Ticket</strong>.</p>
+
+<p>Prenons en exemple un attaquant qui trouve le hash NTLM du compte de la machine <code class="highlighter-rouge">DESKTOP-01</code>. Le compte machine est alors <code class="highlighter-rouge">DESKTOP-01$</code>. L’attaquant peut créer un bloc de données correspondant à un ticket comme celui trouvé dans <a href="/kerberos/#krb_tgs_rep">KRB_TGS_REP</a>, Il indiquera le nom du domaine, le nom du service demandé sous sa forme <a href="/service-principal-name-spn">SPN</a> (Service Principal Name), le nom d’un utilisateur (qu’il peut choisir arbitrairement), son PAC (qu’il peut également forger). Voici un exemple simpliste de ticket que l’attaquant peut créer :</p>
+
+<ul>
+  <li><strong>realm</strong> : adsec.local</li>
+  <li><strong>sname</strong> : cifs\desktop-01.adsec.local</li>
+  <li><strong>enc-part</strong> : <em>// Partie chiffrée avec le hash NTLM trouvé par l’attaquant</em>
+    <ul>
+      <li><strong>key</strong> : 0x309DC6FA122BA1C <em>// Clé de session arbitrairement choisie</em></li>
+      <li><strong>crealm</strong> : adsec.local</li>
+      <li><strong>cname</strong> : pixisAdmin</li>
+      <li><strong>authtime</strong> : 2050/01/01 00:00:00 <em>// Date de validité du ticket</em></li>
+      <li><strong>authorization-data</strong> : PAC forgé dans lequel l’utilisateur est, par exemple, administrateur du domaine</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Une fois cette structure créée, il chiffre le bloc <code class="highlighter-rouge">enc-part</code> avec le hash NTLM découvert, puis il peut créer de toute pièce un <a href="/kerberos/#krb_ap_req">KRB_AP_REQ</a>. En effet, il lui suffit d’envoyer ce ticket au service cible, accompagné d’un authentifiant qu’il chiffre avec la clé de session qu’il a arbitrairement choisie dans le TGS. Le service sera en mesure de déchiffrer le TGS, extraire la clé de session, déchiffrer l’authentifiant et fournir le service à l’utilisateur puisque les informations forgée dans le PAC indiquent qu’il a le droit d’utiliser ce service.</p>
+
+<p>Notons que le PAC est doublement signé. Une première signature via le secret du compte de service, et une deuxième via le secret du contrôleur de domaine. Cependant, lorsque le service reçoit ce ticket, il ne vérifie en général que la première signature. En effet, les comptes de services ayant le privilège <a href="https://docs.microsoft.com/en-us/windows/desktop/secauthz/privilege-constants">SeTcbPrivilege</a>, signifiant que ces comptes peuvent agir en tant que partie du système d’exploitation (par exemple le compte local <code class="highlighter-rouge">SYSTEM</code>), ne vérifient pas la signature du contrôleur de domaine. Pratique, d’un point de vue attaquant ! Cela signifie également que même si le secret du KDC est changé (i.e. le mot de passe du compte <code class="highlighter-rouge">krbtgt</code>), les Silver Tickets pourront toujours fonctionner, sympa comme persistence.</p>
+
+<p>Voici un schéma résumant l’attaque :</p>
+
+<p><a href="/assets/uploads/2019/02/silverticket.png"><img src="/assets/uploads/2019/02/silverticket.png" alt="Silver Ticket" /></a></p>
+
+<p>En pratique, voici une capture d’écran qui montre la création d’un Silver Ticket avec l’outil <a href="http://blog.gentilkiwi.com/mimikatz">Mimikatz</a> développé par Benjamin Delpy (<a href="https://twitter.com/gentilkiwi">@gentilkiwi</a>).</p>
+
+<p><a href="/assets/uploads/2019/02/ST_CIFS.png"><img src="/assets/uploads/2019/02/ST_CIFS.png" alt="CIFS Example" /></a></p>
+
+<p>La ligne de commande utilisée dans Mimikatz est la suivante :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/kerberos::golden /domain:adsec.local /user:random_user /sid:S-1-5-21-1423455951-1752654185-1824483205 /rc4:ceaxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /target:DESKTOP-01.adsec.local /service:cifs /ptt
+</code></pre></div></div>
+
+<p>Cela veut dire qu’on crée un ticket pour le domaine <code class="highlighter-rouge">adsec.local</code> avec un nom d’utilisateur <strong>arbitraire</strong> (<code class="highlighter-rouge">random_user</code>), et que l’on vise le service <code class="highlighter-rouge">CIFS</code> de la machine <code class="highlighter-rouge">DESKTOP-01</code> en fournissant son hash NTLM.</p>
+
+<p>Il est également possible de créer un Silver Ticket sous linux en utilisant <a href="https://github.com/SecureAuthCorp/impacket">impaket</a>, via l’outil <code class="highlighter-rouge">ticketer.py</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ticketer.py <span class="nt">-nthash</span> ceaxxxxxxxxxxxxxxxxxxxxxxxxxxxxx <span class="nt">-domain-sid</span> S-1-5-21-1423455951-1752654185-1824483205 <span class="nt">-domain</span> adsec.local <span class="nt">-spn</span> CIFS/DESKTOP-01.adsec.local random_user
+</code></pre></div></div>
+
+<p>Il faut ensuite exporter le chemin du ticket dans une variable d’environnement spéciale <code class="highlighter-rouge">KRB5CCNAME</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">KRB5CCNAME</span><span class="o">=</span><span class="s1">'/chemin/vers/random_user.ccache'</span>
+</code></pre></div></div>
+
+<p>Enfin, tous les outils de la suite <code class="highlighter-rouge">impacket</code> peuvent être utilisés avec ce ticket, via l’option <code class="highlighter-rouge">-k</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psexec.py <span class="nt">-k</span> DESKTOP-01.adsec.local
+</code></pre></div></div>
+
+<h2 id="golden-ticket">Golden Ticket</h2>
+
+<p>Nous avons vu qu’avec un <strong>Silver Ticket</strong>, il était possible d’accéder à un service fourni par un compte de domaine si ce compte était compromis. En effet, le service accepte les informations chiffrées avec son propre secret puisqu’en théorie, seul le service et le KDC ont connaissance de ce secret.</p>
+
+<p>C’est un bon début, mais nous pouvons aller plus loin. En construisant un Silver Ticket, l’attaquant s’affranchit du KDC puisqu’en réalité, le vrai PAC de l’utilisateur contenu dans son TGT ne permet pas d’effectuer toutes les actions qu’il souhaite. Pour pouvoir modifier le TGT, ou en forger un nouveau, il faudrait connaitre la clé qui l’a chiffré, c’est à dire celle du KDC. Cette clé, c’est en fait le hash NTLM du compte <code class="highlighter-rouge">krbtgt</code>. Ce compte est un simple compte, sans droits particuliers (au niveau système ou Active Directory) et même désactivé. Cette faible exposition permet de mieux le protéger.</p>
+
+<p>Si jamais un attaquant parvient à trouver le hash NTLM de ce compte, il est alors en mesure de forger des TGT avec des PAC arbitraires. Et là, c’est un peu le Saint Graal. Il suffit de forger un TGT avec comme information que l’utilisateur de ce ticket fait partie du groupe “Administrateurs du Domaine”, et le tour est joué.</p>
+
+<p>Avec un TGT de la sorte entre les mains, l’utilisateur peut demander au KDC n’importe quel TGS pour n’importe quel service. Or ces TGS auront une copie du PAC qu’a forgé l’attaquant, certifiant qu’il est administrateur de domaine.</p>
+
+<p>C’est ce TGT forgé qui est appelé <strong>Golden Ticket</strong>. Le schéma de l’attaque est très similaire à celui du Silver Ticket. Voici une représentation également simplifiée :</p>
+
+<p><a href="/assets/uploads/2019/02/goldenticket.png"><img src="/assets/uploads/2019/02/goldenticket.png" alt="Golden Ticket" /></a></p>
+
+<p>En pratique, voici la démonstration de la création d’un <strong>Golden Ticket</strong>. D’abord, nous sommes dans une session qui ne possède pas de ticket en cache, et n’a pas les droits pour accéder à <code class="highlighter-rouge">\\DC-01.adsec.local\c$</code>.</p>
+
+<p><a href="/assets/uploads/2019/03/golden_ticket_access_denied.png"><img src="/assets/uploads/2019/03/golden_ticket_access_denied.png" alt="Access denied" /></a></p>
+
+<p>On génère alors le <strong>Golden Ticket</strong> en utilisant le hash NTLM du compte <code class="highlighter-rouge">krbtgt</code></p>
+
+<p><a href="/assets/uploads/2019/03/golden_ticket_generated.png"><img src="/assets/uploads/2019/03/golden_ticket_generated.png" alt="GT Generation" /></a></p>
+
+<p>La ligne de commande utilisée dans Mimikatz est la suivante :</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/kerberos::golden /domain:adsec.local /user:random_user /sid:S-1-5-21-1423455951-1752654185-1824483205 /krbtgt:ceaxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /ptt
+</code></pre></div></div>
+<p>Cela veut dire qu’on crée un ticket pour le domaine <code class="highlighter-rouge">adsec.local</code> avec un nom d’utilisateur <strong>arbitraire</strong> (<code class="highlighter-rouge">random_user</code>), en fournissant le hash NTLM de l’utilisateur <code class="highlighter-rouge">krbtgt</code>. Cette commande crée un TGT avec une PAC indiquant que nous sommes administrateur du domaine (entre autre), et que nous nous appelons ANYUSER (choisi arbitrairement).</p>
+
+<p>Une fois ce ticket en mémoire, notre session est en mesure de demander un TGS pour n’importe quel <a href="/service-principal-name-spn">SPN</a>, par exemple pour <code class="highlighter-rouge">CIFS\DC-01.adsec.local</code> permettant de lire le contenu du partage <code class="highlighter-rouge">\\DC-01.adsec.local\$</code></p>
+
+<p><a href="/assets/uploads/2019/03/golden_ticket_access_granted.png"><img src="/assets/uploads/2019/03/golden_ticket_access_granted.png" alt="GT granted" /></a></p>
+
+<p>Il est également possible de créer un Golden Ticket sous linux en utilisant <a href="https://github.com/SecureAuthCorp/impacket">impaket</a>, via l’outil <code class="highlighter-rouge">ticketer.py</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ticketer.py <span class="nt">-nthash</span> ceaxxxxxxxxxxxxxxxxxxxxxxxxxxxxx <span class="nt">-domain-sid</span> S-1-5-21-1423455951-1752654185-1824483205 <span class="nt">-domain</span> adsec.local random_user
+</code></pre></div></div>
+
+<p>Il faut ensuite exporter le chemin du ticket dans une variable d’environnement spéciale <code class="highlighter-rouge">KRB5CCNAME</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">KRB5CCNAME</span><span class="o">=</span><span class="s1">'/chemin/vers/random_user.ccache'</span>
+</code></pre></div></div>
+
+<p>Enfin, tous les outils de la suite <code class="highlighter-rouge">impacket</code> peuvent être utilisés avec ce ticket, via l’option <code class="highlighter-rouge">-k</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>secretsdump.py <span class="nt">-k</span> DC-01.adsec.local <span class="nt">-just-dc-ntlm</span> <span class="nt">-just-dc-user</span> krbtgt
+</code></pre></div></div>
+
+<h2 id="méthodes-de-chiffrement">Méthodes de chiffrement</h2>
+
+<p>Jusqu’ici, nous utilisions les hashs <code class="highlighter-rouge">NT</code> pour créer les Silver/Golden Tickets. En réalité, cela signifie que nous utilisions la méthode de chiffrement <code class="highlighter-rouge">RC4_HMAC_MD5</code>, mais ce n’est pas la seule qui existe. En effet, aujourd’hui, plusieurs méthodes de chiffrement sont possibles au sein d’un Active Directory car elles ont évolué avec les versions de Windows. Voici un tableau récapitulatif issu de la <a href="https://docs.microsoft.com/fr-fr/windows/security/threat-protection/security-policy-settings/network-security-configure-encryption-types-allowed-for-kerberos">documentation Microsoft</a></p>
+
+<p><a href="/assets/uploads/2019/03/encryption_types.png"><img src="/assets/uploads/2019/03/encryption_types.png" alt="Encryption types" /></a></p>
+
+<p>Il est possible d’utiliser la méthode de chiffrement souhaitée pour générer le TGT. Il suffira de la préciser dans les futures requêtes avec le contrôleur de domaine (l’information se trouvera dans le champ <code class="highlighter-rouge">EType</code> associé au TGT). Voici un exemple avec l’utilisation du chiffrement AES256.</p>
+
+<p><a href="/assets/uploads/2019/03/golden_ticket_access_granted_aes.png"><img src="/assets/uploads/2019/03/golden_ticket_access_granted_aes.png" alt="GT AES" /></a></p>
+
+<p>Par ailleurs, d’après la présentation <a href="https://www.blackhat.com/docs/us-17/thursday/us-17-Mittal-Evading-MicrosoftATA-for-ActiveDirectory-Domination.pdf">Evading Microsoft ATA for 
+Active Directory Domination</a> de <a href="https://twitter.com/nikhil_mitt">Nikhil Mittal</a> à la Black Hat, cela permettrait de ne pas être détecté par Microsoft ATA, pour le moment, puisqu’on évite de faire un <em>downgade</em> de méthode de chiffrement. En effet, par défaut, la méthode de chiffrement utilisée est la plus forte supportée par le client.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Cet article permet de clarifier les notions de PAC, Silver Ticket, Golden Ticket, ainsi que les différentes méthodes de chiffrement utilisées dans les échanges. Ces notions sont essentielles pour comprendre les attaques Kerberos dans un Active Directory.</p>
+
+<p>N’hésitez pas à laisser un commentaire ou à me retrouver sur le <a href="https://discord.gg/9At6SUZ">serveur Discord</a> du blog si vous avez des questions ou des idées !</p>
+
+<h2 id="ressources">Ressources</h2>
+
+<ul>
+  <li><a href="https://www.sstic.org/media/SSTIC2014/SSTIC-actes/secrets_dauthentification_pisode_ii__kerberos_cont/SSTIC2014-Article-secrets_dauthentification_pisode_ii__kerberos_contre-attaque-bordes_2.pdf">Secrets d’authentification épisode II Kerberos contre-attaque - Aurélien Bordes</a></li>
+  <li><a href="http://adsecurity.org/">ADSecurity - Pyrotek3</a></li>
+  <li><a href="http://remivernier.com/index.php/2018/07/07/kerberos-exploration/">Kerberos Exploration - Rémi Vernier</a></li>
+  <li><a href="https://docs.microsoft.com/fr-fr/windows/security/threat-protection/security-policy-settings/network-security-configure-encryption-types-allowed-for-kerberos">Sécurité réseau: configurer les types de chiffrement autorisés pour Kerberos - Microsoft</a></li>
+  <li><a href="https://blogs.msdn.microsoft.com/openspecification/2010/11/17/encryption-type-selection-in-kerberos-exchanges/">Encryption Type Selection in Kerberos Exchanges - Microsoft</a></li>
+</ul>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/kerberos-silver-golden-tickets/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-00a6';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>

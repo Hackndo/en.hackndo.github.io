@@ -1,0 +1,57 @@
+---
+layout: default
+title: Home
+description: Ce blog est dédié à la sécurité informatique. Tutos sur les buffers overflow, l'Active Directory, on explique tout avec des exemples concrets.
+---
+<div class="posts">
+  {% for post in paginator.posts %}
+  <div class="post">
+  {% if post.cover %}
+    <p class="post-cover">
+      <img src="/{{ post.cover }}" alt="{{ post.title }}" title="{{ post.title }}" />
+    </p>
+  {% endif %}
+    <h1 class="post-title">
+      <a href="{{ post.url }}">
+        {{ post.title }}
+      </a>
+    </h1>
+
+    <div class="post-info">
+      <p class="alignleft"><span class="google-icon-date">{{ post.date | date_to_string }}</span> <a class="post-comments-count" href="{{ site.url }}{{ post.url }}#disqus_thread" data-disqus-identifier="{{ post.disqus_identifier }}"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">{{ post.author }}</a></strong></p>
+    </div>
+
+    {{ post.excerpt }}
+
+    {% capture content_words %} 
+      {{ post.content | number_of_words }} 
+    {% endcapture %} 
+    {% capture excerpt_words %} 
+      {{ post.excerpt | number_of_words }} 
+    {% endcapture %} 
+    {% if excerpt_words != content_words %}
+    <br />
+    <a href="{{ post.url }}">Lire la suite →</a>
+    {% endif %}
+    <hr />
+  </div>
+  {% endfor %}
+</div>
+
+<div class="pagination">
+  {% if paginator.next_page %}
+    <a class="pagination-item older" href="{{ paginator.next_page_path }}">Plus ancien</a>
+  {% else %}
+    <span class="pagination-item older">Plus ancien</span>
+  {% endif %}
+  {% if paginator.previous_page %}
+    {% if paginator.page == 2 %}
+      <a class="pagination-item newer" href="/">Plus récent</a>
+    {% else %}
+      <a class="pagination-item newer" href="{{ paginator.previous_page_path }}">Plus récent</a>
+    {% endif %}
+  {% else %}
+    <span class="pagination-item newer">Plus récent</span>
+  {% endif %}
+</div>

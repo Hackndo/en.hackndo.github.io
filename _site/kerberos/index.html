@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="fr-fr" class="no-js">
+
+  <head>
+    <link href="http://gmpg.org/xfn/11" rel="profile" hreflang="fr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  
+    <meta name="google-site-verification" content="JeRPv2CEcpONAy8C7dMr1nzjlpZxlxYCtt2PnuQ78g8" />
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  
+    <title>
+      
+        Kerberos en Active Directory - hackndo
+      
+    </title>
+
+	<link rel="stylesheet" href="/assets/css/style.css?v=1.13"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600"> <!-- Logo font -->
+    <script src="/assets/js/modernizr.js"></script> <!-- Modernizr -->
+    
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icones/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/icones/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icones/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/icones/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icones/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/icones/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icones/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/icones/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icones/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icones/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/res/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  	
+	<!-- RSS -->
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="hackndo" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hackanddo" />
+    <meta name="twitter:creator" content="@hackanddo" />
+    <meta name="twitter:title" content="Kerberos en Active Directory" />
+    <meta name="twitter:description" content="Kerberos est un protocole qui permet à des utilisateurs de s'authentifier sur le réseau, et d'accéder à des services de manière authentifiée." />
+    
+    <meta name="twitter:image" content="http://localhost:4000/assets/uploads/2018/05/kerberos.png" />
+    
+  
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-80312745-1', 'auto');
+      ga('send', 'pageview');
+  
+    </script>
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Kerberos en Active Directory" />
+<meta name="author" content="Pixis" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="description" content="Kerberos est un protocole qui permet à des utilisateurs de s’authentifier sur le réseau, et d’accéder à des services de manière authentifiée." />
+<meta property="og:description" content="Kerberos est un protocole qui permet à des utilisateurs de s’authentifier sur le réseau, et d’accéder à des services de manière authentifiée." />
+<link rel="canonical" href="http://localhost:4000/kerberos/" />
+<meta property="og:url" content="http://localhost:4000/kerberos/" />
+<meta property="og:site_name" content="hackndo" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-02-02T20:10:02+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icones/logo.png"},"name":"Pixis"},"url":"http://localhost:4000/kerberos/","headline":"Kerberos en Active Directory","dateModified":"2019-02-02T20:10:02+01:00","datePublished":"2019-02-02T20:10:02+01:00","author":{"@type":"Person","name":"Pixis"},"description":"Kerberos est un protocole qui permet à des utilisateurs de s’authentifier sur le réseau, et d’accéder à des services de manière authentifiée.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/kerberos/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+  <body>
+    <header class="cd-main-header">
+    <a href="/" class="cd-logo"><img src="/assets/icones/logo.png" /> <span class="cd-logo-title">hackndo</span></a>
+		
+    <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+
+</header> <!-- .cd-main-header -->
+    <main class="cd-main-content">
+		<nav class="cd-side-nav">
+            <div class="sidebar-about">
+    <h1>
+        <img id="site-logo" src="/assets/icones/logo.png" alt="logo" title="logo" />
+        <a class="sidebar-title" href="/">
+        hackndo
+        </a>
+    </h1>
+    <p class="lead">Think out of the box</p>
+</div>
+
+<ul>
+    <li class="cd-label">Blog</li>
+    <li class="">
+        <a href="/">Home</a>
+    </li>
+    
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/about/">À propos</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/archives/">Archives</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/contact/">Me contacter</a>
+                </li>
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/disclaimer/">Disclaimer</a>
+                </li>
+            
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+                <li class="">
+                    <a href="/projects/">Projets</a>
+                </li>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+    
+        
+    
+</ul>
+<ul>
+    <li class="cd-label">Liens</li>
+    <li><a href="https://www.dailysecurity.fr/" target="_blank">Blog de Geluchat</a></li>
+    <li><a href="http://lsdsecdaemon.com" target="_blank">Blog de Th3_l5D</a></li>
+    <li><a href="http://inf0sec.fr" target="_blank">Blog de Matthieu</a></li>
+</ul>
+<p class="sidebar-copyright">&copy; 2019. Tous droits réservés.</p>
+<div class="sidebar-social">
+<ul>
+  <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
+  <li><a href="https://github.com/hackndo" title="Github" target="_blank"><img title="Github" alt="Github" src="/assets/icones/social/github.png" /></a></li>
+  <li><a href="https://www.youtube.com/channel/UC9WYWHLdu9TK-0Hu3wcHJ9g" title="Youtube" target="_blank"><img title="Youtube" alt="Youtube" src="/assets/icones/social/youtube.png" /></a></li>
+  <li><a href="https://discord.gg/9At6SUZ" title="Discord" target="_blank"><img title="Discord" alt="Discord" src="/assets/icones/social/discord.png" /></a></li>
+  <li><a href="https://www.linkedin.com/in/romainbentz/" title="LinkedIn" target="_blank"><img title="LinkedIn" alt="LinkedIn" src="/assets/icones/social/linkedin.png" /></a></li>
+  <li><a href="https://sh.hackndo.com" title="Shell" target="_blank"><img title="Shell" alt="Shell" src="/assets/icones/social/shell.png" /></a></li>
+  <li><a href="/feed.xml" title="RSS" target="_blank"><img title="RSS" alt="RSS" src="/assets/icones/social/rss.png" /></a></li>
+  <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
+</ul>
+</div>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="post">
+  
+  <div class="post-cover">
+    <img src="/assets/uploads/2018/05/kerberos.png" alt="Kerberos en Active Directory" title="Kerberos en Active Directory" />
+  </div>
+  
+  <h1 class="post-title">Kerberos en Active Directory</h1>
+  <div class="post-info">
+      <p class="alignleft">02 Feb 2019 <a class="post-comments-count" href="http://http://localhost:4000/kerberos/#disqus_thread"></a></p>
+      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">Pixis</a></strong></p>
+      <div class="keywords">
+        <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+      </div>
+</div>
+
+  <article>
+  <p>Active Directory est une solution de Microsoft utilisée pour la gestion d’un système d’information, articulée sur les points suivants :</p>
+
+<ul>
+  <li>Un système d’annuaire de ressources (LDAP)</li>
+  <li>Un système d’authentification (Kerberos)</li>
+  <li>Un système de résolution de noms (DNS)</li>
+  <li>Une politique logicielle homogène</li>
+</ul>
+
+<p>Nous allons nous intéresser dans cet article à la partie authentification au sein d’un Active Directory, donc à la partie Kerberos.</p>
+
+<p>Kerberos est un protocole qui permet à des utilisateurs de s’authentifier sur le réseau, et d’accéder à des services de manière authentifiée.</p>
+
+<!--more-->
+
+<h2 id="fonctionnement">Fonctionnement</h2>
+
+<p>Le besoin auquel répond Kerberos est celui d’un utilisateur qui souhaite utiliser un service exposé quelque part sur le réseau, sans pour autant que l’utilisateur ait besoin d’envoyer son mot de passe, et sans que le serveur ait besoin de connaitre les mots de passe de tout le monde. C’est une authentification centralisée.</p>
+
+<p>Pour répondre à cette problématique, il faut au minimum trois entités</p>
+
+<ul>
+  <li>Un client, qui peut être un ordinateur, un service, une personne, …</li>
+  <li>Une machine proposant un service</li>
+  <li>Un <em>Key Distribution Center</em> ou centre de distribution de clés (KDC) qui est le contrôleur de domaine (DC) en environnement Active Directory</li>
+</ul>
+
+<p><a href="/assets/uploads/2018/05/entities.png"><img src="/assets/uploads/2018/05/entities.png" alt="Entité en jeu" /></a></p>
+
+<p>L’idée est que lorsque le client veut accéder au service, aucun mot de passe ne sera envoyé sur le réseau, évitant ainsi des fuites de ceux-ci qui pourraient compromettre le réseau, et l’authentification est centralisée, c’est au niveau du KDC que ça se passe.</p>
+
+<p>Pour cela, le processus est un peu lourd, et se découpe en trois étapes :</p>
+
+<ol>
+  <li>Authentication Service (AS) : Le client doit s’authentifier auprès du KDC</li>
+  <li>Ticket-Granting Ticket (TGT) : Il doit ensuite demander un ticket permettant d’accéder au service choisi (par exemple CIFS)</li>
+  <li>Accès au service (AP) : Il communique enfin avec le service en lui fournissant le ticket</li>
+</ol>
+
+<p>C’est un peu comme dans certaines soirées. Vous avez votre pièce d’identité que vous avez fait faire et qui prouve que vous êtes bien vous (TGT). Si vous voulez consommer quelque chose, vous devez vous présenter à la caisse avec cette pièce d’identité (TGT) pour demander un ticket de consommation (TGS). La caisse vous donne alors un ticket de consommation tamponné, non falsifiable. Une fois en possession de ce ticket, vous pouvez aller au bar et demander votre consommation en présentant le ticket. Le bar peut vérifier que ce ticket vient bien de la caisse grace au tampon, et vous sert un petit Ricard si vous y avez le droit.</p>
+
+<p>Très sommairement, le processus ressemble à ça :</p>
+
+<p><a href="/assets/uploads/2018/05/simplified_process.png"><img src="/assets/uploads/2018/05/simplified_process.png" alt="Processus simplifié" /></a></p>
+
+<p>Très bien, mais concrètement, comment ça fonctionne ?</p>
+
+<p>Nous sommes donc dans un contexte Active Directory, ce qui fait que le KDC est également le contrôleur de domaine (<em>Domain Controller</em> ou DC). Le KDC possède l’ensemble des informations du domaine, dont les clés de chacun des services, machines, utilisateurs, … Tous les autres éléments ne connaissent que leur clé, et n’ont de ce fait pas connaissance des clés des autres objets dans l’Active Directory.</p>
+
+<p>Nous sommes donc dans la situation suivante :</p>
+
+<p><a href="/assets/uploads/2018/05/keys.png"><img src="/assets/uploads/2018/05/keys.png" alt="DC avec clés" /></a></p>
+
+<p>Prenons comme exemple l’utilisateur <code class="highlighter-rouge">pixis</code> qui veut communiquer avec un service donné. Il faudra pour cela qu’il s’authentifie auprès du KDC pour ensuite pouvoir demander d’utiliser le service. Cette phase s’appelle <em>Authentication Service</em> (AS).</p>
+
+<h3 id="authentication-service-as">Authentication Service (AS)</h3>
+
+<h4 id="krb_as_req">KRB_AS_REQ</h4>
+<p><code class="highlighter-rouge">pixis</code> va dans un premier temps envoyer une demande de <em>Ticket Granting Ticket</em> (TGT) au contrôleur de domaine (DC). Cette demande est appelée <strong>KRB_AS_REQ</strong> (<em>Kerberos Authentication Service Request</em>). Le TGT que demande le client est un bout d’information chiffrée contenant entre autre une clé de session et des informations sur l’utilisateur (ID, nom, groupes, …).</p>
+
+<p>Afin d’effectuer cette demande de TGT, <code class="highlighter-rouge">pixis</code> va envoyer son nom au KDC ainsi que l’heure précise de la demande (heure qu’il va chiffrer avec son secret) et quelques autres informations en clair.</p>
+
+<p><a href="/assets/uploads/2018/05/asreq.png"><img src="/assets/uploads/2018/05/asreq.png" alt="Clé de session" /></a></p>
+
+<p>Le KDC va alors recevoir ce nom, et va vérifier qu’il existe dans sa base de données.</p>
+
+<p><a href="/assets/uploads/2018/05/kdcsearchuser.png"><img src="/assets/uploads/2018/05/kdcsearchuser.png" alt="Clé de session" /></a></p>
+
+<p>S’il le trouve, il va alors récupérer le condensat (ou <em>hash</em>) du mot de passe de <code class="highlighter-rouge">pixis</code> qu’il utilisera pour tenter de déchiffrer le timestamp envoyé. S’il n’y arrive pas, c’est que le client n’est pas celui qu’il prétend être.</p>
+
+<p>S’il y arrive, en revanche, c’est que c’est bien <code class="highlighter-rouge">pixis</code> qui est en train de lui parler puisque l’utilisateur a connaissance du secret de <code class="highlighter-rouge">pixis</code>, donc le KDC va générer une clé de session qui sera unique pour cet utilisateur, ce ticket, et limitée dans le temps.</p>
+
+<p><a href="/assets/uploads/2018/05/cledesession.png"><img src="/assets/uploads/2018/05/cledesession.png" alt="Clé de session" /></a></p>
+
+<h4 id="krb_as_rep">KRB_AS_REP</h4>
+
+<p>Le KDC va alors renvoyer à <code class="highlighter-rouge">pixis</code> différents éléments dans sa réponse (<strong>KRB_AS_REP</strong>)</p>
+
+<ul>
+  <li>La <strong>clé de session</strong>, chiffrée avec le hash de <code class="highlighter-rouge">pixis</code>;</li>
+  <li>Le <strong>TGT</strong>, contenant différentes informations dont les principales sont les suivantes :
+    <ul>
+      <li>Le nom de l’utilisateur</li>
+      <li>La période de validité</li>
+      <li>La clé de session générée</li>
+      <li>Le <em>Privilege Attribute Certificate</em> (PAC) qui contient des informations spécifiques sur le client permettant de connaitre ses droits (son ID, les groupes auxquels il appartient, …)</li>
+    </ul>
+
+    <p>Le TGT sera chiffré avec la clé du KDC. Ainsi, seul le KDC est en mesure de déchiffrer et lire le contenu de ce ticket.</p>
+  </li>
+</ul>
+
+<p><a href="/assets/uploads/2018/05/asrep.png"><img src="/assets/uploads/2018/05/asrep.png" alt="Réponse KDC" /></a></p>
+
+<p><em>Notons que ce TGT est considéré comme une information publique. Il peut très bien être intercepté pendant la phase d’authentification. Nous verrons dans le paragraphe suivant l’importance de l’authentifiant qui accompagne le TGT quand le client communique avec le KDC.</em></p>
+
+<p>Le client reçoit alors ces informations. En utilisant son secret, le premier message va être déchiffré afin de récupérer la clé de session nécessaire pour la suite des échanges.</p>
+
+<h3 id="ticket-granting-service-tgs">Ticket-Granting Service (TGS)</h3>
+
+<p>Maintenant que le client a pu s’authentifier, nous voici dans la situation suivante : Le client possède sa clé ainsi qu’une clé de session limitée dans le temps que seul lui connait, et un TGT chiffré par le KDC qui contient, entre autre, cette même clé de session.</p>
+
+<p><a href="/assets/uploads/2018/05/firststate.png"><img src="/assets/uploads/2018/05/firststate.png" alt="Etat actuel" /></a></p>
+
+<h4 id="krb_tgs_req">KRB_TGS_REQ</h4>
+
+<p>Si <code class="highlighter-rouge">pixis</code> veut utiliser un service, par exemple <code class="highlighter-rouge">CIFS</code> sur le serveur <code class="highlighter-rouge">\\SERVER01</code>, il va envoyer plusieurs informations au KDC pour que celui-ci lui renvoie un ticket de service.</p>
+
+<ul>
+  <li>Le TGT;</li>
+  <li>L’identifiant du service qu’il veut utiliser et l’hôte associé, donc <code class="highlighter-rouge">CIFS/SERV01</code> dans cet exemple;</li>
+  <li>Un <em>authenticator</em>, qui est un message contenant son nom, et un timestamp, le tout chiffré avec la clé de session qu’il a en sa possession.</li>
+</ul>
+
+<p><a href="/assets/uploads/2018/05/tgsreq.png"><img src="/assets/uploads/2018/05/tgsreq.png" alt="Requête service" /></a></p>
+
+<p>Ces informations reçues par le KDC permettent <strong>deux choses</strong>.</p>
+
+<p>La <strong>première</strong> est de s’assurer que c’est bien <code class="highlighter-rouge">pixis</code> qui fait la demande. Pour cela, le KDC va comparer le contenu du TGT avec le contenu de l’<em>authenticator</em>. Comme seul le KDC peut lire le contenu du TGT, il est certain que ce contenu n’a pas été falsifié. Le KDC va donc lire le contenu du TGT, donc les informations de l’utilisateur qui possède le TGT, mais également la clé de session. Ensuite, il va déchiffrer le contenu de l’<em>authenticator</em> avec la clé de session. Si le déchiffrement fonctionne, et que les données dans l’<em>authenticator</em> correspondent aux données dans le TGT, alors <code class="highlighter-rouge">pixis</code> est bien qui il prétend être. En effet, cela assure au KDC que celui qui a fait la requête possède le TGT <strong>et</strong> a connaissance de la clé de session négociée.</p>
+
+<p>La <strong>deuxième</strong> est de savoir à quel service <code class="highlighter-rouge">pixis</code> veut avoir accès, information qu’il obtient en recevant l’identifiant de ce service.</p>
+
+<p>Voici un schéma qui permet de résumer ce processus de vérification au niveau du KDC :</p>
+
+<p><a href="/assets/uploads/2018/05/checkprocess.png"><img src="/assets/uploads/2018/05/checkprocess.png" alt="Process de vérification" /></a></p>
+
+<h4 id="krb_tgs_rep">KRB_TGS_REP</h4>
+
+<p>Maintenant que le KDC a pu vérifier que l’utilisateur était bien <code class="highlighter-rouge">pixis</code>, il va lui renvoyer des informations qui lui permettront de faire une demande auprès du service. Ce message est le <strong>KRB_TGS_REP</strong>. Il est composé des éléments suivants :</p>
+
+<ul>
+  <li>Un ticket contenant le nom et l’instance du service demandé (<code class="highlighter-rouge">CIFS/SERV01</code>), le nom d’utilisateur (<code class="highlighter-rouge">pixis</code>), le PAC et une nouvelle clé de session qui est valide uniquement pour <code class="highlighter-rouge">pixis</code> voulant discuter avec <code class="highlighter-rouge">CIFS</code> sur <code class="highlighter-rouge">//SERVER01</code> pendant un certain temps. Ce ticket est chiffré avec la clé du service en question (donc celle de la machine, puisque le service CIFS tourne sous l’utilisateur machine);</li>
+  <li>La nouvelle clé de session</li>
+</ul>
+
+<p>Ces deux informations (le ticket et la clé de session) sont chiffrées avec la première clé de session, celle qui a été échangée au début entre le KDC et le client.</p>
+
+<p><a href="/assets/uploads/2018/05/tgsrep.png"><img src="/assets/uploads/2018/05/tgsrep.png" alt="Ticket pour le service" /></a></p>
+
+<p>Le client va recevoir ce paquet, et va pouvoir déchiffrer la première couche pour obtenir la clé de session créée pour la communication avec le service, ainsi que le ticket généré pour l’utilisation de ce service. Ce ticket s’appelle le Ticket-Granting Service (TGS).</p>
+
+<p><a href="/assets/uploads/2018/05/decodeservice.png"><img src="/assets/uploads/2018/05/decodeservice.png" alt="Dechiffrement chez le client" /></a></p>
+
+<h3 id="accès-au-service-ap">Accès au service (AP)</h3>
+
+<h4 id="krb_ap_req">KRB_AP_REQ</h4>
+
+<p><code class="highlighter-rouge">pixis</code> va alors générer un nouvel authentifiant qu’il va chiffrer avec cette nouvelle clé de session, et enverra le ticket par la même occasion pour envoyer la requête <strong>KRB_AP_REQ</strong> au service. C’est le même processus qu’avec le KDC.</p>
+
+<p><a href="/assets/uploads/2018/05/toservice.png"><img src="/assets/uploads/2018/05/apreq.png" alt="message envoyé au service" /></a></p>
+
+<p>Le service <code class="highlighter-rouge">CIFS</code> reçoit le ticket qu’il peut déchiffrer. Il est certain que celui-ci est valide et authentique puisque seul le KDC est l’autre entité possédant sa clé. Dedans, il trouvera la clé de session qu’il utilisera pour déchiffrer l’authentifiant. En comparant le contenu du ticket de service avec le contenu de l’authentifiant, le service peut être certain de l’authenticité du client, et il peut lui envoyer les informations dont il a besoin.</p>
+
+<p><a href="/assets/uploads/2018/05/servicecheck.png"><img src="/assets/uploads/2018/05/servicecheck.png" alt="Vérification côté service" /></a></p>
+
+<h3 id="résumé">Résumé</h3>
+
+<p>C’est un processus relativement complexe, mais une fois que les étapes ont été vues en détails, on comprend mieux l’utilité de chacunes d’elles. Voici un schéma récapitulatif des trois étapes pour un client qui demande un accès à deux services différents (cliquez sur l’image si vous voulez l’agrandir) :</p>
+
+<p><a href="/assets/uploads/2019/02/kerberos_resume.png"><img src="/assets/uploads/2019/02/kerberos_resume.png" alt="Kerberos" /></a></p>
+
+<h2 id="exemple-dattaque--unconstrained-delegation">Exemple d’attaque : Unconstrained Delegation</h2>
+
+<p>Ce protocole est relativement complexe mais permet de se protéger contre un grand nombre d’attaques. Ainsi, si un attaquant se place sur le réseau et écoute les communications, il ne sera pas en mesure d’extraire quelconque secret. Il pourra trouver le TGT d’un utilisateur, mais il n’aura pas connaissance de la clé de session utilisée pour chiffrer l’authentifiant. Comme nous l’avons vu, les clés sont toujours protégées par un secret déjà partagé entre les différentes parties.</p>
+
+<p>Cependant, ce protocole a été étendu et complexifié pour satisfaire ses utilisateurs qui avaient des besoins très variés. La fonctionnalité “Unconstrained Delegation” est une fonctionnalité qui peut être utile pour un attaquant.</p>
+
+<p>Nous avons expliqué qu’un client pouvait s’authentifier auprès d’un service pour l’utiliser. Cependant, il arrive que ce service ait besoin d’autres informations pour répondre au client. Prenons l’exemple d’un serveur Web. Si le client communique avec le service Web, mais que celui-ci a besoin de trouver des informations dans une base de données, le service Web doit pouvoir s’authentifier auprès de la base de données pour vérifier que l’utilisateur a le droit de récupérer telle ou telle information. Pour cela, il existe un drapeau qui peut être placé sur un service indiquant qu’il peut impersonner un utilisateur. Cela veut dire que si un utilisateur s’authentifie auprès de ce service, ce dernier est en mesure de s’authentifier auprès d’un (ou plusieurs) autre(s) service(s) en se faisant passer pour l’utilisateur.</p>
+
+<p>Deux drapeaux existent alors :</p>
+
+<ul>
+  <li><strong>Constrained Delegation</strong> : Une liste de services auprès desquels le premier service peut s’authentifier est décidée par l’administrateur.</li>
+  <li><strong>Unconstrained Delegation</strong> : Ce drapeau indique que le service peut se faire passer pour l’utilisateur lorsqu’il s’authentifie auprès de <strong>n’importe quel autre</strong> service.</li>
+</ul>
+
+<p>Concrètement, si le drapeau “Unconstrained Delegation” est positionné pour un service, lorsque l’utilisateur s’authentifie auprès du service, il fournira en plus une copie de son TGT au service, copie qui possède le drapeau <code class="highlighter-rouge">forwarded</code>, ainsi que la clé de session associée à ce nouveau TGT. Ces deux éléments seront utilisés auprès du KDC pour s’authentifier auprès d’un autre service en tant que l’utilisateur.</p>
+
+<p>Si un attaquant arrive à prendre le contrôle d’une machine sur laquelle tourne un service en “Unconstrained Delegation”, alors il suffit qu’il force un compte à s’authentifier sur ce service pour récupérer le TGT de l’utilisateur et la clé de session. Pour peu que ce soit un administrateur du domaine qui est impersonné, l’attaquant pourra alors effectuer n’importe quelle action de la part de l’utilisateur sur le domaine.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Le protocole Kerberos est très robuste face à un grand nombre d’attaques. Sa conception permet de ne jamais exposer les secrets d’authentification des utilisateurs ou des services.</p>
+
+<p>Cependant, des attaques existent pour relayer des tickets ou demander des tickets pour trouver le mot de passe via une attaque hors-ligne. Un exemple a été présenté de manière succinte dans cet article, cependant nous plongerons un peu plus en détails dans les prochains articles afin de présenter d’autres attaques, telles que celles sur les comptes sans pré-authentification, les <a href="/service-principal-name-spn">SPN</a> placés sur les utilisateurs, les attaques permettant de forcer une authentification de la part d’une machine, le relai d’authentification, etc.</p>
+
+  </article>
+</div>
+<div class="keywords">
+    <span class="post-tags"><a href="/archives/#active-directory"><i class="fas fa-tags"></i> Active Directory</a><a href="/archives/#windows"><i class="fas fa-tags"></i> Windows</a></span>
+  </div>
+
+
+<br />
+<div class="box">
+  <div class="dash">
+    <div class="picture">
+      <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
+    </div>
+    <div class="box_content">
+      <strong>Auteur</strong> : <a href="/contact/" target="_blank">Pixis</a><br />
+      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="related">
+  <h2>Articles similaires</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/pass-the-hash/">
+            Pass the Hash
+            <small>18 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/remote-lsass-dump-passwords/">
+            Extraction des secrets de lsass à distance
+            <small>28 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/bloodhound/">
+            BloodHound
+            <small>30 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/kerberos/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '0000-0000-0000-00a0';
+    };
+    
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//hackndo.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </main>
+    <script src="/assets/js/jquery-2.1.4.js"></script>
+    <script src="/assets/js/jquery.menu-aim.js"></script>
+    <script src="/assets/js/anchor.min.js"></script>
+    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+  </body>
+</html>
