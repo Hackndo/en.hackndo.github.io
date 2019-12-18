@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Home
-description: Ce blog est dédié à la sécurité informatique. Tutos sur les buffers overflow, l'Active Directory, on explique tout avec des exemples concrets.
+description: This blog talks about computer security. Tutorials about buffer overflow, Active Directory, we explain everything with examples.
 ---
 <div class="posts">
   {% for post in paginator.posts %}
@@ -19,7 +19,7 @@ description: Ce blog est dédié à la sécurité informatique. Tutos sur les bu
 
     <div class="post-info">
       <p class="alignleft"><span class="google-icon-date">{{ post.date | date_to_string }}</span> <a class="post-comments-count" href="{{ site.url }}{{ post.url }}#disqus_thread" data-disqus-identifier="{{ post.disqus_identifier }}"></a></p>
-      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">{{ post.author }}</a></strong></p>
+      <p class="alignright">Author : <strong><a href="https://twitter.com/HackAndDo">{{ post.author }}</a></strong></p>
     </div>
 
     {{ post.excerpt }}
@@ -32,7 +32,7 @@ description: Ce blog est dédié à la sécurité informatique. Tutos sur les bu
     {% endcapture %} 
     {% if excerpt_words != content_words %}
     <br />
-    <a href="{{ post.url }}">Lire la suite →</a>
+    <a href="{{ post.url }}">Read more →</a>
     {% endif %}
     <hr />
   </div>
@@ -41,17 +41,17 @@ description: Ce blog est dédié à la sécurité informatique. Tutos sur les bu
 
 <div class="pagination">
   {% if paginator.next_page %}
-    <a class="pagination-item older" href="{{ paginator.next_page_path }}">Plus ancien</a>
+    <a class="pagination-item older" href="{{ paginator.next_page_path }}">Older</a>
   {% else %}
-    <span class="pagination-item older">Plus ancien</span>
+    <span class="pagination-item older">Older</span>
   {% endif %}
   {% if paginator.previous_page %}
     {% if paginator.page == 2 %}
-      <a class="pagination-item newer" href="/">Plus récent</a>
+      <a class="pagination-item newer" href="/">Newer</a>
     {% else %}
-      <a class="pagination-item newer" href="{{ paginator.previous_page_path }}">Plus récent</a>
+      <a class="pagination-item newer" href="{{ paginator.previous_page_path }}">Newer</a>
     {% endif %}
   {% else %}
-    <span class="pagination-item newer">Plus récent</span>
+    <span class="pagination-item newer">Newer</span>
   {% endif %}
 </div>

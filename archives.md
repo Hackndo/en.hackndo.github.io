@@ -25,7 +25,7 @@ title: Archives
 
 <form name="category_form">
   <div class="radio-group">
-  <input type="radio" id="option-one" name="selector" checked><label for="option-one">Catégories</label><input type="radio" id="option-two" name="selector"><label for="option-two">Date</label>
+  <input type="radio" id="option-one" name="selector" checked><label for="option-one">Categories</label><input type="radio" id="option-two" name="selector"><label for="option-two">Date</label>
   </div>
  </form>
 

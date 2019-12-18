@@ -1,24 +1,24 @@
 ---
 layout: page
-title: À propos
+title: About
 permalink: /about/
 ---
 
+Like many people, I created a blog. Yes but why ? Quite simply because I am starting to no longer support the innumerable all the `.txt` files on my desktop, all these notes that fly away and I cannot find anymore, or all these ideas that I have. But among all this, what annoys me the most is to learn in depth about a subject, then, a few months later, repeat the exact same process because I forgot what I learned, when I could have summed it all up once and for all.
 
-Comme beaucoup de personnes, j'ai créé un blog. Oui, mais pourquoi ? Tout simplement parce que je commence à ne plus supporter les innombrables fichiers `.txt` sur mon bureau, ces notes qui s'envolent et que je ne retrouve plus, ces idées en vrac. Mais parmi tout ceci, ce qui m'embête le plus, c'est de me renseigner en profondeur sur un sujet, puis, quelques mois plus tard, refaire exactement la même démarche parce que j'ai oublié ce que j'avais appris, alors que j'aurai pu résumer tout ça au propre une bonne fois pour toute.
+So here it is, I try to organize myself and regroup my ideas and knowledge in this blog.
 
-Alors voilà, je tente de m'organiser et de regrouper mes idées et connaissances dans ce blog.
+If you ever came here by accident, know that I do not pretend to be an encyclopedia, and my knowledge is sometimes inaccurate. But fortunately for me, you can leave comments to give your opinions, complete, criticize (positively or not), and correct my articles.
 
-Si jamais vous êtes tombé(e) ici par hasard, sachez que je ne prétends pas être une encyclopédie, et mes connaissances seront parfois inexactes. Mais fort heureusement pour moi, vous pouvez laisser des commentaires pour donner vos avis, compléter, critiquer (positivement ou non), corriger mes articles.
 
-# Qui suis-je
+# Who am I ?
 
-Sur les internets, je m'appelle **Pixis**, et je suis un fervent utilisateur du site [newbiecontest](https://www.newbiecontest.org/index.php){:target="blank"} ([mon profil](https://www.newbiecontest.org/index.php?page=info_membre&nick=pixis){:target="blank"}) dont je suis administrateur.
+On the Internet, my name is **Pixis**, and I am an avid user of [newbiecontest](https://www.newbiecontest.org/index.php){:target="blank"} ([my profile](https://www.newbiecontest.org/index.php?page=info_membre&nick=pixis){:target="blank"}) where I am also an administrator.
 
-Vrai passionné qui passe ses jours et nuits sur différents sujets, que ce soit concernant la sécurité informatique (Active Directory ♥), mais également bidouilleur raspberry/arduino/domotique, toujours curieux, et qui aime partager.
+True enthusiast who spends his days and nights on different subjects, whether it is about computer security (Active Directory ♥), but also raspberry/arduino/home automation hacker, always curious, and who likes to share.
 
-Je vous souhaite donc la bienvenue sur mon humble blog, et j'espère que les articles que vous pourrez trouver vous seront utiles !
+So I welcome you to my humble blog, and I hope you find it useful!
 
-Pour me soutenir :
+To support me:
 
 <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy Me a Coffee', '#202020', 'F1F78GI6');kofiwidget2.draw();</script>

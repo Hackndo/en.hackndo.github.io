@@ -1,18 +1,10 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
-
-# Site settings
 title: hackndo
 email: hackndo@gmail.com
-description: Ce blog est dédié à la sécurité informatique. Tutos sur les buffers overflow, l'Active Directory, on explique tout avec des exemples concrets.
+description: This blog talks about computer security. Tutorials about buffer overflow, Active Directory, we explain everything with examples.
 tagline: Think out of the box
-baseurl: "/" # the subpath of your site, e.g. /blog
+baseurl: "/"
 root: /
-url: "https://beta.hackndo.com" # the base hostname & protocol for your site
+url: "https://en.hackndo.com"
 author: Pixis
 twitter_username: hackanddo
 github_username:  hackndo
@@ -24,8 +16,7 @@ social:
         - https://twitter.com/hackanddo
         - https://www.newbiecontest.org/index.php?page=info_membre&nick=pixis
         - https://www.root-me.org/Betezed
-        - https://unikard.xyz/pbq8b
-lang: fr_FR
+lang: en_US
 
 # Build settings
 markdown: kramdown

@@ -1,15 +1,16 @@
 ---
 layout: page
-title: Me contacter
+title: Contact me
 permalink: /contact/
 ---
 
-Je suis disponible en permanence sur mon serveur Discord
 
-[Hackndo sur Discord](https://discord.gg/9At6SUZ){:target="blank"}
+I'm always available on my Discord server
 
-N'hésitez pas à venir pour discuter des articles, d'infosec, ou tout autre chose.
+[Hackndo on Discord](https://discord.gg/9At6SUZ){:target="blank"}
 
-Vous pouvez également me soutenir si le cœur vous en dit
+Do not hesitate to come and discuss about articles, infosec, or anything else.
+
+You can also support me if you feel like it
 
 <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy Me a Coffee', '#202020', 'F1F78GI6');kofiwidget2.draw();</script>
