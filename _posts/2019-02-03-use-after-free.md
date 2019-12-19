@@ -4,7 +4,7 @@ date: 2019-02-24 11:02:38
 author: "Pixis"
 layout: post
 permalink: /use-after-free/
-disqus_identifier: 0000-0000-0000-00a4
+disqus_identifier: 1000-0000-0000-00a4
 cover: assets/uploads/2019/02/uafbanner.png
 description: "Aujourd'hui, nous allons découvrir ensemble une nouvelle zone mémoire, le tas (ou la Heap), en explicitant une vulnérabilité relativement commune dans les programmes récents, appelée use-after-free."
 tags:

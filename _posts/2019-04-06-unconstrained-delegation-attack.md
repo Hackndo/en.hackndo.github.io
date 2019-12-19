@@ -4,7 +4,7 @@ date: 2019-04-12 11:28:42
 author: "Pixis"
 layout: post
 permalink: /unconstrained-delegation-attack/
-disqus_identifier: 0000-0000-0000-00ac
+disqus_identifier: 1000-0000-0000-00ac
 cover: assets/uploads/2019/04/unconstrained_admin.png
 description: "Cet article montre comment abuser de la délégation complète (Unconstrained Delegation) afin de récupérer le TGT d'un utilisateur, permettant ainsi de s'authentifier auprès de n'importe quel service en son nom."
 tags:

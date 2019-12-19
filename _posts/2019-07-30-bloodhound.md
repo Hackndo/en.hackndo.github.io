@@ -4,7 +4,7 @@ date: 2019-07-30 14:12:41
 author: "Pixis"
 layout: post
 permalink: /bloodhound/
-disqus_identifier: 0000-0000-0000-00af
+disqus_identifier: 1000-0000-0000-00af
 cover: assets/uploads/2019/07/bloodhound.png
 description: "BloodHound est un outil permettant de cartographier un environnement Active Directory en le représentant sous forme de graphe. Cette représentation offre alors toute la puissance de la théorie des graphes pour découvrir des chemins d'attaque qui auraient été autrement difficiles voire impossibles à détecter."
 tags:

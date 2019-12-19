@@ -4,7 +4,7 @@ date: 2019-03-02 14:58:17
 author: "Pixis"
 layout: post
 permalink: /kerberos-silver-golden-tickets/
-disqus_identifier: 0000-0000-0000-00a6
+disqus_identifier: 1000-0000-0000-00a6
 cover: assets/uploads/2019/02/goldenticket.png
 description: "Maintenant que nous avons vu le fonctionnement du protocole Kerberos en environnement Active Directory, nous allons découvrir ensemble les notions de Silver Ticket et Golden Ticket"
 tags:

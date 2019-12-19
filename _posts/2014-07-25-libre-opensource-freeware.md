@@ -4,7 +4,7 @@ date: 2014-07-25 19:38:43 -0400
 author: "Pixis"
 layout: post
 permalink: /libre-opensource-freeware/
-disqus_identifier: 0000-0000-0000-0010
+disqus_identifier: 1000-0000-0000-0010
 description: "Logiciel libre, open source, freeware, ça vous dit quelque chose ? Sûrement, car ces termes sont au cœur des technologies actuelles et sont enracinés dans le marché du logiciel."
 cover: assets/uploads/2014/07/lock.png
 image: assets/uploads/2014/07/lock.png

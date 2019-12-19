@@ -4,7 +4,7 @@ date: 2019-03-29 12:17:22
 author: "Pixis"
 layout: post
 permalink: /constrained-unconstrained-delegation/
-disqus_identifier: 0000-0000-0000-00ab
+disqus_identifier: 1000-0000-0000-00ab
 cover: assets/uploads/2019/02/impersonation.png
 description: "Au sein d'un Active Directory, des services peuvent être utilisés par des utilisateurs. Il arrive parfois que ces services doivent en contacter d'autres, au nom de l'utilisateur, comme un service web pourrait avoir besoin de contacter un serveur de fichiers. Afin d'autoriser un service à accéder à un autre service au nom de l'utilisateur, une solution a été mise en place : La délégation Kerberos."
 tags:

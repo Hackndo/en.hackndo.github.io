@@ -4,7 +4,7 @@ date: 2015-05-24 15:38:43 -0400
 author: "Pixis"
 layout: post
 permalink: /retour-a-la-libc/
-disqus_identifier: 0000-0000-0000-0008
+disqus_identifier: 1000-0000-0000-0008
 description: "Article sur le retour à la libc, avec la théorie et des exemples"
 cover: assets/uploads/2015/05/retli.jpg
 image: assets/uploads/2015/05/retli.jpg

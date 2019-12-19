@@ -4,7 +4,7 @@ date: 2019-05-05 10:28:42
 author: "Pixis"
 layout: post
 permalink: /resource-based-constrained-delegation-attack/
-disqus_identifier: 0000-0000-0000-00ad
+disqus_identifier: 1000-0000-0000-00ad
 cover: assets/uploads/2019/04/rbcd_baneer.png
 description: "Cet article montre comment abuser de la délégation contrainte basée sur les ressources (resource based constrained delegation) afin de prendre le contrôle de machines."
 tags:

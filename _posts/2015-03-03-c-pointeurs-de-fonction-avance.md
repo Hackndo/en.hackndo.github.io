@@ -4,7 +4,7 @@ date: 2015-03-03
 author: "Pixis"
 layout: post
 permalink: /c-pointeurs-de-fonction/
-disqus_identifier: 0000-0000-0000-000C
+disqus_identifier: 1000-0000-0000-000C
 description: "Voici un petit mémo sur les pointeurs de fonction."
 cover: assets/uploads/2015/03/shellcode.jpg
 image: assets/uploads/2015/03/shellcode.jpg

@@ -4,7 +4,7 @@ date: 2015-09-15
 author: "Pixis"
 layout: post
 permalink: /technique-du-canari-bypass/
-disqus_identifier: 0000-0000-0000-0002
+disqus_identifier: 1000-0000-0000-0002
 description: "Explication du canary, et comment le bypasser quand il utilise des forks"
 cover: assets/uploads/2015/09/9537298100_c67c2e1071_b.jpg
 image: assets/uploads/2015/09/9537298100_c67c2e1071_b.jpg

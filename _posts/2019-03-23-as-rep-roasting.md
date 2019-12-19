@@ -7,7 +7,7 @@ permalink: /kerberos-asrep-roasting/
 redirect_from:
   - "/kerberos-asrep-toasting"
   - "/kerberos-asrep-toasting/"
-disqus_identifier: 0000-0000-0000-00a8
+disqus_identifier: 1000-0000-0000-00a8
 cover: assets/uploads/2019/02/asreqroast_no_auth.png
 description: "Lors d'une demande de TGT, l'utilisateur doit, par défaut, s'authentifier auprès du KDC pour que celui-ci lui réponde. Il arrive que cette authentification préalable ne soit pas demandée pour certains comptes, permettant à un attaquant d'abuser de cette configuration"
 tags:
