@@ -12,7 +12,7 @@ comments: true
   <h1 class="post-title">{{ page.title }}</h1>
   <div class="post-info">
       <p class="alignleft">{{ page.date | date_to_string }} <a class="post-comments-count" href="http://{{ site.url }}{{ page.url }}#disqus_thread"></a></p>
-      <p class="alignright">Auteur : <strong><a href="https://twitter.com/HackAndDo">{{ page.author }}</a></strong></p>
+      <p class="alignright">Author : <strong><a href="https://twitter.com/HackAndDo">{{ page.author }}</a></strong></p>
       <div class="keywords">
         <span class="post-tags">{% for tag in page.tags %}<a href="/archives/#{{ tag | slugify }}"><i class="fas fa-tags"></i> {{ tag }}</a>{% endfor %}</span>
       </div>
@@ -34,8 +34,8 @@ comments: true
       <img src="/assets/icones/pixis_logo.png" alt="logo" title="logo" />
     </div>
     <div class="box_content">
-      <strong>Auteur</strong> : <a href="/contact/" target="_blank">{{ page.author }}</a><br />
-      Créateur du blog, suivez-moi sur <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> ou <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
+      <strong>Author</strong> : <a href="/contact/" target="_blank">{{ page.author }}</a><br />
+      Blog author, follow me on <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> or <a href="https://discord.gg/9At6SUZ" target="blank">discord</a>
     </div>
     
   </div>
@@ -43,7 +43,7 @@ comments: true
 {% endif %}
 
 <div class="related">
-  <h2>Articles similaires</h2>
+  <h2>Similar posts</h2>
   <ul class="related-posts">
     {% for post in site.related_posts limit:3 %}
       <li>

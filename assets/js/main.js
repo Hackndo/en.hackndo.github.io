@@ -145,7 +145,7 @@ jQuery(document).ready(function(){
 
     var ToC =
     "<nav role='navigation' class='table-of-contents'>" +
-        "<div class=\"title\">Dans cet article</div>" +
+        "<div class=\"title\">In this post</div>" +
         "<ul>";
 
     if($("article h2").length > 0) {
