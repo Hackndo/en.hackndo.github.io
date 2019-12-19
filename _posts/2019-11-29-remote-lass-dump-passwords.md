@@ -21,11 +21,11 @@ In corporate penetration tests, lateral movement and elevation of privilege are 
 
 ## Introduction
 
-A small introductory message to thank [mpgn] (https://twitter.com/mpgn_x64) who helped me a lot on different subjects, and with whom I worked on this project, and [Skelsec] (https: //twitter.com/skelsec) for his advice and ideas.
+A small introductory message to thank [mpgn](https://twitter.com/mpgn_x64) who helped me a lot on different subjects, and with whom I worked on this project, and [Skelsec](https: //twitter.com/skelsec) for his advice and ideas.
 
 ## CrackMapExec
 
-The [CrackMapExec] tool (https://github.com/byt3bl33d3r/CrackMapExec) is developed and maintained by [Byt3bl33d3r] (https://twitter.com/byt3bl33d3r). Its purpose is to asynchronously be able to execute actions on a set of machines. The tool allows you to authenticate on remote machines with a domain or local account, and a password or a LM-NT hash.
+The [CrackMapExec] tool (https://github.com/byt3bl33d3r/CrackMapExec) is developed and maintained by [Byt3bl33d3r](https://twitter.com/byt3bl33d3r). Its purpose is to asynchronously be able to execute actions on a set of machines. The tool allows you to authenticate on remote machines with a domain or local account, and a password or a LM-NT hash.
 
 CrackMapExec was developed in a modular fashion. It is possible to create its own modules that the tool will execute when it logs in to the machine. There are already a lot of them, such as the enumeration of different information (DNS, Chrome credentials, installed antivirus), the execution of BloodHound ingestor or a module that looks for credentials in "Group Policy Preferences".
 
@@ -393,13 +393,13 @@ With this new tool, I modified the CrackMapExec module so it extracts passwords 
 
 As pypykatz and minidump only work under python3.6 + and CrackMapExec is not yet compatible with python3, I cannot make a pull request at the moment, nor import pypykatz into my module. For the moment, the call to pypykatz is done via a ew process calling my tool.
 
-[mpgn] (https://twitter.com/mpgn_x64) is working on [CrackMapexec for python 3] (https://github.com/byt3bl33d3r/CrackMapExec/pull/323).
+[mpgn](https://twitter.com/mpgn_x64) is working on [CrackMapexec for python 3](https://github.com/byt3bl33d3r/CrackMapExec/pull/323).
 
 ## Nouveaux outils
 
 In the meantime, here are two tools that I have written so you can use this technique:
 
-[lsassy](https://github.com/Hackndo/lsassy) is available on my [Github] (https://github.com/Hackndo/lsassy) or on [Pypi] (https://pypi.org/project/lsassy/). It is the interface between Pypykatz and the remote target, which allows to read lsass dumps remotely.
+[lsassy](https://github.com/Hackndo/lsassy) is available on my [Github](https://github.com/Hackndo/lsassy) or on [Pypi](https://pypi.org/project/lsassy/). It is the interface between Pypykatz and the remote target, which allows to read lsass dumps remotely.
 
 [The CrackMapExec module](https://github.com/Hackndo/lsassy/tree/master/cme) allows you to automate the whole process by doing an lsass dump on the remote hosts, and extracting the credentials of the logged in users using **lsassy**. It also makes it possible to detect accounts with an attack path to become a domain administrator, by relying on the data collected with [Bloodhound](/bloodhound)
 
