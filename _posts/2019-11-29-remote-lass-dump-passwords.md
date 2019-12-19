@@ -1,5 +1,5 @@
 ---
-title: "Extracting secrets from lsass remotely"
+title: "Remote credentials extraction from lsass dump"
 date: 2019-11-28 22:40:00
 author: "Pixis"
 layout: post
