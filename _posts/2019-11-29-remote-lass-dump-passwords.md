@@ -25,7 +25,7 @@ A small introductory message to thank [mpgn](https://twitter.com/mpgn_x64) who h
 
 ## CrackMapExec
 
-The [CrackMapExec] tool (https://github.com/byt3bl33d3r/CrackMapExec) is developed and maintained by [Byt3bl33d3r](https://twitter.com/byt3bl33d3r). Its purpose is to asynchronously be able to execute actions on a set of machines. The tool allows you to authenticate on remote machines with a domain or local account, and a password or a LM-NT hash.
+The [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec) tool is developed and maintained by [Byt3bl33d3r](https://twitter.com/byt3bl33d3r). Its purpose is to asynchronously be able to execute actions on a set of machines. The tool allows you to authenticate on remote machines with a domain or local account, and a password or a LM-NT hash.
 
 CrackMapExec was developed in a modular fashion. It is possible to create its own modules that the tool will execute when it logs in to the machine. There are already a lot of them, such as the enumeration of different information (DNS, Chrome credentials, installed antivirus), the execution of BloodHound ingestor or a module that looks for credentials in "Group Policy Preferences".
 
