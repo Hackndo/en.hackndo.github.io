@@ -11,8 +11,21 @@
         </nav>
 
         <div class="content-wrapper">
-            <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png"></a></p>
-            {{ content }}
+          {% if page.url == "/" %}
+          <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png"></a></p>
+          {% else %}
+            {% for post in site.posts %}
+              {% if post.permalink == page.url %}
+                {% for lang in post.translation %}
+                  {% if lang == "fr" %}
+                    <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png"></a></p>
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+          {{ content }}
         </div>
     </main>
     <script src="/assets/js/jquery-2.1.4.js"></script>
