@@ -9,7 +9,6 @@
 </div>
 
 <ul>
-    <li class="cd-label">Blog</li>
     <li class="{% if page.url == '/' %}active{% endif %}">
         <a href="/">Home</a>
     </li>
@@ -24,7 +23,6 @@
         {% endif %}
     {% endfor %}
 </ul>
-<p class="sidebar-copyright">&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
 <div class="sidebar-social">
 <ul>
   <li><a href="https://twitter.com/HackAndDo" title="Twitter" target="_blank"><img alt="Twitter" title="Twitter" src="/assets/icones/social/twitter.png" /></a></li>
@@ -37,3 +35,4 @@
   <li><a href="https://ko-fi.com/hackndo" title="Ko-Fi" target="_blank"><img title="Ko-Fi" alt="Ko-Fi" src="/assets/icones/social/kofi.gif" /></a></li>
 </ul>
 </div>
+<p class="sidebar-copyright">&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
