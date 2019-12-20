@@ -4,7 +4,7 @@ date: 2019-12-17 23:01:21
 author: "Pixis"
 layout: post
 permalink: /pass-the-hash/
-disqus_identifier: 1000-0000-0000-00b1
+disqus_identifier: 0000-0000-0000-00b1
 cover: assets/uploads/2019/09/pass_the_hash.png
 description: "La technique du Pass the Hash est extrêmement utilisée lors de mouvement latéral, composante essentielle dans une attaque. Nous allons détailler comment cette technique fonctionne, quelles sont ses possibilités et ses limites."
 tags:

@@ -4,7 +4,7 @@ date: 2019-04-23 11:28:42
 author: "Pixis"
 layout: post
 permalink: /gpo-abuse-with-edit-settings/
-disqus_identifier: 1000-0000-0000-00ae
+disqus_identifier: 0000-0000-0000-00ae
 cover: assets/uploads/2019/04/gpo_banner.png
 description: "Cet article présente ce qu'est une GPO puis décrit un chemin d'attaque possible lorsqu'un attaquant a le droit de modifier les paramètres d'une GPO qui s'applique à des utilisateurs."
 tags:

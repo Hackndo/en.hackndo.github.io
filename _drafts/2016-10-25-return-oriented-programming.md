@@ -4,7 +4,7 @@ date: 2016-10-25  15:57:12
 author: "Pixis"
 layout: post
 permalink: /return-oriented-programming/
-disqus_identifier: 1000-0000-0000-0016
+disqus_identifier: 0000-0000-0000-0016
 description: "Cet article a pour but d'expliquer clairement ce qu'est le ROP ou Return Oriented Programming."
 cover: assets/uploads/2016/10/fourth_gadget.png
 image: assets/uploads/2016/10/fourth_gadget.png

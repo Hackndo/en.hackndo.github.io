@@ -4,7 +4,7 @@ date: 2016-07-07  14:12:57
 author: "Pixis"
 layout: post
 permalink: /rappels-d-architecture/
-disqus_identifier: 1000-0000-0000-0015
+disqus_identifier: 0000-0000-0000-0015
 description: "Architecture d'un ordinateur pour aller plus loin dans l'exploitation kernel"
 cover: assets/uploads/2016/07/kernel_3.jpg
 image: assets/uploads/2016/07/kernel_3.jpg
