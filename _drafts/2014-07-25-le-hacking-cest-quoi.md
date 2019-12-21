@@ -1,48 +1,50 @@
 ---
-title: "Le hacking, c'est quoi ?"
+title: "What is hacking about?"
 date: 2014-07-25 15:38:43 -0400
 author: "Pixis"
 layout: post
 permalink: /le-hacking-cest-quoi/
 disqus_identifier: 0000-0000-0000-0001
-description: "Bonjour à tous, et bienvenue sur mon tout premier article."
+description: "Hello everyone,welcome to my very first article."
 cover: assets/uploads/2014/07/hacking_nav.png
 image: assets/uploads/2014/07/hacking_nav.png
 tags:
   - Misc
 ---
 
-Bonjour à tous, et bienvenue sur mon tout premier article.
+Hello everyone,welcome to my very first article.
 
-Je pense qu'il faut commencer par certaines bases si je veux que le fil des articles soit cohérent.
+I think we need to start off with certain prerquisites if we are to have a coherent set of articles.
 
-Or, l'une des notions qui me semble d'une importance primordiale, c'est le hacking. C'est pourquoi, ici, je vais expliciter clairement ce que, à mon sens, signifie le terme hacking.
+As such, one of the most important notions is that of the term "hacking". That is why i will clearly attempt to explain what in my view this term means. 
+
 
 <!--more-->
 
-Tout d'abord, commençons par une petite illustration :
+Firstly, let's start off with a little ilustration:
 
-Vous connaissez sans doute ce jeu :
+You most certainly have heard or read abut this game:
 
 ![enigme des points](/assets/uploads/2014/07/150px-9dots.svg_.png)
 
 
-Le principe est de passer par tous les points, sans lever le crayon, avec un maximum de 4 segments. Essayez-donc !
+The aim of this game is to pass through all the dots, without raising your pen or pencil, and only use a maximum of 4 lines (segments). Give it a try!
 
-Si on ne pense avec l'esprit hacking,  il est impossible de résoudre ce problème. Mais, l'esprit hacking, kézako ?
+If we don't approach this with the mindset of a hacker, it would virtually impossible to resolve this problem. But what is exactly the hacking mindset?
 
 ## _Une_ origine
 
-Le Hacking n'a pas vraiment d'origine définie et concédée par tous. Mais on s'accorde souvent à dire que le Hacking a pris naissance avec l'apparition des premiers ordinateurs au sein du MIT (Massachusetts Institute of Technology) dans les années 1950. Un attrait (qui est rapidement devenu une obsession) est né chez les étudiants du MIT qui, avec des ordinateurs seulement destinés à des calculs simples, ont passé des jours et des nuits à améliorer ce pour quoi ils étaient faits, à les bidouiller.
+Hacking does not have a properly defined origin that is agreed upon by all of us. Having said this we generally tend to agree that the birth of Hacking first appeared with the very first computers that were located at MIT (Massachusetts Institute of Technology) back in the 1950's. What initially started off as an attraction (which quickly turned into an obsession) for the students at MIT who were able to transform their computers that were initially created to perform simple calculations, into enhanced versions that outperfomed the original verions of these computers. 
 
-L'éthique du hacker a d'ailleurs été créée au MIT. Elle énonce six règles :
+The Hacker code of ethics was first created at MIT. This code has six rules: 
 
-  * L'accès aux ordinateurs - et à tout ce qui peut nous apprendre comment le monde marche vraiment - devrait être illimité et total.
-  * L'information devrait être libre et gratuite.
-  * Méfiez-vous de l'autorité. Encouragez la décentralisation.
-  * Les hackers devraient être jugés selon leurs œuvres, et non selon des critères qu'ils jugent factices comme la position, l’âge, la nationalité ou les diplômes.
-  * On peut créer l'art et la beauté sur un ordinateur.
-  * Les ordinateurs sont faits pour changer la vie.
+  *Access to computers - and to everything that can teach us how the world really works - should be unlimited and complete.
+  *Access to information should be open and free
+  *Be wary of any form of authoritarianism, and we should privilege a decentralised model of governance.
+  *Hackers should judged by their creations, and not by their position, age, nationality or diplomas.
+  *We can create art and beauty on a computer.
+  *Computers are made to change our way of life.
+
 
 ## _Une_ définition
 
