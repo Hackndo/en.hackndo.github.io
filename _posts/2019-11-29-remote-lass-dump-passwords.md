@@ -26,7 +26,7 @@ A small introductory message to thank [mpgn](https://twitter.com/mpgn_x64) who h
 
 The [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec) tool is developed and maintained by [Byt3bl33d3r](https://twitter.com/byt3bl33d3r). Its purpose is to asynchronously be able to execute actions on a set of machines. The tool allows you to authenticate on remote machines with a domain or local account, and a password or a LM-NT hash.
 
-CrackMapExec was developed in a modular fashion. It is possible to create its own modules that the tool will execute when it logs in to the machine. There are already a lot of them, such as the enumeration of different information (DNS, Chrome credentials, installed antivirus), the execution of BloodHound ingestor or a module that looks for credentials in "Group Policy Preferences".
+CrackMapExec was developed in a modular way. It is possible to create its own modules that the tool will execute when it logs in to the machine. There are already a lot of them, such as the enumeration of different information (DNS, Chrome credentials, installed antivirus), the execution of BloodHound ingestor or a module that looks for credentials in "Group Policy Preferences".
 
 ## Mimikatz module
 
@@ -40,7 +40,7 @@ But today, the majority of antivirus detects the presence and/or execution of Mi
 
 Because of this, I used to do this manually with the tool called [Procdump](https://docs.microsoft.com/en-us/sysinternals/downloads/procdump).
 
-Procdump is a tool from the [Sysinternals suite](https://docs.microsoft.com/en-us/sysinternals/) which was written by [Marc Russinovich](https://blogs.technet.microsoft.com/markrussinovich/) to helps sysadmins. This toolset has been adopted by a large number of administrators and developpers, so Microsoft decided to buy it in 2006, and the executables are now signed by Microsoft, therefore considered legitimate by Windows.
+Procdump is a tool from the [Sysinternals suite](https://docs.microsoft.com/en-us/sysinternals/) which was written by [Marc Russinovich](https://blogs.technet.microsoft.com/markrussinovich/) to helps sysadmins. This toolset has been adopted by a large number of administrators and developers, so Microsoft decided to buy it in 2006, and the executables are now signed by Microsoft, therefore considered legitimate by Windows.
 
 The procdump tool is one of these tools, and its job is to dump a running process memory. It attaches to the process, reads its memory and write it into a file.
 
@@ -105,7 +105,7 @@ There are different limitations to this method. We will outline them here, and s
 
 The first issue is that during my tests, I am mainly using Linux, whether for web tests or internal tests, and Mimikatz is a tool exclusively developed for Windows. It would be ideal to be able to carry out the attack chain described above from a Linux computer.
 
-Fortunately, the [Pypykatz](https://github.com/skelsec/pypykatz) project by [Skelsec](https://twitter.com/skelsec) can help us solve this issue. Skelsec has developed a partial implementation of Mimikatz in pure python, which means cross-platform. Like Mimikatz, this tool lets us extract the secrets of an lsass dump.
+Fortunately, the [Pypykatz](https://github.com/skelsec/pypykatz) project by [Skelsec](https://twitter.com/skelsec) can help us solve this issue. Skelsec has developed a partial implementation of Mimikatz in pure python, which means cross-platform. Like Mimikatz, this tool lets us extract the secrets of lsass dumps.
 
 [![Pypykatz Example](/assets/uploads/2019/11/pypykatz_example.png)](/assets/uploads/2019/11/pypykatz_example.png)
 
@@ -143,11 +143,11 @@ We then have plenty of time to download our dump and then analyze it locally. Pe
 
 ### Manual method
 
-Sending procdump of the remote host, executing it and the retrieving the dump works perfectly, but it's a very very slow process.
+Sending procdump of the remote host, executing it and the retrieving the dump works perfectly, but it's a very, very slow process.
 
 We talked about CrackMapExec and its modularity at the beginning of this article, that's why I wrote a module to automate this "attack". The module will upload procdump to the target, execute it, retrieve the dump from lsass and will then analyze it with pypykatz for each target specified in CrackMapExec parameters.
 
-This module works well, but it takes a long, very long time to run. It even times out sometimes whil edownloading a huge dump because the file is too big.
+This module works well, but it takes a long, very long time to run. It even times out sometimes while downloading a huge dump because the file is too big.
 
 We need to make that process more efficient.
 
@@ -245,7 +245,7 @@ def parse(filename):
 	return mf
 ```
 
-This is the code that we were looking for. The lsass dump that we are trying to analyse is opened and then parsed. The parsing is only using `read`, `seek` and `tell` method on the file object. 
+This is the code that we were looking for. The lsass dump that we are trying to analyze is opened and then parsed. The parsing is only using `read`, `seek` and `tell` method on the file object. 
 
 We just have to write some code than implements these methods but on a remote file. We'll use Impacket for this purpose.
 
