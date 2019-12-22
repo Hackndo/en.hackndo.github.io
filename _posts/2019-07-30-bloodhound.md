@@ -34,7 +34,7 @@ This is the issue [BloodHound](https://github.com/BloodHoundAD/BloodHound) is tr
 
 ## BloodHound
 
-Bloodhound is a tool developped by [@wald0](https://twitter.com/_wald0), [@Harmj0y](https://twitter.com/harmj0y) and [@CptJesus](https://twitter.com/cptjesus). The idea of this tool is to analyze an Active Directory environment by enumerating its various objects, and by linking them with some relationships. For example, if the user `support-account` is a member of a group called `support`, the user will be linked with the relationship `MemberOf` to this particuliar group.
+BloodHound is a tool developed by [@wald0](https://twitter.com/_wald0), [@Harmj0y](https://twitter.com/harmj0y) and [@CptJesus](https://twitter.com/cptjesus). The idea of this tool is to analyze an Active Directory environment by enumerating its various objects, and by linking them with some relationships. For example, if the user `support-account` is a member of a group called `support`, the user will be linked with the relationship `MemberOf` to this particular group.
 
 [![MemberOf](/assets/uploads/2019/07/MemberOf.png)](/assets/uploads/2019/07/MemberOf.png)
 
@@ -76,7 +76,7 @@ If we managed to take control of the leftmost node, and we wish to reach the rig
 
 An attacker with this information will know how to move through the network to reach his objective in a minimum number of steps.
 
-Take for example a real Active Directory environment. It is made up of a large number of nodes.
+Take for example a real Active Directory environment. It is made up of numerous nodes.
 
 [![All nodes](/assets/uploads/2019/07/all_nodes.png)](/assets/uploads/2019/07/all_nodes.png)
 
@@ -84,13 +84,13 @@ If we compromise `jdoe` user, this is the shortest path to reach `domain admins`
 
 [![ad_shortest_path](/assets/uploads/2019/07/ad_shortest_path.png)](/assets/uploads/2019/07/ad_shortest_path.png)
 
-As we can see, the "shortest" path is quite long, which suggests the environement is quite complexe. Despite this complexity, using BloodHound allows to simply and clearly extract an attack path from a user who didn't seem to have any special access rights.
+As we can see, the "shortest" path is quite long, which suggests the environment is quite complex. Despite this complexity, using BloodHound allows to simply and clearly extract an attack path from a user who didn't seem to have any special access rights.
 
 In order to be able to use graph theory, BloodHound uses "Neo4j" graph oriented database to store Active Directory data.
 
 ## How does it work ?
 
-The BloodHound tool manipulates diffrent data types, collected by different techniques.
+The BloodHound tool manipulates different data types, collected by different techniques.
 
 First, in order to collect directory data, it is necessary to request it from a domain controller. If we have a domain account, even if it has no particular rights, we can browse by default all the users, hosts, GPOs, ACLs, and other information in this directory.
 
@@ -155,7 +155,7 @@ We could have decided to only list the different groups without displaying the r
 
 [![query_result_g](/assets/uploads/2019/07/query_result_g.png)](/assets/uploads/2019/07/query_result_g.png)
 
-For more complexe queries, the posts I linked before will help you go deeper.
+For more complex queries, the posts I linked before will help you go deeper.
 
 ## Tips & tricks
 
@@ -193,7 +193,7 @@ A skull icon will mark these objects afterwards.
 
 [![owned_object](/assets/uploads/2019/07/owned_object.png)](/assets/uploads/2019/07/owned_object.png)
 
-If you are trying to compromise a particular node, you can now request the shortest attack path from the nodes you have already compromized. Neat.
+If you are trying to compromise a particular node, you can now request the shortest attack path from the nodes you have already compromised. Neat.
 
 [![shortestpath_owned](/assets/uploads/2019/07/shortestpath_owned.png)](/assets/uploads/2019/07/shortestpath_owned.png)
 
@@ -210,7 +210,7 @@ There are a few shortcuts that can be useful when using BloodHound. If you know 
 * **CTRL**: Allows you to display or hide node and relationship labels.
 * **CTRL + SHIFT + I**: Displays the developer tools. If you have a bug in the interface, the javascript console will often allow you to understand the root cause of the issue.
 * **CTRL + R**: Reloads the display
-* **SPACE**: Pops up a table that listq all currently displayed nodes. That's very convinient if you want to export some queries results into Excel or something.
+* **SPACE**: Pops up a table that listq all currently displayed nodes. That's very convenient if you want to export some queries results into Excel or something.
 
 ### Editing
 
