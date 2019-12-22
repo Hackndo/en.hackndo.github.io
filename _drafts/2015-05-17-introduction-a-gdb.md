@@ -7,7 +7,6 @@ permalink: /introduction-a-gdb/
 disqus_identifier: 0000-0000-0000-0009
 description: "GDB est un outil extrêmement puissant. Voici un article qu l'introduit avec une mise en pratique."
 cover: assets/uploads/2015/05/gdb_visual.jpg
-image: assets/uploads/2015/05/gdb_visual.jpg
 tags:
     - Linux
 ---
@@ -137,7 +136,7 @@ Quelques informations nécessaires lorsque vous avez chargé un binaire et que v
 
 ## Syntaxe
 
-Comme expliqué dans l'article sur les [notions de base d'assembleur](.././assembleur-notions-de-base/), il existe deux syntaxes pour lire de l'assembleur : AT&T et Intel. Pour passer de l'une à l'autre, voici comment faire :
+Comme expliqué dans l'article sur les [notions de base d'assembleur](/assembly-basics/), il existe deux syntaxes pour lire de l'assembleur : AT&T et Intel. Pour passer de l'une à l'autre, voici comment faire :
 
 ### AT&T
 

@@ -12,67 +12,71 @@ tags:
   - Windows
 ---
 
-Durant les tests d'intrusion internes, le mouvement latéral est une composante essentielle pour l'auditeur afin de chercher des informations en vue d'élever ses privilèges sur le système d'information. La technique dite du **Pass the Hash** est extrêmement utilisée dans cette situation pour devenir administrateur sur un ensemble de machines. Nous allons détailler ici le fonctionnement de cette technique.
+During internal intrusion tests, lateral movement is an essential component for the auditor to seek information in order to elevate his or her privileges over the information system. The technique known as **Pass the Hash** is extremely used in this situation to become an administrator on a set of machines. We will detail here how this technique works.
 
 <!--more-->
 
-## Protocole NTLM
+## NTLM Protocol
+
+The NTLM protocol is an authentication protocol used in Microsoft environments. In particular, it allows a user to prove who he is to a server in order to use a service offered by this server.
+
 
 Le protocole NTLM est un protocole d'authentification utilisé dans les environnement Microsoft. Il permet notamment à un utilisateur de prouver qui il est auprès d'un serveur pour pouvoir utiliser un service proposé par ce serveur.
 
-> Note : Dans cet article, le terme "serveur" est employé dans le sens client/serveur. Le "serveur" peut très bien être un poste de travail.
+> Note: In this article, the term "server" is used in the client/server sense. The "server" can very well be a workstation.
 
 [![NTLM](/assets/uploads/2019/09/NTLM_Basic.png)](/assets/uploads/2019/09/NTLM_Basic.png)
 
-Deux cas de figure peuvent se présenter :
+There are two possible scenarios:
 
-* Soit l'utilisateur utilise les identifiants d'un compte local du serveur, auquel cas le serveur possède le secret de l'utilisateur dans sa base locale et il pourra authentifier l'utilisateur;
-* Soit, dans un environnement Active Directory, l'utilisateur utilise un compte de domaine lors de l'authentification, et le serveur devra alors dialoguer avec le contrôleur de domaine pour vérifier les informations fournies par l'utilisateur.
+* Either the user uses the credentials of a local account of the server, in which case the server has the user's secret in its local database and will be able to authenticate the user;
+* Or in an Active Directory environment, the user uses a domain account during authentication, in which case the server will have to ask the domain controller to verify the information provided by the user.
 
-Dans les deux cas, l'authentification commence par une phase de **challenge/réponse** (ou stimulation/réponse) entre le client et le serveur.
+In both cases, authentication begins with a **challenge/response** phase between the client and the server.
 
-### Challenge - Réponse
+### Challenge - Response
 
-Le principe du challenge/réponse est utilisé pour que le serveur vérifie que l'utilisateur connaisse le secret du compte avec lequel il s'authentifie, sans pour autant faire transiter le mot de passe sur le réseau. C'est ce qu'on appelle une [preuve à divulgation nulle de connaissance](https://fr.wikipedia.org/wiki/Preuve_%C3%A0_divulgation_nulle_de_connaissance). Trois étapes composent cet échange :
+The challenge/response principle is used so that the server verifies that the user knows the secret of the account he is authenticating with, without passing the password through the network. This is called a [zero-knowledge proof](https://en.wikipedia.org/wiki/Zero-knowledge_proof). There are three steps in this exchange:
 
-1. **Négociation** : Le client indique au serveur qu'il veut s'authentifier auprès de lui ([NEGOTIATE_MESSAGE](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/b34032e5-3aae-4bc6-84c3-c6d80eadf7f2)).
-2. **Challenge** : Le serveur envoie un challenge au client. Ce n'est rien d'autre qu'une valeur aléatoire de 64 bits qui change à chaque demande d'authentification ([CHALLENGE_MESSAGE](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/801a4681-8809-4be9-ab0d-61dcfe762786)).
-3. **Réponse** : Le client chiffre le challenge précédemment reçu en utilisant une version hashée de son mot de passe comme clé, et renvoie cette version chiffrée au serveur, avec son nom d'utilisateur et éventuellement son domaine ([AUTHENTICATE_MESSAGE](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/033d32cc-88f9-4483-9bf2-b273055038ce)).
+1. **Negotiation** : The client tells the server that it wants to authenticate to it ([NEGOTIATE_MESSAGE](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/b34032e5-3aae-4bc6-84c3-c6d80eadf7f2)).
+2. **Challenge** : The server sends a challenge to the client. This is nothing more than a 64-bit random value that changes with each authentication request ([CHALLENGE_MESSAGE](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/801a4681-8809-4be9-ab0d-61dcfe762786)).
+3. **Response** : The client encrypts the previously received challenge using a hashed version of its password as the key, and returns this encrypted version to the server, along with its username and possibly its domain ([AUTHENTICATE_MESSAGE](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/033d32cc-88f9-4483-9bf2-b273055038ce)).
+
 
 [![NTLM Challenge Response](/assets/uploads/2019/09/NTLM_Challenge_Response.png)](/assets/uploads/2019/09/NTLM_Challenge_Response.png)
 
-Voici une capture d'écran de mon lab. On voit que l'utilisateur **Administrateur** tente de se connecter sur la machine **LKAPP01.lion.king**
+Here's a screenshot from my lab. You can see that the user **Administrator** tries to connect to the machine **LKAPP01.lion.king**.
 
 [![NTLM Challenge Response](/assets/uploads/2019/11/ntlm_authentication_ws.png)](/assets/uploads/2019/11/ntlm_authentication_ws.png)
 
-Les échanges NTLM sont encadrés en rouge en haut, et dans la partie basse se trouvent les informations contenues dans la réponse du serveur `CHALLENGE_MESSAGE`. On y trouve notamment le challenge.
+NTLM exchanges are framed in red at the top, and at the bottom is the information contained in the server response `CHALLENGE_MESSAGE`. This is where you will find the challenge.
 
-Suite à ces échanges, le serveur est en possession de deux choses :
+Following these exchanges, the server is in possession of two things:
 
-1. Le challenge qu'il a envoyé au client
-2. La réponse du client qui a été chiffrée avec son secret
+1. The challenge it sent to the client
+2. The client's response that was encrypted with his secret
 
-Pour finaliser l'authentification, il ne reste plus au serveur qu'à vérifier la validité de la réponse envoyée par le client. Mais juste avant ça, faisons un petit point sur le secret du client.
+To finalize the authentication, the server only has to check the validity of the response sent by the client. But just before that, let's do a little check on the client's secret.
 
-### Secret d'authentification
+### Authentication secret
 
-Nous avons dit que le client utilise comme clé une version hashée de son mot de passe, et ce pour la raison suivante : Eviter de stocker les mots de passe des utilisateurs en clair sur le serveur. C'est donc un condensat du mot de passe qui est enregistré à la place. Ce condensat est aujourd'hui le **hash NT**, qui n'est rien d'autre que le résultat de la fonction [MD4](https://fr.wikipedia.org/wiki/MD4), sans sel, rien.
+We said that the client uses a hashed version of their password as a key for the following reason: To avoid storing user passwords in clear text on the server. It's hash of the password that is stored instead. This hash is now the **NT hash**, which is nothing but the result of the [MD4](https://fr.wikipedia.org/wiki/MD4) function, **without salt**, nothing.
 
 ```
-hashNT = MD4(password)
+NThash = MD4(password)
 ```
 
-Donc pour résumer, lorsque le client s'authentifie, il utilise l'empreinte MD4 de son mot de passe pour chiffrer le challenge. Voyons alors ce qu'il se passe du côté du serveur, une fois cette réponse reçue.
+So to summarize, when the client authenticates, it uses the MD4 fingerprint of its password to encrypt the challenge. Let's then see what happens on the server side, once this response is received.
 
-## Authentification
+## Authentication
 
-Comme expliqué tout à l'heure, il existe deux scénarios différents. Le premier est que le compte utilisé pour l'authentification est un compte local, c'est à dire que le serveur a connaissance de ce compte, et il a une copie du secret du compte. Le deuxième est qu'un compte de domaine est utilisé, auquel cas le serveur n'a pas connaissance de ce compte ou son secret. Il devra déléguer l'authentification au contrôleur de domaine.
+As explained earlier, there are two different scenarios. The first is that the account used for authentication is a local account, so the server has knowledge of this account, and it has a copy of the account's secret. The second is that a domain account is used, in which case the server has no knowledge of this account or its secret. It will have to delegate authentication to the domain controller.
 
-### Compte local
+### Local account
 
-Dans le cas où l'authentification se fait avec un compte local, le serveur va chiffrer le challenge qu'il a envoyé au client avec la clé secrète de l'utilisateur, ou plutôt avec le hash MD4 du secret de l'utilisateur. Il vérifiera ainsi si le résultat de son opération est égal à la réponse du client, prouvant que l'utilisateur possède le bon secret. Le cas contraire, la clé utilisée par l'utilisateur n'est pas la bonne puisque le chiffrement du challenge ne donne pas celui attendu.
+In the case where authentication is done with a local account, the server will encrypt the challenge it sent to the client with the user's secret key, or rather with the MD4 hash of the user's secret. It will then check if the result of its operation is equal to the client's response, proving that the user has the right secret. If not, the key used by the user is not the right one since the challenge's encryption does not give the expected one.
 
-Pour pouvoir effectuer cette opération, le serveur a besoin de stocker les utilisateurs locaux et le condensat de leur secret. Le nom de cette base de donnée est la **SAM** (Security Accounts Manager). La SAM peut être trouvée dans la base de registre, notamment avec l'outil `regedit` mais uniquement lorsqu'on y accède en tant que **SYSTEM**. On peut l'ouvrir en tant que **SYSTEM** avec [psexec](https://docs.microsoft.com/en-us/sysinternals/downloads/psexec) :
+In order to perform this operation, the server needs to store the local users and the hash of their password. The name of this database is the **SAM** (Security Accounts Manager). The SAM can be found in the registry, especially with the `regedit` tool, but only when accessed as **SYSTEM**. It can be opened as **SYSTEM** with [psexec](https://docs.microsoft.com/en-us/sysinternals/downloads/psexec):
 
 ```
 psexec.exe -i -s regedit.exe
