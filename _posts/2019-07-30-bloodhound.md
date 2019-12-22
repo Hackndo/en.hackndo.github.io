@@ -210,7 +210,7 @@ There are a few shortcuts that can be useful when using BloodHound. If you know 
 * **CTRL**: Allows you to display or hide node and relationship labels.
 * **CTRL + SHIFT + I**: Displays the developer tools. If you have a bug in the interface, the javascript console will often allow you to understand the root cause of the issue.
 * **CTRL + R**: Reloads the display
-* **SPACE**: Pops up a table that list all currently displayed nodes. That's very convinient if you want to export some queries result into Excel or something.
+* **SPACE**: Pops up a table that listq all currently displayed nodes. That's very convinient if you want to export some queries results into Excel or something.
 
 ### Editing
 
