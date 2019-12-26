@@ -84,20 +84,20 @@ psexec.exe -i -s regedit.exe
 
 [![SAM in registry](/assets/uploads/2019/11/SAM_registry.png)](/assets/uploads/2019/11/SAM_registry.png)
 
-Une copie se trouve également sur disque à l'emplacement `C:\Windows\System32\SAM`.
+A copy is also on disk in `C:\Windows\System32\SAM`.
 
-Elle contient donc les utilisateurs locaux et le condensat de leur mot de passe, mais aussi la liste des groupes locaux. Enfin si on veut être précis, elle contient une version chiffrée des condensats. Mais comme toutes les informations pour les déchiffrer sont également dans la base de registres (SAM et SYSTEM), on peut faire le raccourci, et dire que c'est bien le condensat qui est stocké. Si vous voulez voir comment le déchiffrement fonctionne, vous pouvez aller voir [le code de secretsdump.py](https://github.com/SecureAuthCorp/impacket/blob/master/impacket/examples/secretsdump.py#L1124) ou [celui de Mimikatz](https://github.com/gentilkiwi/mimikatz/blob/master/mimikatz/modules/kuhl_m_lsadump.c).
+So it contains the list of local users and their hashed password, as well as the list of local groups. Well, to be more precise, it contains an encrypted version of the hashes. But as all the information needed to decrypt them is also in the registry (SAM and SYSTEM), we can safely say that the hashed is stored there. If you want to see how the decryption mechanism works, you can go check [secretsdump.py code](https://github.com/SecureAuthCorp/impacket/blob/master/impacket/examples/secretsdump.py#L1124) or [Mimikatz code](https://github.com/gentilkiwi/mimikatz/blob/master/mimikatz/modules/kuhl_m_lsadump.c).
 
-On peut d'ailleurs très bien sauvegarder les bases de données SAM et SYSTEM pour extraire la base des condensats des utilisateurs.
+SAM and SYSTEM databases can be backed up to extract the user's hashed passwords database.
 
-D'abord on enregistre les deux bases de données dans un fichier
+First we save the two databases in a file
 
 ```
 reg.exe save hklm\sam save.save
 reg.exe save hklm\system system.save
 ```
 
-Ensuite, on peut utiliser [secretsdump.py](https://github.com/SecureAuthCorp/impacket/blob/master/examples/secretsdump.py) pour extraire les hash
+Then, we can use [secretsdump.py](https://github.com/SecureAuthCorp/impacket/blob/master/examples/secretsdump.py) to extract these hashes
 
 ```bash
 secretsdump.py -sam sam.save -system system.save LOCAL
@@ -106,73 +106,71 @@ secretsdump.py -sam sam.save -system system.save LOCAL
 [![SAM verification](/assets/uploads/2019/11/extract_nt_hashes.png)](/assets/uploads/2019/11/extract_nt_hashes.png)
 
 
-Donc pour résumer, voici le processus de vérification.
+So to summarize, here's the verification process.
 
 [![SAM verification](/assets/uploads/2019/11/SAM_verification.png)](/assets/uploads/2019/11/SAM_verification.png)
 
-Comme le serveur envoie un challenge (**1**) et que le client chiffre ce challenge avec le hash de son secret puis le renvoie au serveur, avec son nom d'utilisateur (**2**), le serveur va chercher le hash du mot de passe de l'utilisateur dans sa base SAM (**3**). Une fois en possession de ce condensat, il va lui aussi chiffrer le challenge précédemment envoyé avec ce hash (**4**), et il pourra ainsi confronter son résultat à celui renvoyé par l'utilisateur. Si c'est le même (**5**) alors l'utilisateur est bien authentifié ! Le cas contraire, l'utilisateur n'a pas fourni le bon secret.
+Since the server sends a challenge (**1**) and the client encrypts this challenge with the hash of its secret and then sends it back to the server with its username (**2**), the server will look for the hash of the user's password in its SAM database (**3**). Once it has it, it will also encrypt the challenge previously sent with this hash (**4**), and compare its result with the one returned by the user. If it is the same (**5**) then the user is authenticated! Otherwise, the user has not provided the correct secret.
 
-### Compte de domaine
+### Domain account
 
-Dans le cas où l'authentification se fait avec un compte du domaine, le hash NT de l'utilisateur n'est plus stocké sur le serveur, mais sur le contrôleur de domaine. Le serveur auprès duquel veut s'authentifier l'utilisateur reçoit alors la réponse à son challenge, mais il n'est pas en mesure de vérifier si cette réponse est valide. Il va déléguer cette tâche au contrôleur de domaine.
+When an authentication is done with a domain account, the user's NT hash is no longer stored on the server, but on the domain controller. The server to which the user wants to authenticate receives the answer to its challenge, but it is not able to check if this answer is valid. It will delegate this task to the domain controller.
 
-Pour cela, il va utiliser le service **Netlogon**, service qui est capable d'établir une connexion sécurisée avec le contrôleur de domaine. Cette connexion sécurisée s'appelle **Secure Channel**. Elle est possible puisque le serveur possède son propre mot de passe, et le contrôleur de domaine connait le hash de ce mot de passe. Ils peuvent alors, de la même manière, effectuer un challenge/réponse pour s'échanger une clé de session et communiquer de manière sécurisée.
+To do this, it will use the **Netlogon** service, which is able to establish a secure connection with the domain controller. This secure connection is called **Secure Channel**. This secure connection is possible because the server knows its own password, and the domain controller knows the hash of the server's password. They can safely exchange a session key and communicate securely.
 
-Je ne vais pas rentrer dans les détails, mais l'idée est donc que le serveur va envoyer différents éléments au contrôleur de domaine dans une structure appelée [NETLOGON_NETWORK_INFO](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/e17b03b8-c1d2-43a1-98db-cf8d05b9c6a8):
+I won't go into details, but the idea is that the server will send different elements to the domain controller in a structure called [NETLOGON_NETWORK_INFO](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/e17b03b8-c1d2-43a1-98db-cf8d05b9c6a8):
 
-* Le nom d'utilisateur du client (Identity)
-* Le challenge envoyé précédemment au client (LmChallenge)
-* La réponse au challenge envoyée par le client (NtChallengeResponse)
+* The client's username (Identity)
+* The challenge previously sent to the client (LmChallenge)
+* The response to the challenge sent by the client (NtChallengeResponse)
 
-> Je ne parle pas de LmChallengeResponse puisque dans cet article, je m'intéresse seulement au hash NT, pas au hash LM qui est complètement obsolète.
+> I'm not talking about LmChallengeResponse because I'm focusing on NT hashes. LM hashes are obsoletes.
 
-Le contrôleur de domaine va chercher le hash NT de l'utilisateur dans sa base de données. Pour le contrôleur de domaine, ce n'est pas dans la SAM, puisque c'est un compte du domaine qui s'authentifie. Cette fois-ci c'est dans un fichier appelé **NTDS.DIT**, qui est la base de données de tous les utilisateurs. Une fois le hash NT récupéré, il va calculer la réponse attendue avec ce hash et le challenge, et va confronter ce résultat à la réponse du client.
+The domain controller will look for the user's NT hash in its database. For the domain controller, it's not in the SAM, since it's a domain account that tries to authenticate. This time it is in a file called **NTDS.DIT**, which is the database of all domain users. Once the NT hash is retrieved, it will compute the expected response with this hash and the challenge, and will compare this result with the client's response.
 
-Un message sera ensuite envoyé au serveur ([NETLOGON_VALIDATION_SAM_INFO4](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/bccfdba9-0c38-485e-b751-d4de1935781d)) indiquant si oui ou non le client est authentifié, et il enverra également tout un tas d'informations concernant l'utilisateur. Ce sont d'ailleurs les mêmes informations que celles qu'on retrouve dans le [PAC](https://beta.hackndo.com/kerberos-silver-golden-tickets/#pac) lors d'une [authentification Kerberos](https://beta.hackndo.com/kerberos/).
+A message will then be sent to the server ([NETLOGON_VALIDATION_SAM_INFO4](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/bccfdba9-0c38-485e-b751-d4de1935781d)) indicating whether or not the client is authenticated, and it will also send a bunch of information about the user. This is the same information that is found in the [PAC](https://beta.hackndo.com/kerberos-silver-golden-tickets/#pac) when [Kerberos authentication](https://beta.hackndo.com/kerberos/) is used.
 
-Donc pour résumer, voici le processus de vérification avec un contrôleur de domaine.
+So to summarize, here is the verification process with a domain controller.
 
 [![SAM verification](/assets/uploads/2019/11/DC_verification.png)](/assets/uploads/2019/11/DC_verification.png)
 
-De la même manière que tout à l'heure, le serveur envoie un challenge (**1**) et le client chiffre ce challenge avec le hash de son secret puis le renvoie au serveur, accompagné de son nom d'utilisateur et le nom du domaine (**2**). Cette fois-ci, le serveur va envoyer ces informations au contrôleur de domaine dans un **Secure Channel** à l'aide du service **Netlogon** (**3**). Une fois en possession de ces informations, le contrôleur de domaine va lui aussi chiffrer le challenge en utilisant le hash de l'utilisateur, trouvé dans sa base de données (**4**), et il pourra ainsi confronter son résultat à celui renvoyé par l'utilisateur. Si c'est le même (**5**) alors l'utilisateur est bien authentifié. Le cas contraire, l'utilisateur n'a pas fourni le bon secret. Dans les deux cas, le contrôleur de domaine transmet l'information au serveur (**6**).
+Same as before, the server sends a challenge (**1**) and the client encrypts this challenge with the hash of its secret and sends it back to the server along with its username and the domain name (**2**). This time the server will send this information to the domain controller in a **Secure Channel** using the **Netlogon** service (**3**). Once in possession of this information, the domain controller will also encrypt the challenge using the user's hash, found in its NTDS.DIT database (**4**), and will then be able to compare its result with the one returned by the user. If it is the same (**5**) then the user is authenticated. Otherwise, the user has not provided the right secret. In both cases, the domain controller transmits the information to the server (**6**).
 
-## Limites du hash NT
+## NT hash limits
 
-Si vous avez bien suivi, vous aurez compris qu'en fait, le mot de passe en clair n'est jamais utilisé dans ces échanges, mais bien la version hashée du mot de passe, appelé hash NT. Ce hash est un condensat simple du mot de passe en clair.
+If you're still following, you will have understood that the plaintext password is never used in these exchanges, but the hashed version of the password called NT hash. It's a simple hash of the plaintext password.
 
-Donc en fait, si on y réfléchit bien, **voler le mot de passe en clair ou voler le hash revient exactement au même**. Comme c'est le hash qui est utilisé pour répondre au challenge/réponse, être en possession du hash permet de s'authentifier auprès d'un serveur. Avoir le mot de passe en clair n'est absolument pas utile. 
+If you think about it, **stealing the plaintext password or stealing the hash is exactly the same**. Since it is the hash that is used to respond to the challenge/response, being in possession of the hash allows one to authenticate to a server. Having the password in clear text is not useful at all. 
 
-Finalement, on peut même dire qu'**avoir le hash NT revient à avoir le mot de passe en clair**, dans la majorité des cas.
+We can even say that **having the NT hash is the same as having the password in clear text**, in the majority of cases.
 
 ## Pass the Hash
 
-On comprend donc bien que si un attaquant connait le hash NT d'un administrateur local d'une machine, il peut tout à fait s'authentifier auprès de cette machine en utilisant ce condensat. De la même manière, s'il possède le hash NT d'un utilisateur de domaine qui fait partie d'un groupe d'administration local d'une machine, il peut également s'authentifier auprès de cette machine en tant qu'administrateur local.
+It is therefore understandable that if an attacker knows the NT hash of a local administrator of a machine, he can easily authenticate to that machine using this hash. Similarly, if he has the NT hash of a domain user who is member of a local administration group on a host, he can also authenticate to that host as a local administrator.
 
-### Administrateur local du parc
+### Local Administrator
 
-Maintenant, plaçons nous dans un environnement d'entreprise : Un nouveau collaborateur arrive, et un poste lui est fourni. Le département informatique ne s'amuse pas à installer et configurer depuis zéro un système Windows pour chaque collaborateur. Non, l'informaticien est paresseux, et s'il peut automatiser, il automatise.
+Now, let's see how it works in a real environement: A new employee arrives and IT provides him/her with a workstation. IT department does not have a good time installing and configuring from scratch a Windows system for each employee. No, computer guys are lazy, and if they can automate, they do. A version of the Windows system is installed and configured to meet all the basic needs and requirements of a new employee. This basic version called **master** is saved somewhere and a copy of this version is provided to each newcomer.
 
-Ce qui est très courant est le scénario suivant : Une version du système Windows est installée et configurée pour répondre à tous les besoins de base d'un nouveau collaborateur. Cette version de base appelée **master** est enregistrée dans un coin, et une copie de cette version est fournie à chaque nouvel arrivant.
+This implies that the local administrator account **is the same** on all workstations that have ben initialised with the same **master**.
 
-Cela implique que le compte administrateur local **est le même** sur tous les postes qui ont bénéficié du même **master**.
+Do you see where I'm going with this? If one of these hosts is compromised and the attacker extracts the NT hash from the workstation's local administrator account, as all the other workstations have the same administrator account with the same password, then they will also have the same NT hash. The attacker can then use the hash found on the compromised host and replay it on all the other hosts to authenticate on them.
 
-Vous voyez où je veux en venir ? Si jamais un seul de ces postes est compromis et que l'attaquant extrait le hash NT de l'administrateur du poste, comme tous les autres postes ont le même compte d'admin avec le même mot de passe, et bien ils auront également le même hash NT. L'attaquant peut alors utiliser le hash trouvé sur le poste compromis et le rejouer sur tous les autres postes pour s'authentifier dessus.
-
-C'est ce qu'on appelle passer le hash, ou plus communément la technique du **Pass the hash**.
+This is called **Pass the hash**.
 
 [![Pass the hash](/assets/uploads/2019/11/pass-the-hash-schema.png)](/assets/uploads/2019/11/pass-the-hash-schema.png)
 
-Prenons un exemple, nous avons trouvé que le hash NT de l'utilisateur `Administrateur` est `20cc650a5ac276a1cfc22fbc23beada1`. Nous pouvons le rejouer sur une autre machine en espérant que cette machine ait été configurée de la même manière. Cet exemple utilise l'outil [psexec.py](https://github.com/SecureAuthCorp/impacket/blob/master/examples/psexec.py) de la suite [Impacket](https://github.com/SecureAuthCorp/impacket).
+As an example, we found that the NT hash for the user `Administrator` is `20cc650a5ac276a1cfc22fbc23beada1`. We can replay it on another machine and hope that machine was configured in the same way. This example uses the [psexec.py](https://github.com/SecureAuthCorp/impacket/blob/master/examples/psexec.py) tool from the [Impacket](https://github.com/SecureAuthCorp/impacket) suite.
 
 [![PTH Local](/assets/uploads/2019/11/pass-the-hash-local.png)](/assets/uploads/2019/11/pass-the-hash-local.png)
 
-Bingo, ce hash fonctionne également sur la nouvelle machine, et nous avons la main dessus.
+Bingo, this hash also works on the new host, and we've got an administrator shell on it.
 
 ### Compte de domaine à privilèges
 
-Il existe une autre manière d'utiliser la technique du **Pass the hash**. Imaginons que pour l'administration du parc à distance, il existe un groupe "HelpDesk" dans l'Active Directory. Pour que les membres de ce groupe puissent intervenir sur les machines des utilisateurs, le groupe est ajouté au groupe local "Administrateurs" de chaque machine. Ce groupe local contient les entités ayant les droits d'administration sur la machine.
+There is another way to use the **Pass the hash** technique. Let's imagine that for remote park administration, there is a "HelpDesk" group in Active Directory. In order for the members of this group to be able to administrate users' workstations, the group is added to the local "Administrators" group of each host. This local group contains all the entities that have administrative rights on the machine.
 
-On peut d'ailleurs les lister avec la commande suivante
+You can list them with the following command
 
 ```bash
 # Machine française
@@ -182,7 +180,7 @@ net localgroup Administrateurs
 net localgroup Administrators
 ```
 
-On obtiendra alors un résultat comme celui-ci :
+The result will be something like this:
 
 ```
 Nom alias       Administrateur
@@ -196,25 +194,26 @@ ADSEC\Admins du domaine
 ADSEC\HelpDesk
 ```
 
-Nous avons donc le groupe du domaine `ADSEC\HelpDesk` qui fait partie des administrateurs de la machine. Si jamais un attaquant vole le hash NT d'un des membres de ce groupe, il peut tout à fait demander à s'authentifier sur les machines ayant `ADSEC\HelpDesk` dans la liste des administrateurs.
+So we have the `ADSEC\HelpDesk` domain group which is member of the host's local administrators group. If an attacker steals the NT hash from one of the members of this group, he can authenticates on all hosts with `ADSEC\HelpDesk` in the administrators list.
 
-L'avantage par rapport au compte local, c'est que quelque soit le master utilisé pour mettre en place les machines, le groupe sera ajouté par [GPO](/gpo-abuse-with-edit-settings/#group-policy-object) à la configuration de la machine. Les chances sont plus grandes pour que ce compte ait des droits d'administration plus étendus, indépendamment des OS et des mises en service des machines.
+The advantage over the local account is that whatever master is used to set up the machines, the group will be added by [GPO](https://beta.hackndo.com/gpo-abuse-with-edit-settings/#group-policy-object) to the host's configuration. Chances are greater that this account will have more extensive administrative rights, independent of OS and machine setup processes.
 
-Lors de la demande d'authentification, le serveur va donc déléguer l'authentification au contrôleur de domaine, et si l'authentification réussit, alors le contrôleur de domaine va envoyer au serveur des informations sur l'utilisateur telles que son nom, **la liste des groupes auxquels il appartient**, la date d'expiration de son mot de passe etc.
+So when authentication is requested, the server will delegate authentication to the domain controller, and if authentication succeeds, then the domain controller will send the server information about the user such as his name, the **list of groups the user belongs to**, the password expiration date, etc.
 
-Le serveur va donc savoir que l'utilisateur fait partie du groupe **HelpDesk**, et lui donnera un accès administrateur.
+The server will then know that the user is part of the **HelpDesk** group, and will give the user administrator access.
 
-Prenons un nouvel exemple, nous avons trouvé que le hash NT de l'utilisateur `jsnow` est `89db9cd74150fc8d8559c3c19768ca3f`. Ce compte fait partie du groupe `HelpDesk` qui est administrateur local de toutes les machines du parc. Rejouons alors son hash sur une autre machine.
+Another example: we found that the NT hash of the user `jsnow` is `89db9cd74150fc8d8559c3c19768ca3f`. This account is part of the `HelpDesk` group which is the local administrator of all the users' workstations. Let's use his hash on another host.
 
 [![PTH Domain](/assets/uploads/2019/11/pass-the-hash-domain.png)](/assets/uploads/2019/11/pass-the-hash-domain.png)
 
-De la même manière, l'authentification a fonctionné et nous sommes administrateur de la cible.
+Again, the authentication worked and we are the administrator of the target.
 
-## Automatisation
 
-Maintenant que nous avons compris le fonctionnement de l'authentification NTLM, et pourquoi un hash NT pouvait être utilisé pour s'authentifier auprès d'autres machines, il serait utile de pouvoir automatiser la connexion sur les différentes cibles pour récupérer autant d'informations que possible en parallélisant les tâches.
+## Automation
 
-Pour cela, l'outil [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec) est idéal. Il prend en entrée une liste de machines cibles, des identifiants, avec un mot de passe en clair ou un hash NT, et il peut exécuter des commandes sur les cibles pour lesquelles l'authentification a fonctionné.
+Now that we have understood how NTLM authentication works, and why an NT hash could be used to authenticate to other hosts, it would be useful to be able to automate the authentication on different targets to retrieve as much information as possible by parallelizing the tasks.
+
+For this, [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec) tool is ideal. It takes as input a list of targets, credentials, with a clear password or NT hash, and it can execute commands on targets for which authentication has worked.
 
 ```bash
 # Compte local d'administration
@@ -224,84 +223,84 @@ crackmapexec smb --local-auth -u Administrateur -H 20cc650a5ac276a1cfc22fbc23bea
 crackmapexec smb -u jsnow -H 89db9cd74150fc8d8559c3c19768ca3f -d adsec.local  10.10.0.1 -x whoami
 ```
 
-Voici un exemple dans lequel l'utilisateur `simba` est administrateur de tous les postes de travail.
+Here is an example where the `simba` user is administrator of all workstations.
 
 [![SAM verification](/assets/uploads/2019/11/crackmapexec.png)](/assets/uploads/2019/11/crackmapexec.png)
 
-Le Pass the hash a été effectué sur quelques machines qui sont alors compromises. Un argument a été passé à CrackMapExec pour énumérer les utilisateurs actuellement connectés sur ces machines.
+Pass the hash was performed on a few machines which are then compromised. An argument has been passed to CrackMapExec to list the users currently logged on these machines.
 
-Avoir la liste des utilisateurs connectés, c'est bien, mais avoir leur mot de passe ou leur hash NT (ce qui est pareil), c'est mieux ! Pour ça, j'ai développé l'outil [lsassy](https://github.com/hackndo/lsassy) dont je parle dans l'article [Extraction des secrets de lsass à distance](/remote-lsass-dump-passwords/#nouveaux-outils). Et en pratique, et bien ça donne ça :
+Having the list of connected users is good, but having their password or NT hash (which is the same) is better! For this, I developed [lsassy](https://github.com/hackndo/lsassy), a tool I talk about in the article [Extracting lsass secrets remotely](/remote-lsass-dump-passwords/#new-tools). It looks like this:
 
 [![Lsassy verification](/assets/uploads/2019/11/crackmapexec_lsassy.png)](/assets/uploads/2019/11/crackmapexec_lsassy.png)
 
-Nous récupérons tous les hash NT des utilisateurs connectés. Ceux des comptes machine ne sont pas affichés puisque nous sommes déjà administrateur de ces machines, ils ne nous sont donc pas utiles.
+We retrieve all NT hash from the connected users. The ones from the machine accounts are not displayed since we are already the administrator of those machines, so they are not useful to us.
 
-## Limites du Pass the hash
+## Pass the hash limits
 
-Le Pass the hash est une technique qui fonctionne toujours lorsque l'authentification NTLM est acceptée par le serveur. Cependant, il existe des méchanismes dans Windows qui limitent ou peuvent limiter les actions d'administration.
+Pass the hash is a technique that always works when NTLM authentication is enabled on the server, which it is by default. However, there are mechanisms in Windows that limit or may limit administrative tasks.
 
-En effet, sur Windows, la gestion des droits est effectuée à l'aide de jetons de sécurité (*Access tokens*) qui permettent de savoir qui a le droit de faire quoi. Les membres du groupe "Administrateurs" possèdent deux tokens. Un avec les droits d'un utilisateur standard, et un autre avec les droits administrateur. Par défaut, lorsqu'un administrateur exécute une tâche, elle est effectuée dans le contexte limité, standard. Si en revanche des actions d'administration doivent être exécutées, alors Windows affiche cette fenêtre très connue appelée **UAC** (*User Account Control* ou Contrôle de Compte Utilisateur)
+On Windows, rights management is performed using **Access tokens** which makes it possible to know who has the right to do what. The members of the "Administrators" group have two tokens. One with standard user rights, and another with administrator rights. By default, when an administrator executes a task, it is done in the standard, limited context. If on the other hand administrative tasks are needed, then Windows displays this well-known window called **UAC** (*User Account Control*).
 
 [![Lsassy verification](/assets/uploads/2019/11/uac_prompt.png)](/assets/uploads/2019/11/uac_prompt.png)
 
-L'utilisateur est averti que les droits d'administration sont demandés par l'application.
+The user is warned that administrative rights are requested by the application.
 
-Quid alors des actions d'administration effectuées à distance ? Et bien deux cas sont possibles.
+What then of the administration tasks performed remotely? Well two cases are possible.
 
-* Soit elles sont demandées par un compte **du domaine** qui fait partie du groupe "Administrateurs" de la machine, auquel cas l'UAC n'est pas activé pour ce compte, et il peut faire ses tâches d'administration.
-* Soit elles sont demandées par un compte **local** qui fait partie du groupe "Administrateurs" de la machine, et dans ce cas, l'UAC est activé dans certains cas, mais pas tous.
+* Either they are requested by an **domain account** that is member of the "Administrators" group of the host, in which case the UAC is not activated for this account, and he can do his administration tasks.
+* Or they are requested by a **local account** that is member of the host's "Administrators" group, in which case the UAC is enabled in some cases, but not all the time.
 
-Pour comprendre le deuxième cas, faisons le point sur deux clés de registre un peu méconnues, mais qui ont pourtant un rôle essentiel lorsque des actions d'administration tentent d'être effectuées suite à une authentification NTLM avec un compte local d'administration.
+To understand the second case, let's look at two registry keys that are sometimes unknown, but that play a key role when administrative tasks attempt to be performed following NTLM authentication with a local administration account.
 
 ### LocalAccountTokenFilterPolicy
 
-Cette première clé de registre se trouve ici dans la base :
+This first registry key can be found here :
 
 > HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 
-Elle peut avoir deux valeurs, `0` ou `1`.
+It can be either `0` or `1`.
 
-Par défaut, elle n'est pas présente, ce qui implique qu'elle vaut `0`.
+It does not exist by default, implying that it is `0`.
 
-* Si elle vaut `0`, valeur par défaut donc, alors seul le compte administrateur natif (RID 500) est en mesure d'effectuer des actions d'administration sans que l'UAC ne l'embête. Les autres comptes d'administration, donc ceux créés par les utilisateurs et ensuite ajoutés en tant qu'administrateurs locaux, ne pourront pas faire d'action d'administration à distance puisque l'UAC sera activée, et ils ne pourront pas valider la boite de dialogue à distance.
-* Si elle vaut `1`, alors **tous** les comptes dans le groupe "Administrateurs" peuvent faire des actions d'administration à distance, natif ou non.
+* If it is set to "0" (default), then only the built-in administrator account (RID 500) is able to perform administration tasks without UAC. The other admin accounts, i.e. those created by users and then added as local administrators, will not be able to perform remote administrative tasks since the UAC will be enabled, so they will only be able to use their limited access token.
+* If it is set to `1`, then **all** accounts in the "Administrators" group can do remote administration tasks, built-in or not.
 
-Donc pour résumer, voici les deux cas :
+So to summarize, here are the two cases:
 
-* **LocalAccountTokenFilterPolicy = 0** : Seul le compte "Administrateur" RID 500 peut faire des actions d'administration à distance
-* **LocalAccountTokenFilterPolicy = 1** : Tous les comptes dans le groupe "Administrateurs" peuvent faire des actions d'administration à distance
+* **LocalAccountTokenFilterPolicy = 0** : Only the RID 500 "Administrator" account can do remote administration tasks
+* **LocalAccountTokenFilterPolicy = 1**: All accounts in the "Administrators" group can do remote administration tasks
 
 ### FilterAdministratorToken
 
-Cette deuxième clé de registre se trouve au même endroit dans la base de registre :
+This second registry key is located in the same place in the registry :
 
 > HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 
-Elle peut également avoir les valeurs `0` ou `1`
+It can also be either `0` or `1`.
 
-Par défault, elle vaut aussi `0`.
+By default, it also defaults to '0'.
 
-* Si elle vaut `0`, valeur par défaut donc, alors le compte administrateur natif (RID 500) est en mesure d'effectuer des actions d'administration sans que l'UAC ne l'embête. Cette clé ne concerne pas les autres comptes.
-* Si elle vaut `1`, alors le compte administrateur natif (RID 500) est également soumis à l'UAC, et il n'est plus en mesure d'effectuer des tâches d'administration à distance, **sauf** si la première clé dont on a parlé vaut `1`.
+* If it is `0`, then the built-in administrator account (RID 500) is able to perform administration tasks without UAC. This key **does not affect other accounts**.
+* If it is set to `1`, then the built-in administrator account (RID 500) is also subject to UAC, and is no longer able to perform remote administration tasks, **unless** the first key mentioned is set to `1`.
 
-Donc pour résumer, voici les deux cas :
+So to summarize, here are the two cases:
 
-* **FilterAdministratorToken = 0** : Le compte natif Administrateur peut faire des actions d'administration à distance
-* **FilterAdministratorToken = 1** : Le compte natif Administrateur **ne peut pas** faire des actions d'administration à distance, sauf si `LocalAccountTokenFilterPolicy` vaut `1`
+* **FilterAdministratorToken = 0** : The built-in Administrator account can do remote administration tasks
+* **FilterAdministratorToken = 1** : The built-in account Administrator **cannot** do remote administration tasks, unless `LocalAccountTokenFilterPolicy` is set to `1`.
 
+### Summary
 
-### Résumé
+Here is a small summary table. For each combination of the two registry keys, this table indicates whether remote administration tasks are possible with a built-in administrator account and with a non-native administrator account. The values in bold are the default values.
 
-Voici un petit tableau résumé. Pour chaque combinaison des deux clés de registre, ce tableau indique si les actions d'administration à distance sont possibles avec un compte administrateur natif et avec un compte administrateur non natif. Les valeurs en gras sont les valeurs par défaut.
+| LocalAccountTokenFilterPolicy | FilterAdministratorToken | Buily-in Administrator (RID 500) | Other Administrators |
+|:-----------------------------:|:------------------------:|:--------------------------------:|:--------------------:|
+|             **0**             |           **0**          |                 1                |           0          |
+|             **0**             |             1            |                 0                |           0          |
+|               1               |           **0**          |                 1                |           1          |
+|               1               |             1            |                 1                |           1          |
 
-| LocalAccountTokenFilterPolicy | FilterAdministratorToken | Administrateuf natif (RID 500) | Administrateuf non natif |
-|:-----------------------------:|:------------------------:|:------------------------------:|:------------------------:|
-|             **0**             |           **0**          |                1               |             0            |
-|             **0**             |             1            |                0               |             0            |
-|               1               |           **0**          |                1               |             1            |
-|               1               |             1            |                1               |             1            |
+I would like to point out once again that this information relates to **administrative** tasks. It is still possible to authenticate to a host, regardless of the values of the registry keys. Here is a small program using the impacket library which allows to understand this precision:
 
-Je précise encore une fois que ces informations concernent les actions d'administration. En effet, il est toujours possible de s'authentifier auprès de la machine, quelles que soient les valeurs des clés de registres. Voici un petit programme utilisant la librairie impacket qui permet de comprendre ce point :
 
 ```python
 from impacket.smbconnection import SMBConnection, SMB_DIALECT
@@ -309,25 +308,25 @@ from impacket.smbconnection import SMBConnection, SMB_DIALECT
 conn = SMBConnection("192.168.1.122", "192.168.1.122")
 
 """
-Dans un premier temps, nous nous authentifions en tant que
-"Administrateur" sur la machine distante. Une authentification
-NTLM va être effectuée, et comme se sont les bonnes informations,
-nous serons authentifiés sur la machine distante.
+First, we authenticate ourselves as "Administrator" on the
+remote host. An NTLM authentication is going to start, and
+since the credentials are valid, we'll be successfuly
+authenticated on the remote host.
 """
 try:
-    conn.login("Administrateur", "S3cUr3d+")
+    conn.login("Administrator", "S3cUr3d+")
     print("Logged in !")
 except:
     print("Loggon failure")
     exit()
 
 """
-Nous nous plaçons dans le cas où :
+Now let say we have the following registry keys set:
 LocalAccountTokenFilterPolicy = 0
 FilterAdministratorToken = 1
-D'après le tableau précédant, le compte administrateur natif
-n'est pas en mesure d'effectuer des actions d'administration,
-telle qu'accéder au partage réseau C$.
+According to the table, built-in Administrator account is not
+allowed to do administrative tasks on the remote host. Trying
+to open C$ remote share is one of them.
 """
 try:
     conn.connectTree("C$")
@@ -337,24 +336,22 @@ except:
     exit()
 ```
 
-Si nous le lançons, voici le résultat :
+When we execute this program, here is the result:
 
 [![Lsassy verification](/assets/uploads/2019/11/test_admin_access.png)](/assets/uploads/2019/11/test_admin_access.png)
 
-Cela confirme bien que l'authentification a fonctionné, mais que le contexte d'administration demandé a été refusé puisque l'UAC est activé pour le compte, puisqu'imposé par la clé **FilterAdministratorToken** dans cet exemple.
+This confirms that the authentication worked, but that the requested administration context was denied since UAC is enabled for the account, because of **FilterAdministratorToken** key in this example.
 
 ## Conclusion
 
-L'authentification NTLM est aujourd'hui encore beaucoup utilisée en entreprise. D'expérience, je n'ai encore jamais vu d'environnement ayant réussi à désactiver NTLM sur l'ensemble de son parc. La technique du Pass the hash reste donc très efficace.
+NTLM authentication is still widely used in companies today. In my experience, I have never yet seen an environment that has managed to disable NTLM on its entire network. Pass the hash is still very efficient.
 
-Cette technique est inhérente au protocole NTLM, cependant il est possible de limiter les dégats en évitant d'avoir le même mot de passe d'administration locale sur tous les postes. La solution [LAPS](https://blogs.technet.microsoft.com/arnaud/2015/11/25/local-admin-password-solution-laps/) de Microsoft est une solution parmi d'autres pour gérer automatiquement les mots de passe des administrateurs en faisant en sorte que ce mot de passe (donc aussi le hash NT) soit différent sur tous les postes.
+This technique is inherent to the NTLM protocol, however it is possible to limit the damage by avoiding having the same local administration password on all workstations. Microsoft's [LAPS](https://blogs.technet.microsoft.com/arnaud/2015/11/25/local-admin-password-solution-laps/) solution is one solution among others to automatically manage local administrator passwords by making sure that this password (and therefore also the NT hash) is different on all workstations.
 
-Par ailleurs, mettre en place une [administration en SILO](https://www.sstic.org/media/SSTIC2017/SSTIC-actes/administration_en_silo/SSTIC2017-Article-administration_en_silo-bordes.pdf) permet d'éviter les élévations de privilèges au sein du système d'information. Des administrateurs dédiés à des zones de criticité différentes (bureautique, serveur, contrôleurs de domaine, ...) se connectent uniquement sur leur zone, et ne peuvent pas accéder à une zone différente. Si ce type d'administration est mise en place et qu'une machine d'une zone est compromise, l'attaquant ne pourra pas utiliser les identifiants trouvés pour atteindre une autre zone.
+Moreover, setting up a [silo administration [fr]](https://www.sstic.org/media/SSTIC2017/SSTIC-actes/administration_en_silo/SSTIC2017-Article-administration_en_silo-bordes.pdf) allows to avoid privilege escalation within the information system. Administrators dedicated to different critical zones (workstations, server, domain controllers, ...) only log in to their zone, and cannot access a different zone. If this type of administration is set up and a host in one zone is compromised, the attacker will not be able to use the stolen credentials to reach another zone.
 
-Enfin, bien positionner les clés de registre dont nous avons parlé dans le dernier paragraphe permet de limiter les actions des administrateurs.
+Finally, properly positioning the registry keys discussed in the last paragraph will limit the actions of administrators, and thus of attackers.
 
-Une partie de ces recommandations est indiquée dans le [Guide d'hygiène informatique](https://www.ssi.gouv.fr/uploads/2017/01/guide_hygiene_informatique_anssi.pdf) publié par l'ANSSI.
+In the meantime, this technique still has a bright future ahead of it!
 
-En attendant, cette technique a encore de beaux jours devant elle !
-
-Si vous avez des questions, n'hésitez pas à les poser ici ou sur [Discord](https://discord.gg/9At6SUZ) et je me ferai une joie de tenter d'y répondre. De la même manière, si vous voyez des coquilles, je suis tout ouïe. A la prochaine !
+If you have any questions, don't hesitate to ask them here or on [Discord](https://discord.gg/nJ4gaR4) and I will be happy to try to answer them. If you see any typos, I'm all ears. See you next time!
