@@ -12,13 +12,13 @@
 
         <div class="content-wrapper">
           {% if page.url == "/" %}
-          <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png"></a></p>
+          <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png" alt="french flag" /></a></p>
           {% else %}
             {% for post in site.posts %}
               {% if post.permalink == page.url %}
                 {% for lang in post.translation %}
                   {% if lang == "fr" %}
-                    <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png"></a></p>
+                    <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png" alt="french flag" /></a></p>
                     {% break %}
                   {% endif %}
                 {% endfor %}
