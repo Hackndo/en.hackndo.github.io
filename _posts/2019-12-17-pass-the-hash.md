@@ -23,8 +23,6 @@ During internal intrusion tests, lateral movement is an essential component for 
 The NTLM protocol is an authentication protocol used in Microsoft environments. In particular, it allows a user to prove who he is to a server in order to use a service offered by this server.
 
 
-Le protocole NTLM est un protocole d'authentification utilisé dans les environnement Microsoft. Il permet notamment à un utilisateur de prouver qui il est auprès d'un serveur pour pouvoir utiliser un service proposé par ce serveur.
-
 > Note: In this article, the term "server" is used in the client/server sense. The "server" can very well be a workstation.
 
 [![NTLM](/assets/uploads/2019/09/NTLM_Basic.png)](/assets/uploads/2019/09/NTLM_Basic.png)
