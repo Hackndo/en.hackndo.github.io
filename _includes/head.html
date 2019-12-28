@@ -53,17 +53,18 @@
     {% endif %}
   
     {% if page.url == "/" %}
-    <link rel="alternate" hreflang="en" href="https://en.hackndo.com">
+    <link rel="alternate" hreflang="fr" href="https://beta.hackndo.com">
     {% else %}
       {% if page.translation %}
         {% for lang in page.translation %}
-        {% if lang == "fr" }
+        {% if lang == "fr" %}
     <link rel="alternate" hreflang="{{ lang }}" href="https://beta.hackndo.com{{ page.url }}">
         {% else %}
     <link rel="alternate" hreflang="{{ lang }}" href="https://{{ lang }}.hackndo.com{{ page.url }}">
         {% endif %}
         {% endfor %}
       {% endif %}
+
     {% endif %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-80312745-1"></script>
