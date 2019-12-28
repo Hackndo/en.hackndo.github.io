@@ -6,7 +6,7 @@ layout: post
 permalink: /pass-the-hash/
 disqus_identifier: 0000-0000-0000-00b1
 cover: assets/uploads/2019/09/pass_the_hash.png
-description: "La technique du Pass the Hash est extrêmement utilisée lors de mouvement latéral, composante essentielle dans une attaque. Nous allons détailler comment cette technique fonctionne, quelles sont ses possibilités et ses limites."
+description: "Pass the Hash is extremely used in internal pentests to get administrative rights on a set of hosts. We will detail here how this technique works."
 tags:
   - "Active Directory"
   - Windows
