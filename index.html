@@ -18,7 +18,7 @@ description: This blog talks about computer security. Tutorials about buffer ove
     </h1>
 
     <div class="post-info">
-      <p class="alignleft"><span class="google-icon-date">{{ post.date | date_to_string }}</span></p>
+      <p class="alignleft">{{ post.date | date_to_string }} · {% assign words = post.content | number_of_words %}{% if words < 360 %}1 min{% else %}{{ words | divided_by:180 }} min{% endif %}</p>
       <p class="alignright">Author : <strong><a href="https://twitter.com/HackAndDo">{{ post.author }}</a></strong></p>
     </div>
 
