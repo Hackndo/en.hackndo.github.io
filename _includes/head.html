@@ -57,7 +57,11 @@
     {% else %}
       {% if page.translation %}
         {% for lang in page.translation %}
+        {% if lang == "fr" }
+    <link rel="alternate" hreflang="{{ lang }}" href="https://beta.hackndo.com{{ page.url }}">
+        {% else %}
     <link rel="alternate" hreflang="{{ lang }}" href="https://{{ lang }}.hackndo.com{{ page.url }}">
+        {% endif %}
         {% endfor %}
       {% endif %}
     {% endif %}
