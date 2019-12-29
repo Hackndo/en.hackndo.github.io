@@ -166,7 +166,7 @@ As an example, we found that the NT hash for the user `Administrator` is `20cc65
 
 Bingo, this hash also works on the new host, and we've got an administrator shell on it.
 
-### Compte de domaine à privilèges
+### Privileged domain account
 
 There is another way to use the **Pass the hash** technique. Let's imagine that for remote park administration, there is a "HelpDesk" group in Active Directory. In order for the members of this group to be able to administrate users' workstations, the group is added to the local "Administrators" group of each host. This local group contains all the entities that have administrative rights on the machine.
 
