@@ -394,7 +394,7 @@ As pypykatz and minidump only work under python3.6 + and CrackMapExec is not yet
 
 [mpgn](https://twitter.com/mpgn_x64) is working on [CrackMapexec for python 3](https://github.com/byt3bl33d3r/CrackMapExec/pull/323).
 
-## Nouveaux outils
+## New tools
 
 In the meantime, here are two tools that I have written so you can use this technique:
 
