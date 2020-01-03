@@ -386,11 +386,30 @@ Function=minidump, Time=0.897719860077
 
 Without this optimization, the script would take about 40 seconds to run, while with optimization, it would take less than a second. Less than a second to extract authentication secrets from a remote lsass dump larger than 150MB!
 
+### Remove Procdump from the equation
+
+That's an update (3rd of Jan. 2020) : Our current technique is relying on Procdump to dump lsass memory. But eventhough it's signed by Microsoft, I find it much cleaner to **not** use it, and use Microsoft built-in tools instead.
+
+There's a DLL called **comsvcs.dll**, located in `C:\Windows\System32` that dumps process memory whenever they crash. This DLL contains a function called `MiniDumpW` that is written so it can be called with `rundll32.exe`.
+
+[![comsvcs dll minidump signature](/assets/uploads/2020/01/minidump_signature.png)](/assets/uploads/2020/01/minidump_signature.png)
+
+The first two arguments are not used, but the third one is split into 3 parts. First part is the process ID that will be dumped, second part is the dump file location, and third part is the word **full**. There is no other choice.
+
+[![comsvcs dll minidump argument](/assets/uploads/2020/01/minidump_offsets.png)](/assets/uploads/2020/01/minidump_offsets.png)
+
+
+Once these 3 arguments has been parsed, basically this DLL creates the dump file, and dumps the specified process into that dump file.
+
+[![comsvcs dll minidump dump](/assets/uploads/2020/01/minidump_dump.png)](/assets/uploads/2020/01/minidump_dump.png)
+
+Thanks to this function, we can use **comsvcs.dll** to dump lsass process instead of uploading procdump and executing it.
+
 ## CrackMapExec module
 
 With this new tool, I modified the CrackMapExec module so it extracts passwords **remotely** from lsass dumps.
 
-As pypykatz and minidump only work under python3.6 + and CrackMapExec is not yet compatible with python3, I cannot make a pull request at the moment, nor import pypykatz into my module. For the moment, the call to pypykatz is done via a ew process calling my tool.
+As pypykatz and minidump only work under python3.6 + and CrackMapExec is not yet compatible with python3, I cannot make a pull request at the moment, nor import pypykatz into my module. For the moment, the call to pypykatz is done via a new process calling my tool.
 
 [mpgn](https://twitter.com/mpgn_x64) is working on [CrackMapexec for python 3](https://github.com/byt3bl33d3r/CrackMapExec/pull/323).
 
@@ -398,7 +417,7 @@ As pypykatz and minidump only work under python3.6 + and CrackMapExec is not yet
 
 In the meantime, here are two tools that I have written so you can use this technique:
 
-[lsassy](https://github.com/Hackndo/lsassy) is available on my [Github](https://github.com/Hackndo/lsassy) or on [Pypi](https://pypi.org/project/lsassy/). It is the interface between Pypykatz and the remote target, which allows to read lsass dumps remotely.
+[lsassy](https://github.com/Hackndo/lsassy) is available on my [Github](https://github.com/Hackndo/lsassy) or on [Pypi](https://pypi.org/project/lsassy/). This tool uses all the research discussed in this article to remotely dump lsass, either with the [DLL technique](#remove-procdump-from-the-equation) or the [Procdump technique](#manual-method--procdump).
 
 [The CrackMapExec module](https://github.com/Hackndo/lsassy/tree/master/cme) allows you to automate the whole process by doing an lsass dump on the remote hosts, and extracting the credentials of the logged in users using **lsassy**. It also makes it possible to detect accounts with an attack path to become a domain administrator, by relying on the data collected with [Bloodhound](/bloodhound)
 
