@@ -1,12 +1,12 @@
 ---
-title: "Get credentials from remote lsass dumps"
+title: "Extract credentials from lsass remotely"
 date: 2019-11-28 22:40:00
 author: "Pixis"
 layout: post
 permalink: /remote-lsass-dump-passwords/
 disqus_identifier: 0000-0000-0000-00b3
 cover: assets/uploads/2019/11/procdump.png
-description: "This article explains how to remotely extract credentials present in an lsass dump, thus avoiding using Mimikatz and antivirus detection."
+description: "This article explains how to remotely extract credentials from lsass, thus avoiding using Mimikatz and most antivirus detection."
 tags:
   - "Active Directory"
   - Windows
