@@ -31,7 +31,7 @@ sitemap:
       <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
     {% endif %}
   </url>
-
+  {% endfor %}
   <url>
     <loc>https://en.hackndo.com/</loc>
     <xhtml:link 
