@@ -6,79 +6,85 @@ layout: post
 permalink: /service-principal-name-spn/
 disqus_identifier: 0000-0000-0000-00a9
 cover: assets/uploads/2019/02/spn.png
-description: "Pour la suite des articles, la notion de SPN (Service Principal Name) va être abordée. Cet article permet de faire un point sur cette notion afin de comprendre ce que sont ces SPN, à quoi ils servent et comment ils sont utilisés."
+description: "This article focuses on SPN (Service Principal Names) in order to understand what they are and how they are used."
 tags:
   - "Active Directory"
   - Windows
+translation:
+  - fr
 ---
 
-Pour la suite des articles, la notion de SPN (Service Principal Name) va être abordée. Cet article permet de faire un point sur cette notion afin de comprendre ce que sont ces "SPN", à quoi ils servent et comment ils sont utilisés.
+This article focuses on SPN (Service Principal Names) in order to understand what they are and how they are used.
 
 <!--more-->
 
-## Qu'est-ce qu'un SPN
+## What is an SPN
 
-Nous nous plaçons dans un environnement Active Directory. Pour comprendre la notion de SPN, il faut comprendre ce qu'est la notion de service au sein d'un active directory.
+We are in an Active Directory environment. To understand what is an APN, we must understand what the notion of service within an Active Directory is.
 
-Un service est en fait une fonctionnalité, un logiciel, quelque chose qui peut être utilisé par d'autres membres de l'AD (Active Directory). On peut avoir par exemple un serveur web, un partage réseau, un service DNS, un service d'impression, etc. Pour identifier un service, nous avons besoin de deux éléments à minima. Le même service peut tourner sur différentes machines, donc il faut spécifier **la machine**, et une machine peut héberger plusieurs services, donc il faut, évidemment, spécifier **le service**.
+A service is actually a feature, a software, something that can be used by other members of the AD (Active Directory). You can have for example a web server, a network share, a DNS service, a printing service, and so on. To identify a service, we need at least two things. The same service can run on different hosts, so we need to specify **the host**, and a computer can host several services, so we need to specify **the service**, obviously.
 
-C'est en combinant ces informations que nous pouvons désigner un service de manière précise. Cette combinaison représente son **Service Principal Name**, ou **SPN**. Il se présente de la sorte :
+It is by combining these information that we can accurately designate a service. This combination represents its **Service Principal Name**, or **SPN**. It looks like this:
 
 ```
-classe_du_service/hostname_ou_FQDN
+service_class/hostname_or_FQDN
 ```
+
+The service class is actually a somewhat generic name for the service. For example, all web servers are grouped in the "www" class and SQL services are in the "SqlServer" class.
+
+If the service runs behind a custom port, or if you want to specify it to avoid any ambiguity, you can append it to the hostname:
 
 La classe du service est en fait un nom un peu générique qui correspond au service. Par exemple, tous les serveurs web sont regroupés dans la classe "www", les services SQL sont dans la classe "SqlServer" etc.
 
 Si jamais le service présente un port particulier, ou si on veut le préciser pour éviter toute ambiguïté, il est possible de l'ajouter à la fin :
 
 ```
-classe_du_service/hostname_ou_FQDN:port
+service_class/hostname_or_FQDN:port
 ```
 
-Enfin, un nom peut être donné au SPN, mais c'est tout à fait arbitraire et optionnel.
+Optionally, you can name a SPN.
 
 ```
-classe_du_service/hostname_ou_FQDN:port/nom_arbitraire
+service_class/hostname_or_FQDN:port/arbitrary_name
 ```
 
-Ainsi, dans mon Active Directory, j'ai deux machines proposant des services web, `WEB-SERVER-01` et `WEB-SERVER-02`, et chacune de ces deux machines propose d'autres services.
+For example, in my Active Directory, I have two hosts offering web services, `WEB-SERVER-01` and `WEB-SERVER-02`, and each of these two machines offers other services.
 
-Si je veux désigner le serveur web sur `WEB-SERVER-01`, le SPN se présente de la façon suivante :
+If I want to designate the web server on `WEB-SERVER-01`, the SPN looks like this:
 
 ```
 www/WEB-SERVER-01
 ```
 
-ou
+or
 
 ```
 www/WEB-SERVER-01.adsec.local
 ```
 
-Dans la vraie vie, voici le SPN d'un service dans un ticket Kerberos :
+In real life, here's the SPN of a service in a Kerberos ticket:
 
 [![SPN](/assets/uploads/2019/02/SPN_ST.png)](/assets/uploads/2019/02/SPN_ST.png)
 
-Ce ticket est destiné à l'utilisation du service `www` sur la machine `WEB-SERVER-01` dans le domaine `adsec.local`.
+This ticket was created after someone asked for `wwww` service on `WEB-SERVER-01' in `adsec.local` domain.
 
-## Exemples
+## Examples
 
-Il existe un grand nombre de classes de services, en voici une liste built-in tirée de la [documentation de Microsoft](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc772815(v=ws.10)#service-principal-names).
+There are a large number of service classes, here is a list of built-in one from the [Microsoft documentation](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc772815(v=ws.10)#service-principal-names).
 
 [![Liste SPN](/assets/uploads/2019/02/liste_spn.png)](/assets/uploads/2019/02/liste_spn.png)
 
-Nous reconnaissons quelques classes de services, telles que `CIFS` pour les services en lien avec le partage de fichiers, `DNS`, `WWW` dont nous avons déjà parlé, ou encore `spooler` qui regroupe les services d'impression.
+We recognize a few service classes, such as `CIFS` for services related to file sharing, `DNS`, `WWW` which we've already discussed, or `spooler` which includes printing services.
 
-Cette liste n'est pas exhaustive, on ne retrouve par exemple pas de `SqlServer` que l'on recontre habituellement dans les environnements AD, ou encore la classe `LDAP` qui réunit les services d'annuaire.
+This list is not exhaustive, for example, there is no `SqlServer`, which is usually found in AD environments, or the `LDAP` class of directory services.
 
-## Cas particulier - HOST
+## Edge case - HOST
 
-Il existe un cas particulier que nous rencontrons dans les attributs SPN d'un objet dans l'AD, c'est le SPN `HOST`.
+There is a special case that we encounter in SPN attributes of an object in AD, it is the `HOST` SPN .
 
 [![HOST SPN](/assets/uploads/2019/02/host_spn.png)](/assets/uploads/2019/02/host_spn.png)
 
-Le SPN `HOST` n'est pas vraiment une classe de service. C'est un SPN qui est un regroupement de classes de services, une sorte d'alias qui regroupe un grand nombre de SPN. Les éléments qu'il regroupe sont définis dans l'attribut "SPN-Mappings" de l'AD. On peut énumérer ces classes via la commande suivante :
+`HOST` SPN is not really a service class. It's a group of service classes, a kind of alias that groups together a large number of SPNs. The elements it groups together are defined in the Active Directory's "SPN-Mappings" attribute. These classes can be listed with the following command:
 
 ```
 Get-ADObject -Identity "CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=HALO,DC=NET" -properties sPNMappings
@@ -86,23 +92,21 @@ Get-ADObject -Identity "CN=Directory Service,CN=Windows NT,CN=Services,CN=Config
 
 [![SPN Mappings](/assets/uploads/2019/02/sPNMappings.png)](/assets/uploads/2019/02/sPNMappings.png)
 
+Thus, if a user ever looks for `www` SPN on `WEB-SERVER-01`, Active Directory will look for `wwww/WEB-SERVER-01` but it will also look for `HOST/WEB-SERVER-01`. If the host has `HOST` SPN then it means it has `www` SPN (and many others).
 
-Ainsi, si jamais un utilisateur cherche le SPN `www` sur la machine `WEB-SERVER-01`, l'AD cherchera `www/WEB-SERVER-01` mais il cherchera également `HOST/WEB-SERVER-01`. Si la machine possède le SPN `HOST` alors cela veut dire qu'elle possède le SPN `www` (et beaucoup d'autres).
+**Note:** This SPN (`HOST`) remains a bit of a mystery to me. When generating a [Silver Ticket](/kerberos-silver-golden-tickets), if you decide that the SPN is `HOST`, then you can perform certain tasks such as managing services or managing scheduled tasks. However, although `CIFS` is included in the `SPN-Mappings` attribute, I was not able to access the `C$` share of the remote host.
 
-**Note :** Ce SPN (`HOST`) reste un peu un mystère pour moi. En effet, lors de la génération d'un [Silver Ticket](/kerberos-silver-golden-tickets), si on décide que le SPN est `HOST`, alors on peut effectuer certaines tâches telles que la gestion des services ou la gestion des tâches planifiées. Cependant, bien que `CIFS` soit inclu dans l'attribut `SPN-Mappings`, je n'étais pas en mesure d'accéder au partage `C$` de la machine.
-
-En posant la question sur le [slack de Bloodhound](https://bloodhoundgang.herokuapp.com/), [@pyrotek3](https://twitter.com/pyrotek3) ([ADSecurity.org](https://adsecurity.org/?page_id=8)) m'a répondu ceci :
-
+After asking about it on [Bloodhound's slack](https://bloodhoundgang.herokuapp.com/), [@pyrotek3](https://twitter.com/pyrotek3) ([ADSecurity.org](https://adsecurity.org/?page_id=8)) answered me this:
 
 > I have seen the same thing. You would think that HOST would handle most things for the Windows system, but there are certain types of calls that need more than HOST since its a catch-all. I only figured out what worked through trial and error (and lots of testing).
 From what I have seen HOST can provide SPN coverage and is a "catch-all" for standard system SPNs so the same SPNs don't have to be registered on every system. For "privileged" type activity, using CIFS seems to be required. For Silver Tickets, you can use whatever SPN you want (provided the system will respond) since the DC isn't involved and the SPNs registered on the computer account in AD doesn't really matter (since you create the ticket and connect directly to the system bypassing the DC and AD).
 It has been a while since I dug into this.
 
-Si quelqu'un est en mesure d'apporter des précisions, n'hésitez pas à les partager via les commentaires ou en me contactant sur Twitter ([@HackAndDo](https://twitter.com/HackAndDo)).
+If anyone can clarify this, free to share it via comments or by contacting me on Twitter ([@HackAndDo](https://twitter.com/HackAndDo)).
 
-## En pratique
+## In practice
 
-Voici un petit script PowerShell qui permet de lister les SPNs présents dans l'Active Directory. Le filtre utilisé est `(servicePrincipalName=*)` qui retourne les résultats avec l'attribut non nul.
+Here is a small PowerShell script that allows you to list the SPNs present in Active Directory. The filter used is `(servicePrincipalName=*)` which returns results with not empty `servicePrincipalName` attribute.
 
 ```powershell
 $search = New-Object DirectoryServices.DirectorySearcher([ADSI]"")
@@ -120,13 +124,13 @@ foreach($result in $results) {
 }
 ```
 
-Ce qui donne en lab :
+Here's the result in my lab:
 
 [![SPN MapListpings](/assets/uploads/2019/03/SPNListPowershell.png)](/assets/uploads/2019/03/SPNListPowershell.png)
 
-On voit apparaitre les différents objets possédant au moins un attribut SPN.
+The different objects with at least one SPN attribute set are displayed.
 
-Si nous ne voulions voir que les comptes utilisateurs qui possèdent un (ou plusieurs SPNs), voici une solution possible :
+If we wanted to only see the user accounts that have one (or more) SPNs, here is a possible solution:
 
 ```powershell
 $search = New-Object DirectoryServices.DirectorySearcher([ADSI]"")
@@ -145,14 +149,14 @@ foreach($result in $results)
 }
 ```
 
-Dans mon lab, voilà le résultat de ce script :
+Here's the result in my lab:
 
 [![SPN MapListpings](/assets/uploads/2019/03/SPNListUsersPowershell.png)](/assets/uploads/2019/03/SPNListUsersPowershell.png)
 
-Cette requête sera pratique pour une attaque que nous décrirons dans le prochain article, le **Kerberoasting**.
+This request will come in handy for an attack that we will describe in another article, **Kerberoasting**.
 
 ## Conclusion
 
-Cet article relativement court a permis de lever le voile sur la notion de SPN qui sera utilisée à diverses reprises. Ce n'est pas quelque chose de compliqué, cependant je trouvais que les documentations étaient toujours vagues. Je complèterai cet article si jamais d'autres éclaircissements sont nécessaires.
+This short post helped me clarify what an SPN is. It's not a complicated thing, however I found the documentation was always vague.
 
-Si vous avez des précisions ou des corrections, n'hésitez pas à les partager, comme à chaque fois !
+If you have any clarifications or corrections, feel free to share them, as always!
