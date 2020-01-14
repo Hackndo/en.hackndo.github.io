@@ -9,56 +9,54 @@ redirect_from:
   - "/kerberos-asrep-toasting/"
 disqus_identifier: 0000-0000-0000-00a8
 cover: assets/uploads/2019/02/asreqroast_no_auth.png
-description: "Lors d'une demande de TGT, l'utilisateur doit, par défaut, s'authentifier auprès du KDC pour que celui-ci lui réponde. Il arrive que cette authentification préalable ne soit pas demandée pour certains comptes, permettant à un attaquant d'abuser de cette configuration"
+description: "When asking for a TGT, by default, an user as to authenticate himself to the KDC in order to get a response. Sometimes, no authentication is asked before returning a TGT for specific account, allowing an attacker to abuse this configuration."
 tags:
   - "Active Directory"
   - Windows
 ---
-
-Lors d'une demande de TGT, l'utilisateur doit, par défaut, s'authentifier auprès du KDC pour que celui-ci lui réponde. Il arrive que cette authentification préalable ne soit pas demandée pour certains comptes, permettant à un attaquant d'abuser de cette configuration.
+When asking for a TGT, by default, an user as to authenticate himself to the KDC in order to get a response. Sometimes, no authentication is asked before returning a TGT for specific account, allowing an attacker to abuse this configuration.
 
 <!--more-->
 
-## Préambule
+## Preamble
 
-Lorsque nous parlons de la notion de TGT, c'est souvent un abus de langage, car nous parlons en fait du [KRB_AS_REP](/kerberos/#krb_tgs_rep) qui contient le TGT (chiffré par le secret du KDC) et la clé de session (chiffrée avec le secret du compte utilisateur).
+When we talk about TGT it's often a language abuse, because you are talking about the [KRB_AS_REP](/kerberos/#krb_tgs_rep) which contain the TGT (encrypted by the KDC's secret) and the session key (encrypted with the user account secret).
 
-Ainsi, dans cet article, la notion de TGT fait seulement référence au TGT contenu dans la réponse [KRB_AS_REP](/kerberos/#krb_tgs_rep). 
+So, in this article, the TGT notion will refer to the TGT contained in the [KRB_AS_REP](/kerberos/#krb_tgs_rep) response.
 
-## Pré-authentification
-
-Lorsque nous avons parlé du [fonctionnement de Kerberos](https://beta.hackndo.com/kerberos), il a été mis en évidence que dans le premier échange ([KRB_AS_REQ](/kerberos/#krb_tgs_req) - [KRB_AS_REP](/kerberos/#krb_tgs_rep)), le client doit d'abord s'authentifier auprès du KDC avant d'obtenir un TGT. Une partie de la réponse du KDC étant chiffrée avec le secret du compte client (la clé de session), il est important que cette information ne soit pas accessible sans authentification. Dans le cas échéant n'importe qui pourrait demander un TGT pour un compte donné, et tenter de décrypter  la partie chiffrée de la réponse [KRB_AS_REP](/kerberos/#krb_tgs_rep) pour retrouver le mot de passe de l'utilisateur ciblé.
+## Pre-authentication
+When we talked about how [Kerberos works](https://beta.hackndo.com/kerberos), it was highlighted that during the first exchange ([KRB_AS_REQ](/kerberos/#krb_tgs_req) - [KRB_AS_REP](/kerberos/#krb_tgs_rep)), the client must first authenticate himself with the KDC, before obtaining a TGT. A part of the response of the KDC being encrypted with the client's account secret (the session key), it is important that this information is not accessible without previous authentication. Otherwise, anyone could ask for a TGT  for a given account, and try to decrypt the encrypted part of the response [KRB_AS_REP](/kerberos/#krb_tgs_rep) in order to recover the password of the targeted user.
 
 [![KRB_AS_REP](/assets/uploads/2018/05/asrep.png)](/assets/uploads/2018/05/asrep.png)
 
-C'est pourquoi le client doit, dans sa requête [KRB_AS_REQ](/kerberos/#krb_tgs_req), envoyer un authentifiant qu'il chiffre avec son secret afin que le KDC le déchiffre et renvoie le [KRB_AS_REP](/kerberos/#krb_tgs_rep) en cas de succès. Si jamais un attaquant demande un TGT pour un compte qu'il ne contrôle pas, il ne sera pas en mesure de chiffrer l'authentifiant de la bonne façon, donc le KDC ne renverra pas les informations attendues.
+That's why the user, in his [KRB_AS_REQ](/kerberos/#krb_tgs_req) request, must send an authenticator encrypted with his own secret in order for the KDC to decipher it and send back the [KRB_AS_REP](/kerberos/#krb_tgs_rep) if it is successful. If an attacker ask for a TGT with an account he does not have control over, he won't be able to encrypt the authenticator correctly, therefore the KDC will not return the desired information.
 
 [![Authentication Required](/assets/uploads/2019/02/asreqroast_auth.png)](/assets/uploads/2019/02/asreqroast_auth.png)
 
-Ce comportement est celui par défaut, il protège les comptes contre cette attaque hors-ligne.
+This is the default behavior, it protects the accounts against this offline attack.
 
 ## KRB_AS_REP Roasting
 
-Cependant, pour différentes raisons (obscures quand même), il est possible de désactiver le prérequis de pré-authentification pour un ou plusieurs compte(s).
+However, for some strange reason (dark one though), it is possible to disable the pre-authentication prerequisite for one or more account(s).
 
 [![Preauthentication Setting](/assets/uploads/2019/02/preauthsettings.png)](/assets/uploads/2019/02/preauthsettings.png)
 
-Par exemple dans [cet article](https://laurentschneider.com/wordpress/2014/01/the-long-long-route-to-kerberos.html), l'auteur indique que pour bénéficier du SSO sur une base de données hébergée sur un serveur Unix, il doit désactiver la pré-authentification sur l'utilisateur. Cela reste un cas très rare, et même [cptjesus](https://twitter.com/cptjesus) et [Harmj0y](https://twitter.com/harmj0y) n'ont pas vraiment de réponse.
+For example in [this article](https://laurentschneider.com/wordpress/2014/01/the-long-long-route-to-kerberos.html), the author indicates that in order to benefit from SSO on a database hosted on a Unix server, he has to disable the pre-authentication for the user. It remains a very rare case, and even [cptjesus](https://twitter.com/cptjesus) and [Harmj0y](https://twitter.com/harmj0y) don't really have an answer.
 
 > cptjesus > As far as why its disabled, I couldn't tell you
 
 > Harmj0y > I honestly don’t really know why it would be disabled, just have heard from a people about the linux/“old” angle.
 
-Quoiqu'il en soit, si cette option est désactivée, n'importe qui peut demander un TGT au nom d'un de ces comptes, sans envoyer d'authentifiant, et le KDC renverra un [KRB_AS_REP](/kerberos/#krb_tgs_rep) au demandeur.
+Anyway, if this option is disabled, anyone could ask for a TGT in the name of one of these accounts, without sending any authenticator, and the KDC will send back a [KRB_AS_REP](/kerberos/#krb_tgs_rep).
 
 [![Authentication Required](/assets/uploads/2019/02/asreqroast_no_auth.png)](/assets/uploads/2019/02/asreqroast_no_auth.png)
 
-Cela peut se faire avec l'outil [ASREPRoast](https://github.com/HarmJ0y/ASREPRoast) de [@Harmj0y](https://twitter.com/harmj0y).
+This can be done with the [ASREPRoast](https://github.com/HarmJ0y/ASREPRoast) tool of [@Harmj0y](https://twitter.com/harmj0y).
 
 [![ASREPRoast](/assets/uploads/2019/02/attackasrep.png)](/assets/uploads/2019/02/attackasrep.png)
 
-Une fois en possession de la réponse du KDC [KRB_AS_REP](/kerberos/#krb_tgs_rep), l'attaquant peut tenter de trouver en mode hors-ligne le mot de passe en clair de la victime ciblée, par exemple en utilisant John The Ripper avec le format `krb5tgs`.
+Once in possession of the KDC response [KRB_AS_REP](/kerberos/#krb_tgs_rep), the attacker can try to find out the clear text of the victim's password  offline, by using John The Ripper with the `krb5tgs` mode for example.
 
 ## Conclusion
 
-Cette technique, décrite dans un [article](https://www.harmj0y.net/blog/activedirectory/roasting-as-reps/) de [Harmj0y](https://twitter.com/harmj0y), est un moyen parmi beaucoup de récupérer des mots de passe en clair au sein d'un environnement Active Directory. Si des comptes à privilèges sont paramétrés pour ne pas nécessiter une pré-authentification, un attaquant peut simplement requêter un TGT pour ce compte et tenter de retrouver en mode hors-ligne le mot de passe du compte. Avec des machines puissantes, la vitesse de cracking peut devenir colossale. Notons cependant que les comptes n'ayant pas de pré-authentification nécessaire sont rares. Ils peuvent exister pour des raisons historiques, mais cette technique reste moins généralisable que le [kerberoasting](/kerberoasting)
+This technique, described in an [article](https://www.harmj0y.net/blog/activedirectory/roasting-as-reps/) of [Harmj0y](https://twitter.com/harmj0y), is one of the many ways to retrieve a clear text password within an Active Directory environment. If any privileged accounts are set up so that they do not need a pre-authentication, an attacker could simply ask for a TGT for this account and try to recover offline the password of this account. With powerful machine, the cracking speed can be really huge. However, you should be aware that accounts without the necessary pre-authentication required are pretty rare. They can exist for historical reason, but [kerberoasting](/kerberoasting) is still more widespread.
