@@ -72,7 +72,7 @@ This ticket was created after someone asked for `wwww` service on `WEB-SERVER-01
 
 There are a large number of service classes, here is a list of built-in one from the [Microsoft documentation](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc772815(v=ws.10)#service-principal-names).
 
-[![Liste SPN](/assets/uploads/2019/02/liste_spn.png)](/assets/uploads/2019/02/liste_spn.png)
+[![SPN List](/assets/uploads/2019/02/liste_spn.png)](/assets/uploads/2019/02/liste_spn.png)
 
 We recognize a few service classes, such as `CIFS` for services related to file sharing, `DNS`, `WWW` which we've already discussed, or `spooler` which includes printing services.
 
