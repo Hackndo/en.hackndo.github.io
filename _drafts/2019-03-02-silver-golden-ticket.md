@@ -12,17 +12,18 @@ tags:
   - Windows
 ---
 
-Maintenant que nous avons vu le fonctionnement du [protocole Kerberos](/kerberos) en environnement Active Directory, nous allons découvrir ensemble les notions de Silver Ticket et Golden Ticket. Pour bien comprendre comment ils fonctionnent, il est nécessaire de faire un zoom sur le PAC (*Privilege Attribute Certificate*).
+Now that we have seen how [Kerberos](/kerberos) works in Active Directory, we are going to discover together the notions of **Silver Ticket** and **Golden Ticket**. To understand how they work, it is necessary to primary focus on the PAC (*Privilege Attribute Certificate*).
 
 <!--more-->
 
 ## PAC
 
-Le PAC est en quelque sorte une extension du protocole Kerberos utilisée par Microsoft pour la bonne gestion des droits dans un Active Directory. En effet, seul le KDC connait les droits de chacuns des objets. Il est donc nécessaire pour lui de transmettre ces informations aux différents services afin qu'ils puissent créer des jetons de sécurité adaptés aux utilisateurs qui utilisent ces services.
+PAC is a kind of extension of Kerberos protocol used by Microsoft for proper rights management in Active Directory. The KDC is the only one to really know everything about everyone. It is therefore necessary for it to transmit this information to the various services so that they can create security tokens adapted to the users who use these services.
 
-*En réalité, Microsoft utilise un champ existant dans les tickets pour y stocker des informations sur l'utilisateur. Ce champ est "authorization-data". Ce n'est donc pas une extension au sens propre du terme.*
+> Note : Microsoft uses an existing field in the tickets to store information about the user. This field is "authorization-data". So it's not an extension in the true sense of the word.
 
-Dans le PAC se trouvent beaucoup d'informations concernant l'utilisateur, telles que son nom, son ID, les groupes auxquels il appartient, les informations de sécurité qui lui sont associées etc. Voici un résumé d'un PAC trouvé dans un TGT. Il a été simplifié pour faciliter sa compréhension.
+There is a lot of information about the user in his PAC, such as his name, ID, group membership, security information, and so on. The following is a summary of a PAC found in a TGT. It has been simplified to make it easier to understand.
+
 
 ```
 AuthorizationData item
@@ -81,40 +82,40 @@ AuthorizationData item
                     .... .... .... .... .... .... .... ...0 = Account Disabled: This account is NOT disabled
 ```
 
-Ce PAC se trouve dans les tickets générés pour un utilisateur (TGT ou TGS) et est chiffré soit avec la clé du KDC, soit avec celle du service demandé. L'utilisateur n'a donc pas la main sur ces informations, il ne peut pas modifier ses propres droits, groupes, etc.
+This PAC is found in the tickets generated for a user (TGT or TGS) and is encrypted either with the KDC key or with the requested service account's key. Therefore the user has no control over this information, and cannot modify his own rights, groups, etc.
 
-Cette structure est très importante car c'est elle qui permet à un utilisateur d'accéder (ou non) à un service, à une ressource, d'effectuer certaines actions.
+This structure is very important because it allows a user to access (or not access) a service, a resource, to perform certain actions.
 
 [![PAC](/assets/uploads/2019/02/pac.png)](/assets/uploads/2019/02/pac.png)
 
-Le PAC peut être considéré comme le badge de sécurité de l'utilisateur : Il peut l'utiliser pour ouvrir des portes, mais il ne peut pas ouvrir des portes auxquelles il n'a pas accès.
+The PAC can be considered as the user's security badge: He can use it to open doors, but he cannot open doors to which he does not have access.
 
 ## Silver Ticket
 
-Lorsqu'un client a besoin d'utiliser un service, il demande au KDC (Key Distribution Center) un TGS (*Ticket Granting Service*). Ce processus passe par les deux demandes [KRB_TGS_REQ](/kerberos/#krb_tgs_req) et [KRB_TGS_REP](/kerberos/#krb_tgs_rep).
+When a customer needs to use a service, he asks the KDC for a TGS (*Ticket Granting Service*). This process goes through two requests [KRB_TGS_REQ](/kerberos/#krb_tgs_req) and [KRB_TGS_REP](/kerberos/#krb_tgs_rep).
 
-Pour rappel, voici à quoi ressemble schématiquement un TGS.
+As a reminder, here is what a TGS looks like schematically.
 
 [![TGS](/assets/uploads/2019/02/tgs.png)](/assets/uploads/2019/02/tgs.png)
 
-Il est chiffré avec le hash NTLM du compte responsable du service (compte machine ou compte utilisateur). Ainsi, si un attaquant parvient à extraire le mot de passe ou le hash NTLM d'un compte de service, il peut alors forger un ticket de service (TGS) en choisissant les informations qu'il veut mettre dedans afin d'accéder à ce service, sans passer par le KDC. C'est l'attaquant qui construit ce ticket dans son coin, comme un grand. C'est ce ticket forgé qui est appelé **Silver Ticket**.
+It is encrypted with the NT hash of the account that is running the service (machine account or user account). Thus, if an attacker manages to extract the password or NT hash of a service account, he can then forge a service ticket (TGS) by choosing the information he wants to put in it in order to access that service, without asking the KDC. It is the attacker who builds this ticket. It is this forged ticket that is called **Silver Ticket**.
 
-Prenons en exemple un attaquant qui trouve le hash NTLM du compte de la machine `DESKTOP-01`. Le compte machine est alors `DESKTOP-01$`. L'attaquant peut créer un bloc de données correspondant à un ticket comme celui trouvé dans [KRB_TGS_REP](/kerberos/#krb_tgs_rep), Il indiquera le nom du domaine, le nom du service demandé sous sa forme [SPN](/service-principal-name-spn) (Service Principal Name), le nom d'un utilisateur (qu'il peut choisir arbitrairement), son PAC (qu'il peut également forger). Voici un exemple simpliste de ticket que l'attaquant peut créer :
+Let's take as an example an attacker who finds the NT hash of `DESKTOP-01` machine account, which is called `DESKTOP-01$`. The attacker can create a block of data corresponding to a ticket like the one found in [KRB_TGS_REP](/kerberos/#krb_tgs_rep). He will specify the domain name, the name of the requested service (its [SPN](/service-principal-name-spn) - Service Principal Name), a username (which he can choose arbitrarily), his PAC (which he can also forge). Here is a simplistic example of a ticket that the attacker can create:
 
 * **realm** : adsec.local
 * **sname** : cifs\desktop-01.adsec.local
-* **enc-part** : *// Partie chiffrée avec le hash NTLM trouvé par l'attaquant*
-    * **key** : 0x309DC6FA122BA1C *// Clé de session arbitrairement choisie*
+* **enc-part** : *// Encrypted with compromised NT hash*
+    * **key** : 0x309DC6FA122BA1C *// Arbitrary session key*
     * **crealm** : adsec.local
     * **cname** : pixisAdmin
-    * **authtime** : 2050/01/01 00:00:00 *// Date de validité du ticket*
-    * **authorization-data** : PAC forgé dans lequel l'utilisateur est, par exemple, administrateur du domaine
+    * **authtime** : 2050/01/01 00:00:00 *// Ticket validity date*
+    * **authorization-data** : Forged PAC where, say, this user is domain administrator
 
-Une fois cette structure créée, il chiffre le bloc `enc-part` avec le hash NTLM découvert, puis il peut créer de toute pièce un [KRB_AP_REQ](/kerberos/#krb_ap_req). En effet, il lui suffit d'envoyer ce ticket au service cible, accompagné d'un authentifiant qu'il chiffre avec la clé de session qu'il a arbitrairement choisie dans le TGS. Le service sera en mesure de déchiffrer le TGS, extraire la clé de session, déchiffrer l'authentifiant et fournir le service à l'utilisateur puisque les informations forgée dans le PAC indiquent qu'il a le droit d'utiliser ce service.
+Once this structure is created, it encrypts the `enc-part` block with the compromised NT hash, then it can create a [KRB_AP_REQ](/kerberos/#krb_ap_req) from scratch. He just has to send this ticket to the targeted service, along with an authenticator that he encrypts with the session key he arbitrarily chose in the TGS. The service will be able to decrypt the TGS, extract the session key, decrypt the authenticator and provide the service to the user since the information forged in the PAC indicates that the user is a Domain Administrator, and this service allows Domain Admins to use it.
 
-Notons que le PAC est doublement signé. Une première signature via le secret du compte de service, et une deuxième via le secret du contrôleur de domaine. Cependant, lorsque le service reçoit ce ticket, il ne vérifie en général que la première signature. En effet, les comptes de services ayant le privilège [SeTcbPrivilege](https://docs.microsoft.com/en-us/windows/desktop/secauthz/privilege-constants), signifiant que ces comptes peuvent agir en tant que partie du système d'exploitation (par exemple le compte local `SYSTEM`), ne vérifient pas la signature du contrôleur de domaine. Pratique, d'un point de vue attaquant ! Cela signifie également que même si le secret du KDC est changé (i.e. le mot de passe du compte `krbtgt`), les Silver Tickets pourront toujours fonctionner, sympa comme persistence.
+Only the PAC is double signed. The first signature uses service account's secret, but the second uses domain controller's secret (krbtgt account's secret). The attacker only knows the service account's secret, so he is not able to forge the secod signature. However, when the service receives this ticket, it usually verifies only the first signature. This is because service accounts with [SeTcbPrivilege](https://docs.microsoft.com/en-us/windows/desktop/secauthz/privilege-constants), accounts that can act as part of the operating system (for example the local `SYSTEM` account), do not verify the Domain Controller's signature. That's very convenient from an attacker's perspective! It also means that even if krbtgt password is changed, Silver Tickets will still work, as long as the service's password doesn't change.
 
-Voici un schéma résumant l'attaque :
+Here is a schematic summarizing the attack:
 
 [![Silver Ticket](/assets/uploads/2019/02/silverticket.png)](/assets/uploads/2019/02/silverticket.png)
 
@@ -122,7 +123,7 @@ En pratique, voici une capture d'écran qui montre la création d'un Silver Tick
 
 [![CIFS Example](/assets/uploads/2019/02/ST_CIFS.png)](/assets/uploads/2019/02/ST_CIFS.png)
 
-La ligne de commande utilisée dans Mimikatz est la suivante :
+Here's the command line used in Mimikatz:
 
 ```
 /kerberos::golden /domain:adsec.local /user:random_user /sid:S-1-5-21-1423455951-1752654185-1824483205 /rc4:ceaxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /target:DESKTOP-01.adsec.local /service:cifs /ptt
