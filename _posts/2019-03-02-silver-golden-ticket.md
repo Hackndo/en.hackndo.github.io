@@ -209,7 +209,7 @@ secretsdump.py -k DC-01.adsec.local -just-dc-ntlm -just-dc-user krbtgt
 ```
 
 
-## Méthodes de chiffrement
+## Encryption methods
 
 Until now, we used `NT` hashes to create Silver/Golden Tickets. In reality, this means that we were using the `RC4_HMAC_MD5` encryption method, but it's not the only one available. Today, there are several encryption methods possible within Active Directory because they have evolved with versions of Windows. Here is a summary table from the [Microsoft documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/network-security-configure-encryption-types-allowed-for-kerberos)
 
@@ -228,7 +228,7 @@ This article clarifies the concepts of PAC, Silver Ticket, Golden Ticket, as wel
 
 Feel free to leave a comment or find me on my [Discord server](https://discord.gg/9At6SUZ) if you have any questions or ideas!
 
-## Ressources
+## Resources
 
 * [FRENCH - Secrets d’authentification épisode II Kerberos contre-attaque - Aurélien Bordes](https://www.sstic.org/media/SSTIC2014/SSTIC-actes/secrets_dauthentification_pisode_ii__kerberos_cont/SSTIC2014-Article-secrets_dauthentification_pisode_ii__kerberos_contre-attaque-bordes_2.pdf)
 * [ADSecurity - Pyrotek3](http://adsecurity.org/)
