@@ -1,6 +1,6 @@
 ---
 title: "Service Principal Name (SPN)"
-date: 2019-03-08 09:17:22
+date: 2020-01-20 09:17:22
 author: "Pixis"
 layout: post
 permalink: /service-principal-name-spn/
