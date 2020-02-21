@@ -119,31 +119,34 @@ Here is a schematic summarizing the attack:
 
 [![Silver Ticket](/assets/uploads/2019/02/silverticket.png)](/assets/uploads/2019/02/silverticket.png)
 
-En pratique, voici une capture d'écran qui montre la création d'un Silver Ticket avec l'outil [Mimikatz](http://blog.gentilkiwi.com/mimikatz) développé par Benjamin Delpy ([@gentilkiwi](https://twitter.com/gentilkiwi)).
+
+In practice, here is a screenshot showing the creation of a Silver Ticket with [Mimikatz](http://blog.gentilkiwi.com/mimikatz) tool developed by Benjamin Delpy ([@gentilkiwi](https://twitter.com/gentilkiwi)).
+
 
 [![CIFS Example](/assets/uploads/2019/02/ST_CIFS.png)](/assets/uploads/2019/02/ST_CIFS.png)
 
 Here's the command line used in Mimikatz:
 
 ```
-/kerberos::golden /domain:adsec.local /user:random_user /sid:S-1-5-21-1423455951-1752654185-1824483205 /rc4:ceaxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /target:DESKTOP-01.adsec.local /service:cifs /ptt
+/kerberos::golden /domain:adsec.local /user:random_user /sid:S-1-5-21-1423455951-1752654185-1824483205 /rc4:0123456789abcdef0123456789abcdef /target:DESKTOP-01.adsec.local /service:cifs /ptt
 ```
 
-Cela veut dire qu'on crée un ticket pour le domaine `adsec.local` avec un nom d'utilisateur **arbitraire** (`random_user`), et que l'on vise le service `CIFS` de la machine `DESKTOP-01` en fournissant son hash NTLM.
+This command line creates a ticket for `adsec.local` domain with an arbitrary username (`random_user`), and targets `CIFS` service of `DESKTOP-01` machine by providing its NT hash.
 
-Il est également possible de créer un Silver Ticket sous linux en utilisant [impaket](https://github.com/SecureAuthCorp/impacket), via l'outil `ticketer.py`.
+It is also possible to create a Silver Ticket under linux using [impaket](https://github.com/SecureAuthCorp/impacket), via `ticketer.py`.
 
 ```bash
-ticketer.py -nthash ceaxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -domain-sid S-1-5-21-1423455951-1752654185-1824483205 -domain adsec.local -spn CIFS/DESKTOP-01.adsec.local random_user
+ticketer.py -nthash 0123456789abcdef0123456789abcdef -domain-sid S-1-5-21-1423455951-1752654185-1824483205 -domain adsec.local -spn CIFS/DESKTOP-01.adsec.local random_user
 ``` 
 
-Il faut ensuite exporter le chemin du ticket dans une variable d'environnement spéciale `KRB5CCNAME`
+Then export the ticket path into a special environment variable `KRB5CCNAME`.
+
 
 ```bash
-export KRB5CCNAME='/chemin/vers/random_user.ccache'
+export KRB5CCNAME='/path/to/random_user.ccache'
 ```
 
-Enfin, tous les outils de la suite `impacket` peuvent être utilisés avec ce ticket, via l'option `-k`
+Finally, all the tools from **impacket** can be used with this ticket, via the `-k` option.
 
 ```bash
 psexec.py -k DESKTOP-01.adsec.local
@@ -151,50 +154,53 @@ psexec.py -k DESKTOP-01.adsec.local
 
 ## Golden Ticket
 
-Nous avons vu qu'avec un **Silver Ticket**, il était possible d'accéder à un service fourni par un compte de domaine si ce compte était compromis. En effet, le service accepte les informations chiffrées avec son propre secret puisqu'en théorie, seul le service et le KDC ont connaissance de ce secret.
+We have seen that with a **Silver Ticket**, it was possible to access a service provided by a domain account if that account was compromised. The service accepts information encrypted with its own secret, since in theory only the service itself and the KDC are aware of this secret.
 
-C'est un bon début, mais nous pouvons aller plus loin. En construisant un Silver Ticket, l'attaquant s'affranchit du KDC puisqu'en réalité, le vrai PAC de l'utilisateur contenu dans son TGT ne permet pas d'effectuer toutes les actions qu'il souhaite. Pour pouvoir modifier le TGT, ou en forger un nouveau, il faudrait connaitre la clé qui l'a chiffré, c'est à dire celle du KDC. Cette clé, c'est en fait le hash NTLM du compte `krbtgt`. Ce compte est un simple compte, sans droits particuliers (au niveau système ou Active Directory) et même désactivé. Cette faible exposition permet de mieux le protéger.
+This is a good start, but we can go further. By building a Silver Ticket, the attacker gets rid of the KDC since in reality, the user's real PAC contained in his TGT does not allow him to perform all the actions he wants.
 
-Si jamais un attaquant parvient à trouver le hash NTLM de ce compte, il est alors en mesure de forger des TGT avec des PAC arbitraires. Et là, c'est un peu le Saint Graal. Il suffit de forger un TGT avec comme information que l'utilisateur de ce ticket fait partie du groupe "Administrateurs du Domaine", et le tour est joué.
+To be able to modify the TGT, or forge a new one, one would need to know the key that encrypted it, i.e. the KDC key. This key is in fact the hash of the `krbtgt` account. This account is a simple account, with no particular rights (at system or Active Directory level) and is even disabled. This low exposure makes it better protected.
 
-Avec un TGT de la sorte entre les mains, l'utilisateur peut demander au KDC n'importe quel TGS pour n'importe quel service. Or ces TGS auront une copie du PAC qu'a forgé l'attaquant, certifiant qu'il est administrateur de domaine.
+If an attacker ever manages to find the secret's hash of this account, he is then able to forge TGTs with arbitrary PACs. And that's kind of like the Holy Grail. Just forge a TGT stating that the user is part of "Domain Administrators" group, and that's it.
 
-C'est ce TGT forgé qui est appelé **Golden Ticket**. Le schéma de l'attaque est très similaire à celui du Silver Ticket. Voici une représentation également simplifiée :
+With such a TGT in his hands, the user can ask the KDC for any TGS for any service. These TGSs will have a copy of the PAC that the attacker has forged, certifying that he is a Domain Administrator.
+
+It is this forged TGT that is called **Golden Ticket**. 
 
 [![Golden Ticket](/assets/uploads/2019/02/goldenticket.png)](/assets/uploads/2019/02/goldenticket.png)
 
-En pratique, voici la démonstration de la création d'un **Golden Ticket**. D'abord, nous sommes dans une session qui ne possède pas de ticket en cache, et n'a pas les droits pour accéder à `\\DC-01.adsec.local\c$`.
+In practice, here is a demonstration of how to create a **Golden Ticket**. First, we are in a session that does not have a cached ticket, and does not have the rights to access `\\DC-01.adsec.local\c$`.
 
 [![Access denied](/assets/uploads/2019/03/golden_ticket_access_denied.png)](/assets/uploads/2019/03/golden_ticket_access_denied.png)
 
-On génère alors le **Golden Ticket** en utilisant le hash NTLM du compte `krbtgt`
+We then generate the **Golden Ticket** using the NT hash of the account `krbtgt`.
 
 [![GT Generation](/assets/uploads/2019/03/golden_ticket_generated.png)](/assets/uploads/2019/03/golden_ticket_generated.png)
 
-La ligne de commande utilisée dans Mimikatz est la suivante :
+Here's the command line used in Mimikatz:
 
 ```
-/kerberos::golden /domain:adsec.local /user:random_user /sid:S-1-5-21-1423455951-1752654185-1824483205 /krbtgt:ceaxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /ptt
+/kerberos::golden /domain:adsec.local /user:random_user /sid:S-1-5-21-1423455951-1752654185-1824483205 /krbtgt:0123456789abcdef0123456789abcdef /ptt
 ```
-Cela veut dire qu'on crée un ticket pour le domaine `adsec.local` avec un nom d'utilisateur **arbitraire** (`random_user`), en fournissant le hash NTLM de l'utilisateur `krbtgt`. Cette commande crée un TGT avec une PAC indiquant que nous sommes administrateur du domaine (entre autre), et que nous nous appelons ANYUSER (choisi arbitrairement).
 
-Une fois ce ticket en mémoire, notre session est en mesure de demander un TGS pour n'importe quel [SPN](/service-principal-name-spn), par exemple pour `CIFS\DC-01.adsec.local` permettant de lire le contenu du partage `\\DC-01.adsec.local\$`
+This command line creates a ticket for `adsec.local` domain with an arbitrary username (`random_user`), by providing the NT hash of `krbtgt` user. This command creates a TGT with a PAC indicating that we are Domain Administrator (among other things), and that we are called random_user (arbitrarily chosen).
+
+Once we have this ticket in memory, our session is able to request a TGS for any [SPN](/service-principal-name-spn), e.g. for `CIFS\DC-01.adsec.local` to read the contents of the share `\DC-01.adsec.local\c$`.
 
 [![GT granted](/assets/uploads/2019/03/golden_ticket_access_granted.png)](/assets/uploads/2019/03/golden_ticket_access_granted.png)
 
-Il est également possible de créer un Golden Ticket sous linux en utilisant [impaket](https://github.com/SecureAuthCorp/impacket), via l'outil `ticketer.py`.
+It is also possible to create a Golden Ticket under linux using [impaket](https://github.com/SecureAuthCorp/impacket), via `ticketer.py`.
 
 ```bash
-ticketer.py -nthash ceaxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -domain-sid S-1-5-21-1423455951-1752654185-1824483205 -domain adsec.local random_user
+ticketer.py -nthash 0123456789abcdef0123456789abcdef -domain-sid S-1-5-21-1423455951-1752654185-1824483205 -domain adsec.local random_user
 ``` 
 
-Il faut ensuite exporter le chemin du ticket dans une variable d'environnement spéciale `KRB5CCNAME`
+Then export the ticket path into a special environment variable `KRB5CCNAME`.
 
 ```bash
 export KRB5CCNAME='/chemin/vers/random_user.ccache'
 ```
 
-Enfin, tous les outils de la suite `impacket` peuvent être utilisés avec ce ticket, via l'option `-k`
+Finally, all the tools from **impacket** can be used with this ticket, via the `-k` option.
 
 ```bash
 secretsdump.py -k DC-01.adsec.local -just-dc-ntlm -just-dc-user krbtgt
@@ -203,23 +209,22 @@ secretsdump.py -k DC-01.adsec.local -just-dc-ntlm -just-dc-user krbtgt
 
 ## Méthodes de chiffrement
 
-Jusqu'ici, nous utilisions les hashs `NT` pour créer les Silver/Golden Tickets. En réalité, cela signifie que nous utilisions la méthode de chiffrement `RC4_HMAC_MD5`, mais ce n'est pas la seule qui existe. En effet, aujourd'hui, plusieurs méthodes de chiffrement sont possibles au sein d'un Active Directory car elles ont évolué avec les versions de Windows. Voici un tableau récapitulatif issu de la [documentation Microsoft](https://docs.microsoft.com/fr-fr/windows/security/threat-protection/security-policy-settings/network-security-configure-encryption-types-allowed-for-kerberos)
+Until now, we used `NT` hashes to create Silver/Golden Tickets. In reality, this means that we were using the `RC4_HMAC_MD5` encryption method, but it's not the only one available. Today, there are several encryption methods possible within Active Directory because they have evolved with versions of Windows. Here is a summary table from the [Microsoft documentation](https://docs.microsoft.com/fr-fr/windows/security/threat-protection/security-policy-settings/network-security-configure-encryption-types-allowed-for-kerberos)
 
 [![Encryption types](/assets/uploads/2019/03/encryption_types.png)](/assets/uploads/2019/03/encryption_types.png)
 
-Il est possible d'utiliser la méthode de chiffrement souhaitée pour générer le TGT. Il suffira de la préciser dans les futures requêtes avec le contrôleur de domaine (l'information se trouvera dans le champ `EType` associé au TGT). Voici un exemple avec l'utilisation du chiffrement AES256.
+The desired encryption method can be used to generate the TGT. The information can be found in `EType` field associated with the TGT. Here is an example using AES256 encryption.
 
-[![GT AES](/assets/uploads/2019/03/golden_ticket_access_granted_aes.png)](/assets/uploads/2019/03/golden_ticket_access_granted_aes.png)
+[![TGT AES](/assets/uploads/2019/03/golden_ticket_access_granted_aes.png)](/assets/uploads/2019/03/golden_ticket_access_granted_aes.png)
 
-Par ailleurs, d'après la présentation [Evading Microsoft ATA for 
-Active Directory Domination](https://www.blackhat.com/docs/us-17/thursday/us-17-Mittal-Evading-MicrosoftATA-for-ActiveDirectory-Domination.pdf) de [Nikhil Mittal](https://twitter.com/nikhil_mitt) à la Black Hat, cela permettrait de ne pas être détecté par Microsoft ATA, pour le moment, puisqu'on évite de faire un *downgade* de méthode de chiffrement. En effet, par défaut, la méthode de chiffrement utilisée est la plus forte supportée par le client.
-
+Furthermore, according to the presentation [Evading Microsoft ATA for 
+Active Directory Domination](https://www.blackhat.com/docs/us-17/thursday/us-17-Mittal-Evading-MicrosoftATA-for-ActiveDirectory-Domination.pdf) from [Nikhil Mittal](https://twitter.com/nikhil_mitt) at Black Hat, this would allow not to be detected by Microsoft ATA, for the moment, since one avoids making a *downgrade* of encryption method. By default, the encryption method used is the strongest supported by the client.
 
 ## Conclusion
 
-Cet article permet de clarifier les notions de PAC, Silver Ticket, Golden Ticket, ainsi que les différentes méthodes de chiffrement utilisées dans les échanges. Ces notions sont essentielles pour comprendre les attaques Kerberos dans un Active Directory.
+This article clarifies the concepts of PAC, Silver Ticket, Golden Ticket, as well as the different encryption methods used in authentication. These notions are essential to understand Kerberos attacks in Active Directory.
 
-N'hésitez pas à laisser un commentaire ou à me retrouver sur le [serveur Discord](https://discord.gg/9At6SUZ) du blog si vous avez des questions ou des idées !
+Feel free to leave a comment or find me on my [Discord server](https://discord.gg/9At6SUZ) if you have any questions or ideas!
 
 ## Ressources
 

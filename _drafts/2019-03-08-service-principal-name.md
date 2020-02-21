@@ -34,10 +34,6 @@ The service class is actually a somewhat generic name for the service. For examp
 
 If the service runs behind a custom port, or if you want to specify it to avoid any ambiguity, you can append it to the hostname:
 
-La classe du service est en fait un nom un peu générique qui correspond au service. Par exemple, tous les serveurs web sont regroupés dans la classe "www", les services SQL sont dans la classe "SqlServer" etc.
-
-Si jamais le service présente un port particulier, ou si on veut le préciser pour éviter toute ambiguïté, il est possible de l'ajouter à la fin :
-
 ```
 service_class/hostname_or_FQDN:port
 ```
