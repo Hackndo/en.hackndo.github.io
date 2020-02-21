@@ -5,7 +5,7 @@ author: "Pixis"
 layout: post
 permalink: /kerberos-silver-golden-tickets/
 disqus_identifier: 0000-0000-0000-00a6
-cover: assets/uploads/2019/02/goldenticket.png
+cover: assets/uploads/2019/02/banner_tickets.png
 description: "This post focuses on silver ticket and golden ticket. What are they, how are they used, what can be done with them, we will uncover everything there is to know."
 tags:
   - "Active Directory"
