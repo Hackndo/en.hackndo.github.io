@@ -10,6 +10,8 @@ description: "This post focuses on silver ticket and golden ticket. What are the
 tags:
   - "Active Directory"
   - Windows
+translation:
+  - fr
 ---
 
 Now that we have seen how [Kerberos](/kerberos) works in Active Directory, we are going to discover together the notions of **Silver Ticket** and **Golden Ticket**. To understand how they work, it is necessary to primary focus on the **PAC** (Privilege Attribute Certificate).
