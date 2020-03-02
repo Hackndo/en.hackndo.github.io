@@ -20,7 +20,7 @@ This article focuses on SPN (Service Principal Names) in order to understand wha
 
 ## What is an SPN
 
-We are in an Active Directory environment. To understand what is an APN, we must understand what the notion of service within an Active Directory is.
+We are in an Active Directory environment. To understand what is an SPN, we must understand what the notion of service within an Active Directory is.
 
 A service is actually a feature, a software, something that can be used by other members of the AD (Active Directory). You can have for example a web server, a network share, a DNS service, a printing service, and so on. To identify a service, we need at least two things. The same service can run on different hosts, so we need to specify **the host**, and a computer can host several services, so we need to specify **the service**, obviously.
 
