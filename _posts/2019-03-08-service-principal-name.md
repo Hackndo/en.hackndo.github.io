@@ -98,7 +98,7 @@ After asking about it on [Bloodhound's slack](https://bloodhoundgang.herokuapp.c
 From what I have seen HOST can provide SPN coverage and is a "catch-all" for standard system SPNs so the same SPNs don't have to be registered on every system. For "privileged" type activity, using CIFS seems to be required. For Silver Tickets, you can use whatever SPN you want (provided the system will respond) since the DC isn't involved and the SPNs registered on the computer account in AD doesn't really matter (since you create the ticket and connect directly to the system bypassing the DC and AD).
 It has been a while since I dug into this.
 
-If anyone can clarify this, free to share it via comments or by contacting me on Twitter ([@HackAndDo](https://twitter.com/HackAndDo)).
+If anyone can clarify this, feel free to share it via comments or by contacting me on Twitter ([@HackAndDo](https://twitter.com/HackAndDo)).
 
 ## In practice
 
