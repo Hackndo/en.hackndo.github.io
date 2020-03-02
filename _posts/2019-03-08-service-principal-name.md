@@ -149,7 +149,7 @@ Here's the result in my lab:
 
 [![SPN MapListpings](/assets/uploads/2019/03/SPNListUsersPowershell.png)](/assets/uploads/2019/03/SPNListUsersPowershell.png)
 
-This request will come in handy for an attack that we will describe in another article, [Kerberoasting](/kerberoasting/).
+This request will come in handy for an attack that we will describe in another article, **kerberoasting**.
 
 ## Conclusion
 
