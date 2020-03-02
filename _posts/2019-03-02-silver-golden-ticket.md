@@ -102,7 +102,7 @@ As a reminder, here is what a TGS looks like schematically.
 
 It is encrypted with the NT hash of the account that is running the service (machine account or user account). Thus, if an attacker manages to extract the password or NT hash of a service account, he can then forge a service ticket (TGS) by choosing the information he wants to put in it in order to access that service, without asking the KDC. It is the attacker who builds this ticket. It is this forged ticket that is called **Silver Ticket**.
 
-Let's take as an example an attacker who finds the NT hash of `DESKTOP-01` machine account (`DESKTOP-01$`). The attacker can create a block of data corresponding to a ticket like the one found in [KRB_TGS_REP](/kerberos/#krb_tgs_rep). He will specify the domain name, the name of the requested service (its **SPN** - Service Principal Name), a username (which he can choose arbitrarily), his PAC (which he can also forge). Here is a simplistic example of a ticket that the attacker can create:
+Let's take as an example an attacker who finds the NT hash of `DESKTOP-01` machine account (`DESKTOP-01$`). The attacker can create a block of data corresponding to a ticket like the one found in [KRB_TGS_REP](/kerberos/#krb_tgs_rep). He will specify the domain name, the name of the requested service (its [SPN](/service-principal-name-spn/) - Service Principal Name), a username (which he can choose arbitrarily), his PAC (which he can also forge). Here is a simplistic example of a ticket that the attacker can create:
 
 * **realm** : adsec.local
 * **sname** : cifs\desktop-01.adsec.local
@@ -188,7 +188,7 @@ Here's the command line used in Mimikatz:
 
 This command line creates a ticket for `adsec.local` domain with an arbitrary username (`random_user`), by providing the NT hash of `krbtgt` user. It creates a TGT with a PAC indicating that we are Domain Admin (among other things), and that we are called random_user (arbitrarily chosen).
 
-Once we have this ticket in memory, our session is able to request a TGS for any **SPN**, e.g. for `CIFS\DC-01.adsec.local` to read the contents of the share `\\DC-01.adsec.local\C$`.
+Once we have this ticket in memory, our session is able to request a TGS for any [SPN](/service-principal-name-spn/), e.g. for `CIFS\DC-01.adsec.local` to read the contents of the share `\\DC-01.adsec.local\C$`.
 
 [![GT granted](/assets/uploads/2019/03/golden_ticket_access_granted.png)](/assets/uploads/2019/03/golden_ticket_access_granted.png)
 
