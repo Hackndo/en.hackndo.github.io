@@ -62,7 +62,7 @@ In real life, here's the SPN of a service in a Kerberos ticket:
 
 [![SPN](/assets/uploads/2019/02/SPN_ST.png)](/assets/uploads/2019/02/SPN_ST.png)
 
-This ticket was created after someone asked for `wwww` service on `WEB-SERVER-01' in `adsec.local` domain.
+This ticket was created after someone asked for `www` service on `WEB-SERVER-01` in `adsec.local` domain.
 
 ## Examples
 
@@ -149,7 +149,7 @@ Here's the result in my lab:
 
 [![SPN MapListpings](/assets/uploads/2019/03/SPNListUsersPowershell.png)](/assets/uploads/2019/03/SPNListUsersPowershell.png)
 
-This request will come in handy for an attack that we will describe in another article, **Kerberoasting**.
+This request will come in handy for an attack that we will describe in another article, [Kerberoasting](/kerberoasting/).
 
 ## Conclusion
 
