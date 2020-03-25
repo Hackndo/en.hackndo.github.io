@@ -292,12 +292,7 @@ So to summarize, here are the two cases:
 
 Here is a small summary table. For each combination of the two registry keys, this table indicates whether remote administration tasks are possible with a built-in administrator account and with a non-native administrator account. The values in bold are the default values.
 
-| LocalAccountTokenFilterPolicy | FilterAdministratorToken | Buily-in Administrator (RID 500) | Other Administrators |
-|:-----------------------------:|:------------------------:|:--------------------------------:|:--------------------:|
-|             **0**             |           **0**          |                 1                |           0          |
-|             **0**             |             1            |                 0                |           0          |
-|               1               |           **0**          |                 1                |           1          |
-|               1               |             1            |                 1                |           1          |
+[![Registry table](/assets/uploads/2019/11/pth_table.png)](/assets/uploads/2019/11/pth_table.png)
 
 I would like to point out once again that this information relates to **administrative** tasks. It is still possible to authenticate to a host, regardless of the values of the registry keys. Here is a small program using the impacket library which allows to understand this precision:
 
