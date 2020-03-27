@@ -1,6 +1,6 @@
 ---
 title: "AS_REP Roasting"
-date: 2020-02-20 07:10:06
+date: 2020-03-19 07:10:06
 author: "Pixis"
 layout: post
 permalink: /kerberos-asrep-roasting/
