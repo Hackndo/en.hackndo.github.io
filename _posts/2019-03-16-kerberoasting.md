@@ -20,17 +20,20 @@ With the help of previously discussed notions, we have everything in hand to exp
 
 ## Principle
 
-The article on how [kerberos works](/kerberos) helped to understand how a user requests a TGS from the domain controller. The [KRB_TGS_REP](/kerberos/#krb_tgs_rep) response is composed of two parts. The first part is the TGS whose content is encrypted with the secret of the requested service, and the second part is a session key which will be used between the user and the service. The whole is encrypted using the user's secret.
+The article on how [kerberos works](/kerberos) helped to understand how a user requests a TGS from the domain controller. The [KRB_TGS_REP](/kerberos/#krb_tgs_rep) response is composed of two parts.
+
+1. The first part is the **TGS** whose content is encrypted with the **secret of the requested service**
+2. The second part is a **session key** which will be used between the user and the service. The whole is encrypted using the **user's secret**.
 
 [![Ticket for the service](/assets/uploads/2018/05/tgsrep.png)](/assets/uploads/2018/05/tgsrep.png)
 
-An Active Directory user can ask a domain controller for a TGS for any service. It is not the role of the KDC to verify the rights of the requester. The only purpose of the KDC is to provide security information related to a user (via the [PAC](/kerberos-silver-golden-tickets/#pac)). It is the service who must verify the rights of the user by reading his PAC provided in the TGS.
+A domain user can ask a domain controller for a TGS for any service. It is not the role of the domain controller to check access rights. The only purpose of the domain controller when asked for a TGS is to provide security information related to a user (via the [PAC](/kerberos-silver-golden-tickets/#pac)). It is the service who must check the user's rights by reading the PAC provided in the TGS.
 
-For example, TGS request can be made by specifying arbitrary [SPN](/service-principal-name-spn). If those [SPN](/service-principal-name-spn) are registered in the Active Directory, the KDC will provide a piece of information encrypted with the secret key of the account executing the service. With this information, the attacker can now try to recover the account's plaintext password via a brute-force attack.
+For example, TGS request can be made by specifying arbitrary [SPN](/service-principal-name-spn). If those [SPN](/service-principal-name-spn) are registered in the Active Directory, the domain controller will provide a piece of information **encrypted with the secret key of the account executing the service**. With this information, the attacker can now try to recover the account's plaintext password via a brute-force attack.
 
 Fortunately, most of the accounts that runs services are machine accounts (`MACHINENAME$`) and their password are very long, complex and completely random, so they're not really vulnerable to this type of attack. However, there are some services executed by accounts whose password have been chosen by a humans. It is those accounts that are much simpler to compromise via brute-force attack, so it is those accounts which will be targeted by a **Kerberoast** attack.
 
-In order to list those accounts, a LDAP filter can be used to extract user-type accounts with a non-empty `servicePrincipalName`. This filter is as follow :
+In order to list those accounts, a LDAP filter can be used to extract user-type accounts with a non-empty `servicePrincipalName`. The filter is as follow:
 
 ```
 &(objectCategory=person)(objectClass=user)(servicePrincipalName=*)
@@ -55,11 +58,11 @@ foreach($result in $results)
 }
 ```
 
-In the lab, a fake [SPN](/service-principal-name-spn) as been placed on the user "support-account".
+In my lab, a fake [SPN](/service-principal-name-spn) as been set on user **support-account**.
 
 [![SPN on User](/assets/uploads/2019/03/SPNOnUser.png)](/assets/uploads/2019/03/SPNOnUser.png)
 
-Thus, during our LDAP search, here is what we get :
+Thus, during our LDAP search, here is what we get:
 
 [![SPN MapListpings](/assets/uploads/2019/03/SPNListUsersPowershell.png)](/assets/uploads/2019/03/SPNListUsersPowershell.png)
 
@@ -70,13 +73,15 @@ Invoke-Kerberoast -domain adsec.local | Export-CSV -NoTypeInformation output.csv
 john --session=Kerberoasting output.csv
 ```
 
+Or [GetUserSPNs.py](https://github.com/SecureAuthCorp/impacket/blob/master/examples/GetUserSPNs.py) provided by Impacket.
+
 We then hope to find password, which depends on the company's password policy for these accounts.
 
 ## Protection
 
 To protect ourselves against this attack, we must avoid having [SPN](/service-principal-name-spn) on user accounts, in favor of machine accounts.
 
-If it really is necessary, then we should use Microsoft's "Managed Service Accounts" (MSA) feature , which ensures that the account password is robust and changed regularly and automatically. To do so, simply add a service account (only via PowerShell) :
+If it really is necessary, then we should use Microsoft's **Managed Service Accounts** (MSA) feature , which ensures that the account password is robust and changed regularly and automatically. To do so, simply add a service account (only via PowerShell):
 
 ```powershell
 New-ADServiceAccount sql-service
@@ -94,4 +99,4 @@ Finally, this user must be assigned to the service.
 
 ## Conclusion
 
-The Kerberoast attack allows us to retrieve new accounts within an Active Directory for lateral movement. The compromised accounts can have higher privileges, which is sometimes the case on the computer hosting the service. It is then important from a defensive perspective to control the [SPN](/service-principal-name-spn) attribute of domain accounts to prevent accounts with weak password from being vulnerable to this attack.
+The Kerberoast attack allows us to retrieve new accounts within an Active Directory for lateral movement. The compromised accounts can have higher privileges, which is sometimes the case on the computer hosting the service. It is then important from a defensive perspective to control the [SPN](/service-principal-name-spn) attribute on domain accounts to prevent accounts with weak password from being vulnerable to this attack.
