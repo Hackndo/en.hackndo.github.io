@@ -22,3 +22,11 @@ So I welcome you to my humble blog, and I hope you find it useful!
 To support me:
 
 <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy Me a Coffee', '#202020', 'F1F78GI6');kofiwidget2.draw();</script>
+
+
+# Thanks
+
+Thank you to these amazing people who helped me translating different posts from French to English
+
+* [Grillette](https://twitter.com/0xGrillette)
+* [WaM](https://twitter.com/WaM76938985)
