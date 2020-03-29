@@ -177,7 +177,7 @@ I was thinking of doing an article that would describe the principle of Constrai
 
 If you have any questions or suggestions, do not hesitate, I'm all ears.
 
-## Ressources
+## Resources
 
 Big thanks to them for their clear explanations.
 
