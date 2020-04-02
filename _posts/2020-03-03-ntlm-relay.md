@@ -26,9 +26,9 @@ In addition, and to avoid confusion, here are some reminders:
 
 * **NT Hash** and **LM Hash** are hashed versions of user passwords. LM hashes are totally obsolete, and will not be mentioned in this article. NT hash is commonly called, wrongly in my opinion, "NTLM hash". This designation is confusing with the protocol name, NTLM. Thus, when we talk about the user's password hash, we will refer to it as **NT hash**.
 * **NTLM** is therefore the name of the **authentication protocol**. It also exists in version 2. In this article, if the version affects the explanation, then NTLMv1 and NTLMv2 will be the terms used. Otherwise, the term NTLM will be used to group all versions of the protocol.
-* **Hash NTLMv1** and **Hash NTLMv2** will be the terminology used to refer to the challenge response sent by the client, for versions 1 and 2 of the NTLM protocol.
+* **NTLMv1 Hash** and **NTLMv2 Hash** will be the terminology used to refer to the challenge response sent by the client, for versions 1 and 2 of the NTLM protocol.
 * **Net-NTLMv1** and **Net-NTLMv2** are pseudo-neo-terminologies used when the NT hash is called NTLM hash in order to distinguish the NTLM hash from the protocol. Since we do not use the NTLM hash terminology, these two terminologies will not be used.
-* **Hash Net-NTLMv1** and **Hash Net-NTLMv2** are also terminologies to avoid confusion, but will also not be used in this article.
+* **Net-NTLMv1 Hash** and **Net-NTLMv2 Hash** are also terminologies to avoid confusion, but will also not be used in this article.
 
 ## Introduction
 
