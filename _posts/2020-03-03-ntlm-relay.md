@@ -82,7 +82,7 @@ At the end of these exchanges, the attacker is authenticated on the server with 
 
 For information, it is this **valid response** relayed by the attacker in message 3, the encrypted challenge, that is commonly called Net-NTLMv1 hash or Net-NTLMv2 hash. But in this article, it will be called **NTLMv1 hash** or **NTLMv2 hash**, as indicated in the preliminary paragraph.
 
-To be exact, this is not exactly an enrypted version of the challenge, but a hash that uses the client's secret. It is HMAC_MD5 function which is [used for NTLMv2](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/5e550938-91d4-459f-b67d-75d70009e3f3) for example. This type of hash can only be broken by brute force. The cryptography associated with [computation of the NTLMv1 hash](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/464551a8-9fc4-428e-b3d3-bc5bfb2e73a5) is obsolete, and the NT hash that was used to create the hash can be retrieved very quickly. For NTLMv2, on the other hand, it takes much longer. It is therefore preferable and advisable **not to allow NTLMv1 authentication on a production network**.
+To be exact, this is not exactly an encrypted version of the challenge, but a hash that uses the client's secret. It is HMAC_MD5 function which is [used for NTLMv2](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/5e550938-91d4-459f-b67d-75d70009e3f3) for example. This type of hash can only be broken by brute force. The cryptography associated with [computation of the NTLMv1 hash](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/464551a8-9fc4-428e-b3d3-bc5bfb2e73a5) is obsolete, and the NT hash that was used to create the hash can be retrieved very quickly. For NTLMv2, on the other hand, it takes much longer. It is therefore preferable and advisable **not to allow NTLMv1 authentication on a production network**.
 
 ## In practice
 
@@ -242,7 +242,7 @@ The client, knowing that NTLM authentication is required, will send the first me
   < Connection: close
 ```
 
-As long as the session is open, authentication will be effective. As soon as the session closes, however, the server will no longer have the client's security context, and a new authentication will have to take place. This can often happen, and thanks to Microsoft's SSO (**Single Sign On**) mechanisms, it is often transparent to the user.
+As long as the TCP session is open, authentication will be effective. As soon as the session closes, however, the server will no longer have the client's security context, and a new authentication will have to take place. This can often happen, and thanks to Microsoft's SSO (**Single Sign On**) mechanisms, it is often transparent to the user.
 
 ### Integration with SMB
 
