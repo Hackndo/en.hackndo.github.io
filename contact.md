@@ -7,7 +7,7 @@ permalink: /contact/
 
 I'm always available on my Discord server
 
-[Hackndo on Discord](https://discord.gg/9At6SUZ){:target="blank"}
+[Hackndo on Discord](https://discord.gg/NyjPhRb){:target="blank"}
 
 Do not hesitate to come and discuss about articles, infosec, or anything else.
 

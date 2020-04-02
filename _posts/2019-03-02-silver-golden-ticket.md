@@ -228,7 +228,7 @@ Active Directory Domination](https://www.blackhat.com/docs/us-17/thursday/us-17-
 
 This article clarifies the concepts of PAC, Silver Ticket, Golden Ticket, as well as the different encryption methods used in authentication. These notions are essential to understand Kerberos attacks in Active Directory.
 
-Feel free to leave a comment or find me on my [Discord server](https://discord.gg/9At6SUZ) if you have any questions or ideas!
+Feel free to leave a comment or find me on my [Discord server](https://discord.gg/NyjPhRb) if you have any questions or ideas!
 
 ## Resources
 

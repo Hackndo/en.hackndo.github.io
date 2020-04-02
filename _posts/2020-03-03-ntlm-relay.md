@@ -653,4 +653,4 @@ We ended by showing how channel binding can link the authentication layer and th
 
 I hope this long article has given you a better understanding of what happens during an NTLM relay attack and the protections that exist.
 
-Since this article is quite substantial, it is quite likely that some mistakes have slipped in. Feel free to contact me on [twitter](https://twitter.com/hackanddo) or on my [Discord Server](https://discord.gg/9At6SUZ) to discuss this.
+Since this article is quite substantial, it is quite likely that some mistakes have slipped in. Feel free to contact me on [twitter](https://twitter.com/hackanddo) or on my [Discord Server](https://discord.gg/NyjPhRb) to discuss this.
