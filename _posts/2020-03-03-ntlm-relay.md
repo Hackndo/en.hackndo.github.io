@@ -405,7 +405,7 @@ So for LDAP we have a matrix similar to SMBv1, except for the default behaviors.
 
 [![LDAP signing matrix](/assets/uploads/2020/03/ntlm_ldap_signing_table.png)](/assets/uploads/2020/03/ntlm_ldap_signing_table.png)
 
-The difference with SMB is that in Active Directory domain, **all** hosts have **Negotiated Signing** setting. The domain controller does'nt **require** signing.
+The difference with SMB is that in Active Directory domain, **all** hosts have **Negotiated Signing** setting. The domain controller doesn't **require** signing.
 
 #### Settings
 
