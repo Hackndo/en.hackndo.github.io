@@ -66,7 +66,7 @@ All that the client has to send to the server, the attacker will receive it, and
 
 [![NTLM Relay](/assets/uploads/2020/03/ntlm_relay_basic.png)](/assets/uploads/2020/03/ntlm_relay_basic.png)
 
-And it's all working out! Indeed, from the client's point of view, on the left part on the diagram, an NTLM authentication takes place between the attacker and him, with all the necessary bricks. The client sends a negociate request in its first message, to which the attacker replies with a challenge. Upon receiving this challenge, the client builds its response using its secret, and finally sends the last authentication message containing the encrypted challenge.
+And it's all working out! Indeed, from the client's point of view, on the left part on the diagram, an NTLM authentication takes place between the attacker and him, with all the necessary bricks. The client sends a negotiate request in its first message, to which the attacker replies with a challenge. Upon receiving this challenge, the client builds its response using its secret, and finally sends the last authentication message containing the encrypted challenge.
 
 Ok, that's great but the attacker cannot do anything with this exchange. Fortunately, there is the right side of the diagram. Indeed, from the server's point of view, the attacker is a client like any other. He sent a first message to ask for authentication, and the server responded with a challenge. As **the attacker sent this same challenge to the real client**, the real client **encrypted this challenge** with **its secret**, and responded **with a valid response**. The attacker can therefore send this **valid response** to the server.
 
@@ -221,7 +221,7 @@ The client, knowing that NTLM authentication is required, will send the first me
 > User-Agent: Mozilla/5.0
 > Accept: text/html
 > Accept-Language: en
-=> Authorization: NTLM <NEGOCIATE in base 64>
+=> Authorization: NTLM <NEGOTIATE in base 64>
 
   < HTTP/1.1 401 Unauthorized
   => WWW-Authenticate: NTLM <CHALLENGE in base 64>
@@ -381,7 +381,7 @@ For example, if **DESKTOP01** client wants to communicate with **DC01** domain c
 
 [![Negotiation DC01](/assets/uploads/2020/03/ntlm_ex2.png)](/assets/uploads/2020/03/ntlm_ex2.png)
 
-During negotiation phase, the client and server set the `NEGOCIATE_SIGN` flag to **1** since they both support signing.
+During negotiation phase, the client and server set the `NEGOTIATE_SIGN` flag to **1** since they both support signing.
 
 [![NEGOTIATE_SIGN](/assets/uploads/2020/03/ntlm_negotiate_flags.png)](/assets/uploads/2020/03/ntlm_negotiate_flags.png)
 
@@ -623,7 +623,7 @@ As there are many cases, here is a table summarizing some of them.
 
 I think we can't relay LDAPS or HTTPS since the attacker doesn't have a valid certificate but let's say the client is permissive and allowed untrusted certificates. Other protocols could be added, such as SQL or SMTP, but I must admit I didn't read the documentation for all the protocols that exist. Shame on me.
 
-For gray boxes, I don't know how an HTTPS server handles an authentication with the `NEGOCIATE_SIGN` flag set to **1**.
+For gray boxes, I don't know how an HTTPS server handles an authentication with the `NEGOTIATE_SIGN` flag set to **1**.
 
 ## Stop. Using. NTLMv1.
 
