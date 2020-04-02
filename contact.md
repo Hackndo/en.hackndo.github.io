@@ -5,9 +5,7 @@ permalink: /contact/
 ---
 
 
-I'm always available on my Discord server
-
-[Hackndo on Discord](https://discord.gg/NyjPhRb){:target="blank"}
+<iframe src="https://discordapp.com/widget?id=378528634253869056&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe>
 
 Do not hesitate to come and discuss about articles, infosec, or anything else.
 
