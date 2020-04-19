@@ -6,7 +6,7 @@ layout: post
 permalink: /constrained-unconstrained-delegation/
 disqus_identifier: 0000-0000-0000-00ab
 cover: assets/uploads/2019/02/delegation_banner.png
-description: "Within an Active Directory, services can be used by users. Sometimes these services need to contact others, on behalf of the user, like a web service might need to contact a file server. In order to allow a service to access another service on behalf of the user, a solution has been implemented (introduced in Windows Server 2000) to meet this need : Kerberos Delegation."
+description: "In order to allow a service to access another service on behalf of the user, Kerberos Delegation has been implemented."
 tags:
   - "Active Directory"
   - Windows
