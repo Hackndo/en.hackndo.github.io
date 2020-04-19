@@ -260,7 +260,6 @@ What is important to remember is that there is a specific SMB command with an al
 Here is an example of an SMB packet containing the response of a server to an authentication.
 
 [![NTLM in SMB](/assets/uploads/2020/03/ntlm_smb_pcap_example.png)](/assets/uploads/2020/03/ntlm_smb_pcap_example.png)
-HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanmanServer\Parameters
 
 These two examples show that the content of NTLM messages is protocol-independent. It can be included in any protocol that supports it.
 
