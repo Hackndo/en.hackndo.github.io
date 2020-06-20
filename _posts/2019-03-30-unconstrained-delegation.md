@@ -98,7 +98,7 @@ Concretely, during exchanges with the Domain Controller as described in the [Ker
 * Is the `TRUSTED_FOR_DELEGATION` flag set in the attributes of the account associated to the [SPN](/service-principal-name-spn).
 * Is the `NOT_DELEGATED` flag **not** set for the requesting user.
 
-If both prerequisites are met, then the Domain Controller will respond to the user with a [KRB_TGS_REQ](/kerberos/#krb_tgs_req) containing standard information, but it will also contains a **copy of the user's TGT** in his response, and a new associated session key.
+If both prerequisites are met, then the Domain Controller will respond to the user with a [KRB_TGS_REP](/kerberos/#krb_tgs_rep) containing standard information, but it will also contains a **copy of the user's TGT** in his response, and a new associated session key.
 
 [![TGT Copy](/assets/uploads/2019/02/cop_tgt.png)](/assets/uploads/2019/02/cop_tgt.png)
 
