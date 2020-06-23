@@ -515,9 +515,10 @@ To give you an idea, here's how the session key is computed for NTLMv1 and NTLMv
 
 ```
 # For NTLMv1
-Key = MD4(Hash NT)
+Key = MD4(NT Hash)
 
 # For NTLMv2
+NTLMv2 Hash = HMAC_MD5(NT Hash, Uppercase(Username) + UserDomain)
 Key = HMAC_MD5(NTLMv2 Hash, HMAC_MD5(NTLMv2 Hash, NTLMv2 Response + Challenge))
 ```
 
