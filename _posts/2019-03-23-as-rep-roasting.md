@@ -55,7 +55,7 @@ Anyway, if this option is disabled, anyone could ask for a TGT in the name of on
 
 [![Authentication Required](/assets/uploads/2019/02/asreqroast_no_auth.png)](/assets/uploads/2019/02/asreqroast_no_auth.png)
 
-This can be done with the [ASREPRoast](https://github.com/HarmJ0y/ASREPRoast) tool of [@Harmj0y](https://twitter.com/harmj0y).
+This can be done with the [ASREPRoast](https://github.com/HarmJ0y/ASREPRoast) tool of [@Harmj0y](https://twitter.com/harmj0y) or more recently with [Rubeus](https://github.com/GhostPack/Rubeus#asreproast) using `asreproast` functionnality.
 
 [![ASREPRoast](/assets/uploads/2019/02/attackasrep.png)](/assets/uploads/2019/02/attackasrep.png)
 
