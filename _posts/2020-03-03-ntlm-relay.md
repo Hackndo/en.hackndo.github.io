@@ -60,9 +60,9 @@ Except that the attacker does not "just" want to authenticate to the server. He 
 
 ### Message Relaying
 
-During NTLM authentication, a client can prove to a server its identify by encrypting with its password some piece of information provided by the server. So the only thing the attacker has to do is to let the client do his work, and passing the messages from the client to the server, and the replies from the server to the client.
+During NTLM authentication, a client can prove to a server its identity by encrypting with its password some piece of information provided by the server. So the only thing the attacker has to do is to let the client do its work, and passing the messages from the client to the server, and the replies from the server to the client.
 
-All that the client has to send to the server, the attacker will receive it, and he will send the messages back to the real server, and all the messages that the server sends to the client, the attacker will also receive them, and he will forward them to the client, as is.
+All the client has to send to the server, the attacker will receive it, and he will send the messages back to the real server, and all the messages that the server sends to the client, the attacker will also receive them, and he will forward them to the client, as is.
 
 [![NTLM Relay](/assets/uploads/2020/03/ntlm_relay_basic.png)](/assets/uploads/2020/03/ntlm_relay_basic.png)
 
@@ -133,7 +133,7 @@ Now that we have understood the basic principle of NTLM relay, the question that
 
 To answer this question, we must first clarify one fundamental thing. When a client authenticates to a server to do *something*, we must distinguish two things:
 
-1. **Authentication**, allowing the server to verify that the client is who it claims to be.
+1. **Authentication**, allowing the server to verify that the client is who he claims to be.
 2. **The session**, during which the client will be able to perform *actions*.
 
 Thus, if the client has authenticated correctly, it will then be able to access the resources offered by the server, such as network shares, access to an LDAP directory, an HTTP server or a SQL database. This list is obviously not exhaustive.
@@ -318,11 +318,11 @@ This negotiation thus allows each of the two parties, client and server, to indi
 
 ### Implementation
 
-Now that we've seen how both parties indicate to the other their **ability** to sign packets, they have to agree on it. This time, this decision is made according to the protocol. So it will be decided differently for SMBv1, for SMBv2, or for LDAP. But the idea remains the same.
+Now that we've seen how both parties indicate to the other their **ability** to sign packets, they have to agree on it. This time, this decision is made according to the protocol. So it will be decided differently for SMBv1, for SMBv2, or LDAP. But the idea remains the same.
 
 Depending on the protocol, there are usually 2 or even 3 options that can be set to decide wether signing will be enforced, or not. The 3 options are :
 
-* Disabled : This means that signing is not managed.
+* Disabled: This means that signing is not managed.
 * Enabled: This option indicates that the machine can handle signing if need be, but it does not require signing. 
 * Mandatory: This finally indicates that signing is not only supported, but that packets **must** be signed in order for the session to continue.
 
@@ -463,7 +463,7 @@ The MIC is a signature that is sent only in the last message of an NTLM authenti
 HMAC_MD5(Session key, NEGOTIATE_MESSAGE + CHALLENGE_MESSAGE + AUTHENTICATE_MESSAGE)
 ```
 
-What is important is that the session key **depends on the client's secret**, so an attacker can't re-calculate the MIC.
+What is important is that the session key **depends on the client's secret**, so an attacker can't re-compute the MIC.
 
 Here's an example of MIC:
 
@@ -487,9 +487,9 @@ Changing or removing this flag would make the **NTLMv2 hash** invalid, since the
 
 [![MIC Protection](/assets/uploads/2020/03/ntlm_mic_protection.png)](/assets/uploads/2020/03/ntlm_mic_protection.png)
 
-The MIC protects the integrity of the 3 messages, the msAvFlags protects the presence of the MIC, and the NTLMv2 hash protects the presence of the flag. The attacker, not being aware of the user's secret, cannot recalculate this hash.
+The MIC protects the integrity of the 3 messages, the msAvFlags protects the presence of the MIC, and the NTLMv2 hash protects the presence of the flag. The attacker, not being aware of the user's secret, cannot re-compute this hash.
 
-So you will have understood that, we can do nothing in this case, and that's thanks to the MIC.
+So you will have understood that, we can do nothing in this case, and that's because of the MIC.
 
 ### Drop the MIC
 
@@ -499,7 +499,7 @@ It's [CVE-2019-1040](https://www.preempt.com/blog/drop-the-mic-cve-2019-1040/) n
 
 It has been integrated in [ntlmrelayx](https://github.com/SecureAuthCorp/impacket/blob/master/examples/ntlmrelayx.py) tool via the use of the `--remove-mic` parameter.
 
-Let's take our example from earlier, but this time with a domain controller that is still vulnerable. This is what it looks like in practice.
+Let's take our earlier example, but this time with a domain controller that is still vulnerable. This is what it looks like in practice.
 
 [![Drop the MIC](/assets/uploads/2020/03/ntlm_removemic.png)](/assets/uploads/2020/03/ntlm_removemic.png)
 

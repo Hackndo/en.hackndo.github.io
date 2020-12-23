@@ -26,7 +26,7 @@ In order to understand what is Kerberos Delegation, let's take a concrete exampl
 
 The web server is front-end, and it's this web server that will fetch the information instead of the user on the file server in order to display the content of a file, for example.
 
-However, the web server does not know what belongs to the user on the file server. It is not his role to unpack the user's [PAC](/kerberos-silver-golden-tickets/#pac) to make a specific demand to the file server. This is where the **delegation**  comes in. This mechanism allows the web server to **impersonate** the user, and to authenticate on the user's behalf to the file server. Thus, from the file server's point of view, it is the user who makes the request. The file server will be able to reand and check user's rightsr, then send back the information to which this account has access. This is how the web server can then display this information in a nice interface back to the user.
+However, the web server does not know what belongs to the user on the file server. It is not his role to unpack the user's [PAC](/kerberos-silver-golden-tickets/#pac) to make a specific demand to the file server. This is where the **delegation**  comes in. This mechanism allows the web server to **impersonate** the user, and to authenticate on the user's behalf to the file server. Thus, from the file server's point of view, it is the user who makes the request. The file server will be able to read and check user's rightsr, then send back the information to which this account has access. This is how the web server can then display this information in a nice interface back to the user.
 
 [![Impersonation](/assets/uploads/2019/02/impersonation.png)](/assets/uploads/2019/02/impersonation.png)
 
@@ -136,7 +136,7 @@ For example here the `msDS-AllowedToDelegateTo` attribute will contain `cifs/WEB
 
 [![allowedToDelegateTo](/assets/uploads/2020/04/allowedToDelegateTo.png)](/assets/uploads/2020/04/allowedToDelegateTo.png)
 
-If the targeted [SPN](/service-principal-name-spn) is present, then the Domain Controller send back a valid TGS, with the name of the user, for the requested service. Here is a summary diagram :
+If the targeted [SPN](/service-principal-name-spn) is present, then the Domain Controller sends back a valid TGS, with the name of the user, for the requested service. Here is a summary diagram :
 
 [![Constrained Delegation Detailed](/assets/uploads/2019/02/constrained_delegation_schema_detailed.png)](/assets/uploads/2019/02/constrained_delegation_schema_detailed.png)
 

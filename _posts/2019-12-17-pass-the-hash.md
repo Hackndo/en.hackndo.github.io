@@ -14,13 +14,13 @@ translation:
   - fr
 ---
 
-During internal intrusion tests, lateral movement is an essential component for the auditor to seek information in order to elevate his or her privileges over the information system. The technique known as **Pass the Hash** is extremely used in this situation to become an administrator on a set of machines. We will detail here how this technique works.
+During internal intrusion tests, lateral movement is an essential component for the auditor to seek information in order to elevate their privileges over the information system. The technique known as **Pass the Hash** is extremely used in this situation to become an administrator on a set of machines. We will detail here how this technique works.
 
 <!--more-->
 
 ## NTLM Protocol
 
-The NTLM protocol is an authentication protocol used in Microsoft environments. In particular, it allows a user to prove who he is to a server in order to use a service offered by this server.
+The NTLM protocol is an authentication protocol used in Microsoft environments. In particular, it allows a user to prove their identity to a server in order to use a service offered by this server.
 
 
 > Note: In this article, the term "server" is used in the client/server sense. The "server" can very well be a workstation.
@@ -60,7 +60,7 @@ To finalize the authentication, the server only has to check the validity of the
 
 ### Authentication secret
 
-We said that the client uses a hashed version of their password as a key for the following reason: To avoid storing user passwords in clear text on the server. It's hash of the password that is stored instead. This hash is now the **NT hash**, which is nothing but the result of the [MD4](https://fr.wikipedia.org/wiki/MD4) function, **without salt**, nothing.
+We said that the client uses a hashed version of their password as a key for the following reason: To avoid storing user passwords in clear text on the server. It's the password's hash that is stored instead. This hash is now the **NT hash**, which is nothing but the result of the [MD4](https://fr.wikipedia.org/wiki/MD4) function, **without salt**, nothing.
 
 ```
 NThash = MD4(password)
@@ -86,7 +86,7 @@ psexec.exe -i -s regedit.exe
 
 A copy is also on disk in `C:\Windows\System32\SAM`.
 
-So it contains the list of local users and their hashed password, as well as the list of local groups. Well, to be more precise, it contains an encrypted version of the hashes. But as all the information needed to decrypt them is also in the registry (SAM and SYSTEM), we can safely say that the hashed is stored there. If you want to see how the decryption mechanism works, you can go check [secretsdump.py code](https://github.com/SecureAuthCorp/impacket/blob/master/impacket/examples/secretsdump.py#L1124) or [Mimikatz code](https://github.com/gentilkiwi/mimikatz/blob/master/mimikatz/modules/kuhl_m_lsadump.c).
+So it contains the list of local users and their hashed password, as well as the list of local groups. Well, to be more precise, it contains an encrypted version of the hashes. But as all the information needed to decrypt them is also in the registry (SAM and SYSTEM), we can safely say that their hashed version is stored there. If you want to see how the decryption mechanism works, you can go check [secretsdump.py code](https://github.com/SecureAuthCorp/impacket/blob/master/impacket/examples/secretsdump.py#L1124) or [Mimikatz code](https://github.com/gentilkiwi/mimikatz/blob/master/mimikatz/modules/kuhl_m_lsadump.c).
 
 SAM and SYSTEM databases can be backed up to extract the user's hashed passwords database.
 
