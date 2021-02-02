@@ -425,12 +425,12 @@ In the meantime, here are two tools that I have written so you can use this tech
 
 [lsassy](https://github.com/Hackndo/lsassy) is available on my [Github](https://github.com/Hackndo/lsassy) or on [Pypi](https://pypi.org/project/lsassy/). This tool uses all the research discussed in this article to remotely dump lsass, either with the [DLL technique](#remove-procdump-from-the-equation) or the [Procdump technique](#manual-method--procdump).
 
-[The CrackMapExec module](https://github.com/Hackndo/lsassy/tree/master/cme) allows you to automate the whole process by doing an lsass dump on the remote hosts, and extracting the credentials of the logged in users using **lsassy**. It also makes it possible to detect accounts with an attack path to become a domain administrator, by relying on the data collected with [Bloodhound](/bloodhound)
+[The CrackMapExec module](https://github.com/byt3bl33d3r/CrackMapExec/blob/master/cme/modules/lsassy.py) allows you to automate the whole process by doing an lsass dump on the remote hosts, and extracting the credentials of the logged in users using **lsassy**.
 
 ## Conclusion
 
-There is still work to do to integrate these changes to CrackMapExec, whether it is in terms of compatibility with python versions, cleanliness and maintainability of the code, but this research is very useful for me to better understand the tools I use on a daily basis.
+There is still work to do, but this research is very useful for me to better understand the tools I use on a daily basis.
 
-I now have a tool that works well, quickly, and which can be integrated into CrackMapExec using a few tricks, so that it is very useful for my internal tests, and I hope that it will be useful for you.
+I now have a tool that works well, quickly, and that was officially integrated into CrackMapExec, and I hope that it will be useful for you.
 
 I hope this article will give you new ideas to upgrade infosec tools that we use every day, see you later for a new article!
