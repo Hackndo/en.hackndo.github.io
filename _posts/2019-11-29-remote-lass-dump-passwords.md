@@ -415,10 +415,6 @@ We just have to keep in mind that this technique can only be executed as **SYSTE
 
 With this new tool, I modified the CrackMapExec module so it extracts passwords **remotely** from lsass dumps.
 
-As pypykatz and minidump only work under python3.6 + and CrackMapExec is not yet compatible with python3, I cannot make a pull request at the moment, nor import pypykatz into my module. For the moment, the call to pypykatz is done via a new process calling my tool.
-
-[mpgn](https://twitter.com/mpgn_x64) is working on [CrackMapexec for python 3](https://github.com/byt3bl33d3r/CrackMapExec/pull/323).
-
 ## New tools
 
 In the meantime, here are two tools that I have written so you can use this technique:
