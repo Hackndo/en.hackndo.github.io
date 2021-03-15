@@ -145,7 +145,7 @@ Let's go back to our buffer overflow. We have rewritten the value of the `EIP` b
 
 So we will redirect the execution flow to the first instruction we want to execute, which is the `XOR EAX, EAX`. The stack will then look like this
 
-IMAGE
+[![first_gadget](/assets/uploads/2016/10/first_gadget.png)](/assets/uploads/2016/10/first_gadget.png)
 
 The execution flow will be redirected to the instructions : 
 ```
@@ -156,15 +156,15 @@ RET
 
 Once the `XOR` is done, the `RET` instruction will be executed. As a reminder, a `RET` is nothing else than a `POP EIP`. The address on the top of the stack will be put in the `EIP` register. As the address on the top of the stack is just after the sEIP that we have overwritten (and that has already been `POP`'d by the `RET` of the function), we just have to put the address of the second gadget on the top of the stack, as follows :
 
-IMAGE
+[![second_gadget](/assets/uploads/2016/10/second_gadget.png)](/assets/uploads/2016/10/second_gadget.png)
 
 Followed by the gadget that allows to make the `POP EBX`. However this gadget needs a specific value on the stack, since the gadget will "pop" a value to put it in `EBX`. We will then have the following stack :
 
-IMAGE
+[![third_gadget](/assets/uploads/2016/10/third_gadget.png)](/assets/uploads/2016/10/third_gadget.png)
 
 The `POP EBX` will then remove the value `0x00000003` from the stack. All our registers are ready, we just have to redirect the flow to the `int 0x80` instruction which makes the system call : 
 
-IMAGE
+[![fourth_gadget](/assets/uploads/2016/10/fourth_gadget.png)](/assets/uploads/2016/10/fourth_gadget.png)
 
 By organizing the stack in this way, we will have our gadgets chained together, filling the registers as we knew them before making the system call that interests us.
 
