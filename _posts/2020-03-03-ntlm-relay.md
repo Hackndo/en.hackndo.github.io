@@ -623,8 +623,6 @@ As there are many cases, here is a table summarizing some of them.
 
 I think we can't relay LDAPS or HTTPS since the attacker doesn't have a valid certificate but let's say the client is permissive and allowed untrusted certificates. Other protocols could be added, such as SQL or SMTP, but I must admit I didn't read the documentation for all the protocols that exist. Shame on me.
 
-For gray boxes, I don't know how an HTTPS server handles an authentication with the `NEGOTIATE_SIGN` flag set to **1**.
-
 ## Stop. Using. NTLMv1.
 
 Here is a little "fun fact" that [Marina Simakov](https://twitter.com/simakov_marina) suggested me to add. As we discussed, NTLMv2 hash takes into account the server's challenge, but also the `msAvFlags` flag which indicates the presence of a MIC field, the field indicating the NetBios name of the target host during authentication, the SPN in case of service binding, and the certificate hash in case of TLS binding.
