@@ -26,7 +26,7 @@ In addition, and to avoid confusion, here are some reminders:
 
 * **NT Hash** and **LM Hash** are hashed versions of user passwords. LM hashes are totally obsolete, and will not be mentioned in this article. NT hash is commonly called, wrongly in my opinion, "NTLM hash". This designation is confusing with the protocol name, NTLM. Thus, when we talk about the user's password hash, we will refer to it as **NT hash**.
 * **NTLM** is therefore the name of the **authentication protocol**. It also exists in version 2. In this article, if the version affects the explanation, then NTLMv1 and NTLMv2 will be the terms used. Otherwise, the term NTLM will be used to group all versions of the protocol.
-* **NTLMv1 Hash** and **NTLMv2 Hash** will be the terminology used to refer to the challenge response sent by the client, for versions 1 and 2 of the NTLM protocol.
+* **NTLMv1 Response** and **NTLMv2 Response** will be the terminology used to refer to the challenge response sent by the client, for versions 1 and 2 of the NTLM protocol.
 * **Net-NTLMv1** and **Net-NTLMv2** are pseudo-neo-terminologies used when the NT hash is called NTLM hash in order to distinguish the NTLM hash from the protocol. Since we do not use the NTLM hash terminology, these two terminologies will not be used.
 * **Net-NTLMv1 Hash** and **Net-NTLMv2 Hash** are also terminologies to avoid confusion, but will also not be used in this article.
 
@@ -80,7 +80,7 @@ At the end of these exchanges, the attacker is authenticated on the server with 
 
 ### Net-NTLMv1 and Net-NTLMv2
 
-For information, it is this **valid response** relayed by the attacker in message 3, the encrypted challenge, that is commonly called Net-NTLMv1 hash or Net-NTLMv2 hash. But in this article, it will be called **NTLMv1 hash** or **NTLMv2 hash**, as indicated in the preliminary paragraph.
+For information, it is this **valid response** relayed by the attacker in message 3, the encrypted challenge, that is commonly called Net-NTLMv1 hash or Net-NTLMv2 hash. But in this article, it will be called **NTLMv1 response** or **NTLMv2 response**, as indicated in the preliminary paragraph.
 
 To be exact, this is not exactly an encrypted version of the challenge, but a hash that uses the client's secret. It is HMAC_MD5 function which is [used for NTLMv2](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/5e550938-91d4-459f-b67d-75d70009e3f3) for example. This type of hash can only be broken by brute force. The cryptography associated with [computation of the NTLMv1 hash](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/464551a8-9fc4-428e-b3d3-bc5bfb2e73a5) is obsolete, and the NT hash that was used to create the hash can be retrieved very quickly. For NTLMv2, on the other hand, it takes much longer. It is therefore preferable and advisable **not to allow NTLMv1 authentication on a production network**.
 
