@@ -349,4 +349,4 @@ Finally, properly positioning the registry keys discussed in the last paragraph 
 
 In the meantime, this technique still has a bright future ahead of it!
 
-If you have any questions, don't hesitate to ask them here or on [Discord](https://discord.gg/NyjPhRb) and I will be happy to try to answer them. If you see any typos, I'm all ears. See you next time!
+If you have any questions, don't hesitate to ask them here or on [Discord](https://discord.hackndo.com) and I will be happy to try to answer them. If you see any typos, I'm all ears. See you next time!
