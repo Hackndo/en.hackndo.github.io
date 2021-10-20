@@ -61,7 +61,7 @@ This can be done with the [ASREPRoast](https://github.com/HarmJ0y/ASREPRoast) to
 
 There is also impacket [GetNPUsers.py](https://github.com/SecureAuthCorp/impacket/blob/master/examples/GetNPUsers.py) tool that can perform this operation.
 
-Once in possession of the domain controller response [KRB_AS_REP](/kerberos/#krb_tgs_rep), the attacker can try to find out the victim's clear text password offline, by using John The Ripper with the `krb5tgs` mode, or with hashcat for example.
+Once in possession of the domain controller response [KRB_AS_REP](/kerberos/#krb_tgs_rep), the attacker can try to find out the victim's clear text password offline, by using John The Ripper with the `krb5asrep` mode, or with hashcat for example.
 
 ## Conclusion
 
