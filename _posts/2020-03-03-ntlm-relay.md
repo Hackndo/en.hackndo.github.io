@@ -493,9 +493,9 @@ So you will have understood that, we can do nothing in this case, and that's bec
 
 ### Drop the MIC
 
-A little review of a recent vulnerability found by [Preempt](https://www.preempt.com) that you will easily understand now.
+A little review of a recent vulnerability found by Preempt that you will easily understand now.
 
-It's [CVE-2019-1040](https://www.preempt.com/blog/drop-the-mic-cve-2019-1040/) nicely named **Drop the MIC**. This vulnerability showed that if the MIC was just removed, even if the flag indicated its presence, the server accepted the authentication without flinching. This was obviously a bug that has since been fixed.
+It's CVE-2019-1040 nicely named **Drop the MIC**. This vulnerability showed that if the MIC was just removed, even if the flag indicated its presence, the server accepted the authentication without flinching. This was obviously a bug that has since been fixed.
 
 It has been integrated in [ntlmrelayx](https://github.com/SecureAuthCorp/impacket/blob/master/examples/ntlmrelayx.py) tool via the use of the `--remove-mic` parameter.
 
@@ -548,7 +548,7 @@ This is the name that is compared with the host making the NetLogon request. Thu
 
 Finally, in the same way as `msAvFlags`, we cannot change the machine name on the fly in the NTLM response, because it is taken into account in the calculation of the NTLMv2 response.
 
-A vulnerability similar to **Drop the MIC 2** has been discovered recently by Preempt security team. Here is the [link](https://www.preempt.com/blog/your-session-key-is-my-session-key-how-to-retrieve-the-session-key-for-any-authentication/) to their post if you're curious.
+A vulnerability similar to **Drop the MIC 2** has been discovered recently by Preempt security team.
 
 ## Channel Binding
 
@@ -609,9 +609,6 @@ Here is a diagram to illustrate the 2nd case. Seems complicated, but it's not.
 It shows the establishment of two TLS sessions. One between the client and the attacker (in red) and one between the attacker and the server (in blue). The client will retrieve the attacker's certificate, and calculate a hash, **cert hash**, in red.
 
 At the end of the NTLM exchanges, this hash will be added in the NTLM response, and will be protected since it is part of the encrypted data of the NTLM response. When the server receives this hash, it will hash his own certificate, and seeing that it is not the same result, it will refuse the connection.
-
-Again, Preempt recently [found a vulnerability](https://www.preempt.com/blog/how-to-easily-bypass-epa-to-compromise-any-web-server-that-supports-windows-integrated-authentication/) which has been fixed since then.
-
 
 ## What can be relayed?
 
