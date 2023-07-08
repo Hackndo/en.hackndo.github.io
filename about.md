@@ -13,9 +13,9 @@ If you ever came here by accident, know that I do not pretend to be an encyclope
 
 # Who am I ?
 
-On the Internet, my name is **Pixis**, and I am an avid user of [newbiecontest](https://www.newbiecontest.org/index.php){:target="blank"} ([my profile](https://www.newbiecontest.org/index.php?page=info_membre&nick=pixis){:target="blank"}) where I am also an administrator.
+On the Internet, my name is **Pixis**, and I work for [Login Sécurité](https://www.login-securite.com/){:target="blank"}.
 
-True enthusiast who spends his days and nights on different subjects, whether it is about computer security (Active Directory ♥), but also raspberry/arduino/home automation hacker, always curious, and who likes to share.
+True enthusiast who spends his days and nights on different subjects, whether it is about computer security (Active Directory ♥, smart contract hacking), but also raspberry/arduino/home automation hacker, always curious, and who likes to share.
 
 So I welcome you to my humble blog, and I hope you find it useful!
 
