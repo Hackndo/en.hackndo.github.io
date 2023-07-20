@@ -100,4 +100,4 @@ Furthermore, with each validated block, a small amount of the cryptocurrency is 
 
 ## Conclusion
 
-These paragraphs hopefully clarify the overall concept of a blockchain and serve as an introduction to the upcoming articles that will focus on the Ethereum blockchain, specifically the Ethereum Virtual Machine, which enables the execution of smart contracts, and the security challenges associated with this decentralized code execution. See you soon!
+These paragraphs hopefully clarify the overall concept of a blockchain and serve as an introduction to the next articles that focus on the [Ethereum blockchain](/ethereum/), specifically the [Ethereum Virtual Machine](/ethereum-virtual-machine), which enables the execution of smart contracts, and the security challenges associated with this decentralized code execution. See you soon!
