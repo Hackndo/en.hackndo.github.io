@@ -278,7 +278,7 @@ With all these explanations, we are able to understand the entire **account stor
 
 [![Storage slots examples](/assets/uploads/2023/06/storage_slots_example_explained.png)](/assets/uploads/2023/06/storage_slots_example_explained.png)
 
-## Memory Reading
+## Memory reading
 
 It's great, we are able to read and understand the storage space of contracts, but concretely, how do we access the storage space of a contract already deployed on the blockchain?
 
@@ -319,7 +319,7 @@ SLOT 4:  0x000000000000000000000000000000000000000003f806d77433774f8c683600
 SLOT 5:  0x0000000000000000000000000000000000000000000000000000000000c6647c
 ```
 
-## Putting It into Practice
+## Putting it into practice
 
 A contract is deployed at address `0x84229eeFb7DB3f1f2B961c61E7CbEfd9D4c665E3` on the [Sepolia test network](https://www.alchemy.com/overviews/sepolia-testnet).
 
