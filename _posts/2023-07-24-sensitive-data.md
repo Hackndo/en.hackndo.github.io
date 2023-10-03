@@ -9,6 +9,8 @@ cover: assets/uploads/2023/10/sensitive_data.png
 description: "All data recorded by a smart contract is stored on the blockchain, and can thus be read by everyone. If any sensitive data is recorded by a smart contract, an attacker will be able to read it."
 tags:
   - "Blockchain"
+translation:
+  - fr
 ---
 
 Do you remember the different storage spaces to which the EVM has access? The one comparable to a computer hard disk is the **account storage**. This is the memory area in which the state of the contract is recorded. But you'll also remember that the Ethereum blockchain is a decentralised state machine that can be read by anyone. Do you see where I'm going with this? All the data recorded by a smart contract can be read by anyone. If any sensitive data is recorded by a smart contract, we will be able to read it.
