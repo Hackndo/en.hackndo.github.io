@@ -1,5 +1,5 @@
 ---
-title: "Sensitive Data"
+title: "Sensitive Data in smart contracts"
 date: 2023-10-03 08:09:08
 author: "Pixis"
 layout: post
