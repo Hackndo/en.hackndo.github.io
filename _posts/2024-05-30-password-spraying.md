@@ -16,6 +16,8 @@ translation:
 
 Password spraying is a well-known technique which consists of testing the same password on several accounts, in the hope that it will work for one of them. This technique is used in many different contexts: On web applications, the Cloud, services like SSH, FTP, and many others. It's also widely used in internal penetration testing with Active Directory. It's the latter that we're going to focus on, because although the technique seems simple, it's not easy to put it into practice without side effects.
 
+<!--more-->
+
 ## Introduction
 
 This article is not about something new, but rather a report on my research into password policies in an Active Directory environment. Indeed, there are several ways of limiting an attacker by locking accounts. These different levers are very useful when they are understood, which is not always the case (and wasn't the case for me a few weeks ago). This article will, I hope, clarify what password policies allow, how they are applied, and therefore, as a pentester, how to do password spraying while minimizing the risk of locking accounts.
