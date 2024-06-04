@@ -11,7 +11,7 @@ tags:
   - "Active Directory"
   - Windows
 translation:
-  - fr
+  fr: 
 ---
 
 With the help of previously discussed notions, we have everything in hand to explain the **Kerberoasting** attack principle, based on the TGS request and the [SPN](/service-principal-name-spn) attributes of Active Directory accounts.

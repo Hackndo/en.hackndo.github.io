@@ -10,7 +10,7 @@ cover: assets/uploads/2015/08/deepweb.jpg
 tags:
   - Web
 translation:
-  - fr
+  fr: 
 ---
 
 This is a very small article that allows to put things back in order. I'm often asked if I've ever been on the deep web, the dark web, or darknets without really understanding what it was, what were the differences and so on. This article is not intended to make a study nor an inventory, but rather to get a basic understanding of these terms. So here are a few lines to start explaining in five minutes what these terms imply.

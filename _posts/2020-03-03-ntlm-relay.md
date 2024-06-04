@@ -11,7 +11,7 @@ tags:
   - "Active Directory"
   - Windows
 translation:
-  - fr
+  fr: 
 ---
 
 NTLM relay is a technique of standing between a client and a server to perform actions on the server while impersonating the client. It can be very powerful and can be used to take control of an Active Directory domain from a black box context (no credentials). The purpose of this article is to explain NTLM relay, and to present its limits.

@@ -11,7 +11,7 @@ tags:
   - "Active Directory"
   - Windows
 translation:
-  - fr
+  fr: 
 ---
 
 Within an Active Directory, services can be used by users. Sometimes these services need to contact others, on behalf of the user, like a web service might need to contact a file server. In order to allow a service to access another service **on behalf of the user**, a solution has been implemented (introduced in Windows Server 2000) to meet this need : **Kerberos Delegation.**

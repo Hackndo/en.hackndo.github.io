@@ -11,7 +11,7 @@ tags:
   - "Active Directory"
   - Windows
 translation:
-  - fr
+  fr: 
 ---
 
 During internal intrusion tests, lateral movement is an essential component for the auditor to seek information in order to elevate their privileges over the information system. The technique known as **Pass the Hash** is extremely used in this situation to become an administrator on a set of machines. We will detail here how this technique works.

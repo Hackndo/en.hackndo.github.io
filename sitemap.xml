@@ -12,10 +12,20 @@ sitemap:
 
     {% if post.translation %}
       {% for lang in post.translation %}
-      <xhtml:link 
-               rel="alternate"
-               hreflang="{{ lang }}"
-               href="https://{{ lang }}.hackndo.com{{ post.url }}"/>
+        {% if lang[1] != nil %}
+        <xhtml:link 
+                 rel="alternate"
+                 hreflang="{{ lang[0] }}"
+                 href="{{ lang[1] }}"/>
+
+        {% else %}
+          <xhtml:link 
+                 rel="alternate"
+                 hreflang="{{ lang[0] }}"
+                 href="https://{{ lang[0] }}.hackndo.com{{ post.url }}"/>
+        {% endif %}
+      
+
       {% endfor %}
       <xhtml:link 
                rel="alternate"

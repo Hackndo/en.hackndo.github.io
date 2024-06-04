@@ -17,8 +17,12 @@
             {% for post in site.posts %}
               {% if post.permalink == page.url %}
                 {% for lang in post.translation %}
-                  {% if lang == "fr" %}
-                    <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png" alt="french flag" /></a></p>
+                  {% if lang[0] == "fr" %}
+                    {% if lang[1] == nil %}
+                      <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png" alt="french flag" /></a></p>
+                    {% else %}
+                      <p class="lang"><a href="{{ lang[1] }}"><img src="/assets/icones/fr.png" alt="french flag" /></a></p>
+                    {% endif %}
                     {% break %}
                   {% endif %}
                 {% endfor %}

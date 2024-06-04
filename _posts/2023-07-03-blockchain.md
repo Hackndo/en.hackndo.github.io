@@ -10,7 +10,7 @@ description: "A blockchain represents a decentralized register (or database). Th
 tags:
   - "Blockchain"
 translation:
-  - fr
+  fr: 
 ---
 
 

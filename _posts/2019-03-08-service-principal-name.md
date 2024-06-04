@@ -11,7 +11,7 @@ tags:
   - "Active Directory"
   - Windows
 translation:
-  - fr
+  fr: 
 ---
 
 This article focuses on SPN (Service Principal Names) in order to understand what they are and how they are used.

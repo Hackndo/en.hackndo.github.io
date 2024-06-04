@@ -11,7 +11,7 @@ tags:
   - "User Land"
   - Linux
 translation:
-  - fr
+  fr: 
 ---
 
 This article aims to explain clearly what ROP or Return Oriented Programming is. What is this technique? Why is it useful? What are the limits? How to implement it? We will answer these questions together.

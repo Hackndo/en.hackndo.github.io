@@ -11,7 +11,7 @@ tags:
   - "Active Directory"
   - Windows
 translation:
-  - fr
+  fr: 
 ---
 
 In corporate penetration tests, lateral movement and elevation of privilege are two fundamental concepts for advancing and gaining control of the target. There are a multitude of ways to do one or the other, but today we will present a new technique for reading the content of a lsass dump remotely, significantly reducing latency and detection during password extraction on a set of machines.

@@ -32,7 +32,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/icones/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/assets/icones/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/icones/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/assets/res/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/assets/icones/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
@@ -58,10 +57,14 @@
     {% else %}
       {% if page.translation %}
         {% for lang in page.translation %}
-          {% if lang == "fr" %}
-            <link rel="alternate" hreflang="{{ lang }}" href="https://beta.hackndo.com{{ page.url }}">
+          {% if lang[1] != nil %}
+            <link rel="alternate" hreflang="{{ lang[0] }}" href="{{ lang[1] }}">
           {% else %}
-            <link rel="alternate" hreflang="{{ lang }}" href="https://{{ lang }}.hackndo.com{{ page.url }}">
+            {% if lang[0] == "fr" %}
+              <link rel="alternate" hreflang="{{ lang[0] }}" href="https://beta.hackndo.com{{ page.url }}">
+            {% else %}
+              <link rel="alternate" hreflang="{{ lang[0] }}" href="https://{{ lang[0] }}.hackndo.com{{ page.url }}">
+            {% endif %}  
           {% endif %}
         {% endfor %}
         <link rel="alternate" hreflang="en" href="https://en.hackndo.com{{ page.url }}">

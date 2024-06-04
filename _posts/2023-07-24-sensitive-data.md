@@ -10,7 +10,7 @@ description: "All data recorded by a smart contract is stored on the blockchain,
 tags:
   - "Blockchain"
 translation:
-  - fr
+  fr: 
 ---
 
 Do you remember the different storage spaces to which the EVM has access? The one comparable to a computer hard disk is the **account storage**. This is the memory area in which the state of the contract is recorded. But you'll also remember that the Ethereum blockchain is a decentralised state machine that can be read by anyone. Do you see where I'm going with this? All the data recorded by a smart contract can be read by anyone. If any sensitive data is recorded by a smart contract, we will be able to read it.

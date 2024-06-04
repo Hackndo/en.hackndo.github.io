@@ -14,7 +14,7 @@ tags:
   - "Active Directory"
   - Windows
 translation:
-  - fr
+  fr: 
 ---
 
 When asking for a TGT, by default, a user has to authenticate himself to the domain controller in order to get a response. Sometimes, no authentication is asked before returning a TGT for specific account, allowing an attacker to abuse this configuration.

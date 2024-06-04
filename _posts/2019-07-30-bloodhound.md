@@ -11,7 +11,7 @@ tags:
   - "Active Directory"
   - Windows
 translation:
-  - fr
+  fr: 
 ---
 
 BloodHound is a tool for visualizing an Active Directory environment as a graph. This representation then offers all the power of graph theory to unravel new attack paths that otherwise would have been difficult or impossible to detect.
