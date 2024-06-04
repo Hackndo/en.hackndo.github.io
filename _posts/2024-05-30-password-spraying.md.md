@@ -175,7 +175,7 @@ But I wanted to go a step further. We saw that after a certain period of time, t
 
 To ensure that everything runs smoothly, the tool starts by retrieving the time from the domain controller so that it's perfectly synchronized, and synchronizes regularly with LDAP (a real user might be trying a wrong password during our password spraying).
 
-In short, I'm very happy to share with you the [conpass](https://github.com/hackndo/conpass) tool, which is extremely useful for me in penetration testing, and I hope it will be as useful for you.
+In short, I'm very happy to share with you the [conpass](https://github.com/login-securite/conpass) tool, which is extremely useful for me in penetration testing, and I hope it will be as useful for you.
 
 [![Conpass](/assets/uploads/2024/05/conpass.png)](/assets/uploads/2024/05/conpass.png)
 
