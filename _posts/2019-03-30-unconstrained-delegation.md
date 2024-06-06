@@ -193,7 +193,7 @@ If you have any questions or suggestions, do not hesitate, I'm all ears.
 
 Big thanks to them for their clear explanations.
 
-* [S4U2Pwnage - Harmj0y](https://www.harmj0y.net/blog/activedirectory/s4u2pwnage/)
+* [S4U2Pwnage - Harmj0y](https://blog.harmj0y.net/activedirectory/s4u2pwnage/)
 * [ADSecurity - Pyrotek3](http://adsecurity.org/)
 * [Secrets d’authentification épisode II Kerberos contre-attaque - Aurélien Bordes](https://www.sstic.org/media/SSTIC2014/SSTIC-actes/secrets_dauthentification_pisode_ii__kerberos_cont/SSTIC2014-Article-secrets_dauthentification_pisode_ii__kerberos_contre-attaque-bordes_2.pdf)
 * [Wagging the dog - Edla Shamir](https://shenaniganslabs.io/2019/01/28/Wagging-the-Dog.html)
