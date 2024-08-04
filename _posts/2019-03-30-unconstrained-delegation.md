@@ -126,7 +126,7 @@ The user makes a TGS request, then sends it to `Service A`. Since this service n
 
 It is during this request that the Domain Controller, upon seeing this information, will verify that `Service A` has the right to authenticate to `Resource B` on behalf of the user.
 
-#### Constrained Delegation - Classique
+#### Constrained Delegation - Classic
 
 In the classic **Constrained Delegation** case (when delegation information is located in `Service A`), this information is found in the [msDS-AllowedToDelegateTo](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada2/86261ca1-154c-41fb-8e5f-c6446e77daaa) attribute **of the requesting account**, thus of `Service A`. This attribute specifies the list of authorized [SPN](/service-principal-name-spn) for the delegation.
 
@@ -167,7 +167,7 @@ This ability to manage **protocol transition** is accepted by the Domain Control
 
 [![Protocol transition](/assets/uploads/2020/04/protocol_transition.png)](/assets/uploads/2020/04/protocol_transition.png)
 
-In the first case, the **TRUSTED_FOR_DELEGATION** flag is set on the account, and the service can only relay kerberos authentication. It cannot use the S4U2Self extension to create a ticket out of nowhere.
+In the first case, no specific flag is set on the account, and the service can only relay kerberos authentication. It cannot use the S4U2Self extension to create a ticket out of nowhere.
 
 In the second case, the **TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION** flag is set. If this is the case, then the service with this flag **can pretend to be anyone** when accessing services in its list via the **S4U2Self** extension.
 
