@@ -1,6 +1,7 @@
 ---
 title: "Kerberoasting"
 date: 2020-03-26 08:02:44
+last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
 permalink: /kerberoasting/

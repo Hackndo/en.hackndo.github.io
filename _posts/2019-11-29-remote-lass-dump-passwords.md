@@ -1,6 +1,7 @@
 ---
 title: "Extract credentials from lsass remotely"
 date: 2019-11-28 22:40:00
+last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
 permalink: /remote-lsass-dump-passwords/

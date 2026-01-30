@@ -1,6 +1,7 @@
 ---
 title: "NTLM Relay"
 date: 2020-04-01 10:11:52
+last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
 permalink: /ntlm-relay/
@@ -96,10 +97,10 @@ The attacker has therefore managed to put himself man-in-the-middle position. Th
 The tool I used to perform this attack is [ntlmrelayx](https://github.com/SecureAuthCorp/impacket/blob/master/examples/ntlmrelayx.py) from **impacket**. This tool is presented in details in [this article](https://www.secureauth.com/blog/playing-relayed-credentials) by [Agsolino](https://twitter.com/agsolino), impacket (*almighty*) developer.
 
 ```sh
-ntlmrelayx.py -t 192.168.56.221
+ntlmrelayx.py -t 192.168.56.211
 ```
 
-The tool creates different servers, including an SMB server for this example. If it receives a connection on this server, it will relay it to the provided target, which is **192.168.56.221** in this example. 
+The tool creates different servers, including an SMB server for this example. If it receives a connection on this server, it will relay it to the provided target, which is **192.168.56.211** in this example. 
 
 From a network point of view, here is a capture of the exchange, with the attacker relaying the information to the target.
 
@@ -532,7 +533,7 @@ On the other hand, for [authentication with a domain account](/pass-the-hash/#do
 
 [![Session key](/assets/uploads/2020/03/ntlm_session_key_struct.png)](/assets/uploads/2020/03/ntlm_session_key_struct.png)
 
-The question then arises as to what prevents an attacker from making the same request to the domain controller as the target server. Well before [CVE-2015-005](https://www.coresecurity.com/advisories/windows-pass-through-authentication-methods-improper-validation), nothing! 
+The question then arises as to what prevents an attacker from making the same request to the domain controller as the target server. Well before [CVE-2015-0005](https://www.coresecurity.com/advisories/windows-pass-through-authentication-methods-improper-validation), nothing! 
 
 > What we found while implementing the NETLOGON protocol [12] is the domain controller not verifying whether the authentication information being sent, was actually meant to the domain-joined machine that is requesting this operation (e.g. NetrLogonSamLogonWithFlags()). What this means is that **any domain-joined machine can verify any pass-through authentication against the domain controller**, and to get the base key for cryptographic operations for any session within the domain.
 

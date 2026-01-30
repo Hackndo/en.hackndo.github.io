@@ -1,6 +1,7 @@
 ---
 title: "Silver & Golden Tickets"
 date: 2020-01-15 14:58:17
+last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
 permalink: /kerberos-silver-golden-tickets/

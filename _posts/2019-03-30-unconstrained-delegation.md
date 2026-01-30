@@ -1,6 +1,7 @@
 ---
 title: "Kerberos Delegation"
 date: 2020-04-18 12:17:22
+last_modified_at: 2024-08-04 17:21:53
 author: "Pixis"
 layout: post
 permalink: /constrained-unconstrained-delegation/
