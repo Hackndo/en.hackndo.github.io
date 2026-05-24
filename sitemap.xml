@@ -45,17 +45,21 @@ sitemap:
   </url>
   {% endfor %}
   <url>
-    <loc>https://en.hackndo.com/</loc>
-    <xhtml:link 
-              rel="alternate"
-              hreflang="en"
-              href="https://en.hackndo.com/"/>
-    <xhtml:link 
-              rel="alternate"
-              hreflang="fr"
-              href="https://beta.hackndo.com/"/>
-    
-      <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
-      
-    </url>
+    <loc>{{ site.url }}/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://beta.hackndo.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://en.hackndo.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://beta.hackndo.com/"/>
+    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+  </url>
+
+  {% for page in site.pages %}
+    {% if page.sitemap.exclude != 'yes' and page.layout and page.url contains '.html' == false and page.url != '/404.html' %}
+      {% unless page.url contains '/feed' or page.url contains '/sitemap' %}
+  <url>
+    <loc>{{ site.url }}{{ page.url }}</loc>
+    <lastmod>{% if page.last_modified_at %}{{ page.last_modified_at | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}</lastmod>
+  </url>
+      {% endunless %}
+    {% endif %}
+  {% endfor %}
 </urlset>
