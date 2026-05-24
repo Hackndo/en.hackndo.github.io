@@ -23,8 +23,6 @@ A quick post to let you know: I'm off to travel around the world! Departure on S
 
 Up to now, I've been more focused on appsys, while he'll be looking at the **network** side. It's an extremely interesting area as well, and I can't wait to see what he comes up with 😀
 
-On top of that, let me remind you of this post [Follow the white rabbit](/follow-the-white-rabbit/). There aren't that many validations. It's not too hard for you, is it? 😉
-
 Alright, off to your keyboards, and see you in 10 months!
 
 Love pisse flex.
