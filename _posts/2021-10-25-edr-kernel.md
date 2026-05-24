@@ -46,7 +46,7 @@ First of all, let's address the notion of a **process**. A process is somewhat t
 
 ### Virtual memory
 
-We've already talked about [virtual memory](https://beta.hackndo.com/memory-allocation/#m%C3%A9moire-virtuelle) in a previous article, so we won't detail the abstraction layer between virtual memory and physical memory. Let's recall however that although all processes share the same physical memory, they only have access to their own virtual memory. From each process's point of view, all of the memory is dedicated to it, and the other processes don't exist. For this to work, a page table is located between each process's virtual memory and physical memory. It's thanks to it that each process thinks it has access to all of physical memory.
+We've already talked about [virtual memory](/memory-allocation/#virtual-memory) in a previous article, so we won't detail the abstraction layer between virtual memory and physical memory. Let's recall however that although all processes share the same physical memory, they only have access to their own virtual memory. From each process's point of view, all of the memory is dedicated to it, and the other processes don't exist. For this to work, a page table is located between each process's virtual memory and physical memory. It's thanks to it that each process thinks it has access to all of physical memory.
 
 [![Virtual memory](/assets/uploads/2015/01/img_54b50ce3eda87.png)](/assets/uploads/2015/01/img_54b50ce3eda87.png)
 

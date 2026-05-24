@@ -4,7 +4,10 @@ date: 2015-06-11
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /wget-segfault-resume/
+permalink: /wget-segfault-summary/
+redirect_from:
+  - "/wget-segfault-resume/"
+  - "/wget-segfault-resume"
 disqus_identifier: 0000-0000-0000-0007
 description: "A segfault in wget? Technical analysis of the why and how to propose a patch!"
 cover: assets/uploads/2015/06/WGETSEGFAULT.jpg
@@ -12,7 +15,7 @@ tags:
   - "User Land"
   - Linux
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/wget-segfault-resume/
 ---
 Hi everyone, **winw** recently showed me something pretty cool. In a terminal, type the command
 

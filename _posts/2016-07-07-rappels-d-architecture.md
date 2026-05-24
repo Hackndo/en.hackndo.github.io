@@ -4,7 +4,10 @@ date: 2016-07-07  14:12:57
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /rappels-d-architecture/
+permalink: /architecture-basics/
+redirect_from:
+  - "/rappels-d-architecture/"
+  - "/rappels-d-architecture"
 disqus_identifier: 0000-0000-0000-0015
 description: "Computer architecture to go further into kernel exploitation."
 cover: assets/uploads/2016/07/kernel_3.jpg
@@ -12,7 +15,7 @@ tags:
   - "Kernel Land"
   - Linux
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/rappels-d-architecture/
 ---
 
 Before going further, we need to briefly talk about computer architecture. Indeed, in user-land, there's an abstraction layer that lets us not worry too much about the architecture (although it's still necessary to know calling conventions, the number of bits handled, etc.), whereas the kernel **is** this layer, so thinking we can write correct exploits without knowing the rudiments of computer architecture is clearly not imaginable.
@@ -38,7 +41,7 @@ When a series of instructions is being executed, it's possible that an event occ
 
 Each type of interrupt has a unique number associated with a routine to be executed. The CPU has a special register that tells us which routine corresponds to which interrupt number. This register points to the _Interrupt Vector Table_. As you can imagine, it would be interesting to modify this table...
 
-Since CPUs have two execution modes, privileged and non-privileged, as we mentioned in the introductory article on [the kernel world](/le-monde-du-kernel), it's possible, using instructions provided by the CPU in non-privileged mode, to make interrupts to execute privileged code, for example so that the kernel executes the faulty code, and thus exploit the vulnerability.
+Since CPUs have two execution modes, privileged and non-privileged, as we mentioned in the introductory article on [the kernel world](/the-kernel-world/), it's possible, using instructions provided by the CPU in non-privileged mode, to make interrupts to execute privileged code, for example so that the kernel executes the faulty code, and thus exploit the vulnerability.
 
 ## Memory management
 

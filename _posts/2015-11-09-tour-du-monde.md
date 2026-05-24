@@ -4,14 +4,17 @@ date: 2015-11-09  15:38:43
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /tour-du-monde/
+permalink: /around-the-world/
+redirect_from:
+  - "/tour-du-monde/"
+  - "/tour-du-monde"
 disqus_identifier: 0000-0000-0000-0011
 description: "A quick post to let you know: I'm off to travel around the world!"
 cover: assets/uploads/2015/11/DSC00791-copie2.jpg
 tags:
   - Misc
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/tour-du-monde/
 ---
 Hello everyone.
 

@@ -4,14 +4,17 @@ date: 2018-05-20 21:35:33
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /conventions-d-appel/
+permalink: /calling-conventions/
+redirect_from:
+  - "/conventions-d-appel/"
+  - "/conventions-d-appel"
 disqus_identifier: 0000-0000-0000-00a1
 cover: assets/uploads/2018/05/conventions-d-appel.png
 description: "Here is an article that is not really technical, not really complicated, and for which you can find documentation pretty much everywhere, but it's the kind of information that I read one day, that I forget a few weeks later, so that I want to summarize in my own words once and for all"
 tags:
   - Misc
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/conventions-d-appel/
 ---
 
 

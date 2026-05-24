@@ -89,7 +89,7 @@ If you didn't have time to look at the article on the basics of assembly, let's 
 
 The `gcc` (**G**NU **C**ompiler **C**ollection) command is a command on Linux that historically allowed to compile programs written in C, but which now allows to compile programs in different languages (C, C++, Java...).
 
-**gdb** (**G**NU Project **D**e**b**ugger) is a powerful debugger, completely command-line based. It allows, among other things, to disassemble a program, to launch it, to pause it during its execution, to read memory, to modify it during execution, and so on. You can also read the article [Introduction to GDB](/introduction-a-gdb/) to better understand how it works.
+**gdb** (**G**NU Project **D**e**b**ugger) is a powerful debugger, completely command-line based. It allows, among other things, to disassemble a program, to launch it, to pause it during its execution, to read memory, to modify it during execution, and so on. You can also read the article [Introduction to GDB](/introduction-to-gdb/) to better understand how it works.
 
 **Tip**: When we are in a gdb session, it is possible to pass it a large number of commands. As some of them can have very long names, or can be called extremely often, some abbreviations can be used. For example, the command to get information about the registers is **info registers** but it can be launched using the simple **i r** command.
 

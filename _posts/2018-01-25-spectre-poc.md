@@ -4,7 +4,10 @@ date: 2018-01-25 22:28:14
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /construction-poc-spectre/
+permalink: /spectre-poc/
+redirect_from:
+  - "/construction-poc-spectre/"
+  - "/construction-poc-spectre"
 disqus_identifier: 0000-0000-0000-001f
 cover: assets/uploads/2018/01/spectre_poc.png
 description: "Today, we're going to build a proof of concept of the Spectre attack to put into practice the theory of this attack presented in the previous article."
@@ -13,7 +16,7 @@ tags:
   - Linux
   - Hardware
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/construction-poc-spectre/
 ---
 
 Today, we're going to build a proof of concept (PoC - *Proof of Concept*) of the Spectre attack in order to put into practice the theory of this attack presented in the article [Meltdown and Spectre](/meltdown-spectre).

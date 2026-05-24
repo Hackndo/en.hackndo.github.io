@@ -4,7 +4,10 @@ date: 2015-09-15
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /technique-du-canari-bypass/
+permalink: /canary-bypass-technique/
+redirect_from:
+  - "/technique-du-canari-bypass/"
+  - "/technique-du-canari-bypass"
 disqus_identifier: 0000-0000-0000-0002
 description: "Explanation of the canary, and how to bypass it when forks are used"
 cover: assets/uploads/2015/09/9537298100_c67c2e1071_b.jpg
@@ -12,7 +15,7 @@ tags:
   - "User Land"
   - Linux
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/technique-du-canari-bypass/
 ---
 
 Hi, today I worked on a binary that used a technique to limit the damage caused by a buffer overflow. It is called **Stack-Smashing Protector** (also known as SSP). It is a gcc extension. In the case of the binary I studied, to protect against buffer overflows, gcc adds a secret value on the stack, called the **canary**, just before the saved EBP. A buffer overflow is generally used to overwrite the saved EIP, which is located right after the saved EBP. So if that happened, the secret value would also be overwritten. A check on this value is performed before exiting the function, and if it has been modified, the program terminates abruptly and throws tomatoes at our face.
@@ -215,7 +218,7 @@ Here is a diagram that summarizes this brute force for a 32-bit system:
 
 In the first drawing at the top left, we see the buffer stopping just before the canary, the latter having a value that is still unknown to us. We then add a byte to the buffer, `\x00`, to overwrite the first byte of the canary. But since it's not the right byte, the program closes. We then try the next byte `\x01` but the program closes again. When we try `\xCA`, this time everything's fine. We discovered the first secret byte! We then move on to the second byte (second column in this diagram), and so on until we discover the canary in its entirety!
 
-Once this value is discovered, all that is left is to perform a classic buffer overflow exploitation. For that, I advise you to read the article on [buffer overflows](/buffer-overflow/) or the one on [return to libc](/retour-a-la-libc/).
+Once this value is discovered, all that is left is to perform a classic buffer overflow exploitation. For that, I advise you to read the article on [buffer overflows](/buffer-overflow/) or the one on [return to libc](/return-to-libc/).
 
 To your keyboards!
 </content>

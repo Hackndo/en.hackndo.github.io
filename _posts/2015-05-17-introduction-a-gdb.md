@@ -4,14 +4,17 @@ date: 2015-05-17
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /introduction-a-gdb/
+permalink: /introduction-to-gdb/
+redirect_from:
+  - "/introduction-a-gdb/"
+  - "/introduction-a-gdb"
 disqus_identifier: 0000-0000-0000-0009
 description: "GDB is an extremely powerful tool. Here is an article that introduces it with a hands-on application."
 cover: assets/uploads/2015/05/gdb_visual.jpg
 tags:
     - Linux
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/introduction-a-gdb/
 ---
 
 Let the programmer who has never put `printf`, `var_dump`, `echo`, `print`, `System.out`, `console.log`, `cout` all over their code to find out where a bug came from come forward. Let the programmer who has never torn their hair out over a program that crashed violently without warning throw the first stone (It's an expression, eh!). Fortunately, there is a plethora of debuggers, free or not, one of which is particularly well known, the GNU debugger named **GDB** (GNU Project Debugger), which we are going to introduce in this introduction.

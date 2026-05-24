@@ -402,7 +402,7 @@ With this calculation in mind, the attacker can extract any byte from the memory
 
 These two attacks are getting a lot of attention because there is no obvious and simple way to patch them, and therefore to protect against them.
 
-Regarding Meltdown, it is for example possible to completely change the memory management mode by ensuring that the kernel and the process have two separate address spaces, as we saw in the article [the kernel world](/le-monde-du-kernel/). Thus, we can switch from the left mode (sharing address space) to the right mode (separation of address spaces)
+Regarding Meltdown, it is for example possible to completely change the memory management mode by ensuring that the kernel and the process have two separate address spaces, as we saw in the article [the kernel world](/the-kernel-world/). Thus, we can switch from the left mode (sharing address space) to the right mode (separation of address spaces)
 
 [![Different address spaces](/assets/uploads/2016/06/Screen-Shot-2016-06-14-at-23.30.17.png)](/assets/uploads/2016/06/Screen-Shot-2016-06-14-at-23.30.17.png)
 

@@ -4,18 +4,19 @@ date: 2017-09-19  15:36:12
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /la-faille-xss/
-permalink: /attaque-xss/
+permalink: /xss-attack/
 redirect_from:
-  - "/la-faille-xss"
+  - "/attaque-xss/"
+  - "/attaque-xss"
   - "/la-faille-xss/"
+  - "/la-faille-xss"
 disqus_identifier: 0000-0000-0000-001a
 description: "In this article, we'll talk about the XSS (Cross Site Scripting) attack, explaining how it works and how it can be truly dangerous."
 cover: assets/uploads/2017/09/xss_cover.png
 tags:
   - Web
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/la-faille-xss/
 ---
 
 In this article, we're going to talk about the XSS (Cross Site Scripting) attack, explaining how it works and how it can be truly dangerous. To do this, we'll explain in a very simple way how this attack works, and then we'll run through a complete, concrete example, allowing us to take control of a victim's machine.

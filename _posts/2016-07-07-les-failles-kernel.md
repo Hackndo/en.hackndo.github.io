@@ -4,7 +4,10 @@ date: 2016-07-07  10:38:42
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /les-failles-kernel/
+permalink: /kernel-vulnerabilities/
+redirect_from:
+  - "/les-failles-kernel/"
+  - "/les-failles-kernel"
 disqus_identifier: 0000-0000-0000-0014
 description: "What are the kernel-related vulnerabilities? We're going to find out in this article."
 cover: assets/uploads/2016/07/kernel_2.jpg
@@ -12,10 +15,10 @@ tags:
   - "Kernel Land"
   - Linux
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/les-failles-kernel/
 ---
 
-With the introductory article on [the kernel world](/le-monde-du-kernel/), we have all the general theoretical elements that allow us to understand why it's interesting to find flaws in the kernel.
+With the introductory article on [the kernel world](/the-kernel-world/), we have all the general theoretical elements that allow us to understand why it's interesting to find flaws in the kernel.
 
 So we'll now look at what these flaws are. No, we're not yet going to get our hands dirty. But this world is so vast that it's necessary to have a global view before diving in head first. You'll see, it remains interesting nonetheless.
 
@@ -130,4 +133,4 @@ But sometimes code snippets forget to notify the kernel that they no longer need
 
 * * *
 
-There we go, we've gone through the major bugs encountered that can lead to kernel exploitation. But then, how do we exploit them? For that, we need a few necessary reminders about [computer architecture](/rappels-d-architecture).
+There we go, we've gone through the major bugs encountered that can lead to kernel exploitation. But then, how do we exploit them? For that, we need a few necessary reminders about [computer architecture](/architecture-basics/).

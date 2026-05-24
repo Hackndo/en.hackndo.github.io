@@ -634,7 +634,7 @@ There we go, we also managed to pop a shell on the binary by exploiting a buffer
 
 I also made a video with a buffer overflow exploitation as in case 1; you can [find it here](https://www.youtube.com/watch?v=V7Gdc32XRhA){:target="blank"}. (The video is in French.)
 
-I hope this **buffer overflow tutorial** article has been helpful. However, there are some protections against this type of exploitation, such as making the stack non-executable. At that point, no panic, you can still get a shell, with, for example, the [return to libc](/retour-a-la-libc/) technique. Have fun!
+I hope this **buffer overflow tutorial** article has been helpful. However, there are some protections against this type of exploitation, such as making the stack non-executable. At that point, no panic, you can still get a shell, with, for example, the [return to libc](/return-to-libc/) technique. Have fun!
 
 Feel free to comment and share if you liked it!
 </content>

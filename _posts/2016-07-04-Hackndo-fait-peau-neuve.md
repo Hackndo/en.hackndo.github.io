@@ -4,14 +4,17 @@ date: 2016-07-04  09:17:43
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /hackndo-fait-peau-neuve/
+permalink: /hackndo-new-look/
+redirect_from:
+  - "/hackndo-fait-peau-neuve/"
+  - "/hackndo-fait-peau-neuve"
 disqus_identifier: 0000-0000-0000-0012
 description: "Welcome to the brand new version of the Hackndo blog."
 cover: assets/uploads/2016/07/beta_hackndo_com.jpg
 tags:
   - Misc
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/hackndo-fait-peau-neuve/
 ---
 
 Welcome to the brand new version of the Hackndo blog.

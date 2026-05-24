@@ -4,14 +4,17 @@ date: 2014-07-25 19:38:43
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /libre-opensource-freeware/
+permalink: /free-open-source-freeware/
+redirect_from:
+  - "/libre-opensource-freeware/"
+  - "/libre-opensource-freeware"
 disqus_identifier: 0000-0000-0000-0010
 description: "Free software, open source, freeware - do these ring any bells? Probably, because these terms are at the heart of today's technologies and are deeply rooted in the software market."
 cover: assets/uploads/2014/07/lock.png
 tags:
   - Misc
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/libre-opensource-freeware/
 ---
 
 Free software, open source, freeware - do these ring any bells? Probably, because these terms are at the heart of today's technologies and are deeply rooted in the software market.

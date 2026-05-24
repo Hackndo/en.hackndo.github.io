@@ -129,7 +129,7 @@ I won't go into details, but the idea is that the server will send different ele
 
 The domain controller will look for the user's NT hash in its database. For the domain controller, it's not in the SAM, since it's a domain account that tries to authenticate. This time it is in a file called **NTDS.DIT**, which is the database of all domain users. Once the NT hash is retrieved, it will compute the expected response with this hash and the challenge, and will compare this result with the client's response.
 
-A message will then be sent to the server ([NETLOGON_VALIDATION_SAM_INFO4](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/bccfdba9-0c38-485e-b751-d4de1935781d)) indicating whether or not the client is authenticated, and it will also send a bunch of information about the user. This is the same information that is found in the [PAC](https://beta.hackndo.com/kerberos-silver-golden-tickets/#pac) when [Kerberos authentication](https://beta.hackndo.com/kerberos/) is used.
+A message will then be sent to the server ([NETLOGON_VALIDATION_SAM_INFO4](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/bccfdba9-0c38-485e-b751-d4de1935781d)) indicating whether or not the client is authenticated, and it will also send a bunch of information about the user. This is the same information that is found in the [PAC](/kerberos-silver-golden-tickets/#pac) when [Kerberos authentication](/kerberos/) is used.
 
 So to summarize, here is the verification process with a domain controller.
 
@@ -197,7 +197,7 @@ ADSEC\HelpDesk
 
 So we have the `ADSEC\HelpDesk` domain group which is member of the host's local administrators group. If an attacker steals the NT hash from one of the members of this group, he can authenticates on all hosts with `ADSEC\HelpDesk` in the administrators list.
 
-The advantage over the local account is that whatever master is used to set up the machines, the group will be added by [GPO](https://beta.hackndo.com/gpo-abuse-with-edit-settings/#group-policy-object) to the host's configuration. Chances are greater that this account will have more extensive administrative rights, independent of OS and machine setup processes.
+The advantage over the local account is that whatever master is used to set up the machines, the group will be added by [GPO](/gpo-abuse-with-edit-settings/#group-policy-object) to the host's configuration. Chances are greater that this account will have more extensive administrative rights, independent of OS and machine setup processes.
 
 So when authentication is requested, the server will delegate authentication to the domain controller, and if authentication succeeds, then the domain controller will send the server information about the user such as his name, the **list of groups the user belongs to**, the password expiration date, etc.
 

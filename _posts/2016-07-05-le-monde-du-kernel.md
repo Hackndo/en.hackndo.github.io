@@ -4,7 +4,10 @@ date: 2016-07-05  17:48:43
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /le-monde-du-kernel/
+permalink: /the-kernel-world/
+redirect_from:
+  - "/le-monde-du-kernel/"
+  - "/le-monde-du-kernel"
 disqus_identifier: 0000-0000-0000-0013
 description: "When you use your computer every day, browsing the internet, watching movies, or even coding, a huge machinery is at work behind the scenes to make your life easier."
 cover: assets/uploads/2016/07/kernel_1.jpg
@@ -12,7 +15,7 @@ tags:
   - "Kernel Land"
   - Linux
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/le-monde-du-kernel/
 ---
 
 Hello everyone. Today I'm starting a series of articles about the kernel world. I should mention upfront that the book "A guide to kernel exploitation - Exploiting the core" is the main source for this series.
@@ -85,4 +88,4 @@ Since the kernel memory is replicated for all processes, we can create our own p
 
 * * *
 
-So, ready to dive into this new world? The next part with [kernel vulnerabilities](/les-failles-kernel)
+So, ready to dive into this new world? The next part with [kernel vulnerabilities](/kernel-vulnerabilities/)

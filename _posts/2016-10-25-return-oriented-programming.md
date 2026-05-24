@@ -21,24 +21,24 @@ This article aims to explain clearly what ROP or Return Oriented Programming is.
 
 ## Reminders
 
-We have seen in previous articles two techniques of exploitation following a buffer overflow. The first one was a [simple introduction and exploitation of buffer overflow (stack-based)](https://beta.hackndo.com/buffer-overflow/) when we had no protection. The stack was executable and the Address Space Layout Randomization (ASLR) was not activated. We will come back to these protections in the following.
-We then detailed a technique that could be used when the stack was no longer executable. For that, you can read the article about the [return to libc](https://beta.hackndo.com/retour-a-la-libc/), but this one doesn't work anymore when the ASLR is activated.
+We have seen in previous articles two techniques of exploitation following a buffer overflow. The first one was a [simple introduction and exploitation of buffer overflow (stack-based)](/buffer-overflow/) when we had no protection. The stack was executable and the Address Space Layout Randomization (ASLR) was not activated. We will come back to these protections in the following.
+We then detailed a technique that could be used when the stack was no longer executable. For that, you can read the article about the [return to libc](/return-to-libc/), but this one doesn't work anymore when the ASLR is activated.
 This article aims at exposing a new exploitation technique, the ROP (Return Oriented Programming) which allows, in spite of these various protections, to divert the execution flow of a program in order to take control of it.
 
 ## Theory
 ### ASLR
 
-When you run a program, the headers of the binary are supposed to give the location of the different segments/sections. Thus, each time you run the binary, the addresses do not vary. The stack always starts at the same place, the same for the heap, as well as the segments of the binary (But yes! You know, we explained everything in the article about [memory management](https://beta.hackndo.com/memory-allocation/)).
+When you run a program, the headers of the binary are supposed to give the location of the different segments/sections. Thus, each time you run the binary, the addresses do not vary. The stack always starts at the same place, the same for the heap, as well as the segments of the binary (But yes! You know, we explained everything in the article about [memory management](/memory-allocation/)).
 Well, ASLR is a protection in the kernel that will make some address spaces random. Generally, the stack, the heap and the libraries are impacted. It is then no longer possible to find the address of a shellcode placed on the stack, or the address of the `system` function in the libc. This is very annoying.
 But don't worry, ROP is here to save us.
 
 ### ROP - Return Oriented Programming
 
-If you had been following the article on the [return to libc](https://beta.hackndo.com/retour-a-la-libc/), then you should know that it was a kind of introduction to ROP.
+If you had been following the article on the [return to libc](/return-to-libc/), then you should know that it was a kind of introduction to ROP.
 We are still in the same context. A binary is vulnerable to buffer overflow. However, this binary has the two protections we have mentioned
 
 - **NX** : This is the common name for the protection that makes the stack **N**on-e**X**ecutable. No more shellcode on the stack, either in the buffer or in environment variables.
-- **ASLR** : In addition to not being executable anymore, the stack moves from one execution to another, just like the heap or the libraries. So this time, we can't find the address of `system` for sure as we did in the article about the [return to libc](https://beta.hackndo.com/retour-a-la-libc/).
+- **ASLR** : In addition to not being executable anymore, the stack moves from one execution to another, just like the heap or the libraries. So this time, we can't find the address of `system` for sure as we did in the article about the [return to libc](/return-to-libc/).
 
 To overcome these two protections, we need to find an exploitation technique that does not execute anything on the stack, and that uses information that does not move from one execution to another. For this, we will use code that has already been created. And what could be easier than using the code of the binary we want to exploit?
 

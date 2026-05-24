@@ -4,14 +4,17 @@ date: 2018-09-26 07:35:33
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /evenement-sigsegv1/
+permalink: /sigsegv1-event/
+redirect_from:
+  - "/evenement-sigsegv1/"
+  - "/evenement-sigsegv1"
 disqus_identifier: 0000-0000-0000-00a2
 cover: assets/uploads/2018/09/rtfm.png
 description: "Our association aims to create a French event on the theme of hacking on December 1st 2018 at the 42 school."
 tags:
   - Misc
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/evenement-sigsegv1/
 ---
 
 I'd like to tell you about a big project we've put together with friends around hacking. For the past year, we've been working on the organization of a 24-hour hacking event that will take place on December 1st, 2018.

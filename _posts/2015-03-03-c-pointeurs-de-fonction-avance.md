@@ -4,14 +4,17 @@ date: 2015-03-03
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /c-pointeurs-de-fonction/
+permalink: /c-function-pointers/
+redirect_from:
+  - "/c-pointeurs-de-fonction/"
+  - "/c-pointeurs-de-fonction"
 disqus_identifier: 0000-0000-0000-000C
 description: "Here is a quick memo about function pointers."
 cover: assets/uploads/2015/03/shellcode.jpg
 tags:
     - Misc
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/c-pointeurs-de-fonction/
 ---
 Here is a quick memo about function pointers. As a reminder, a pointer is a variable that contains the memory address of a piece of data. The data can be an int, a float, an array, etc. But it can also be the address of a function. But what does the address of a function mean?
 

@@ -4,7 +4,10 @@ date: 2015-05-24 15:38:43
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /retour-a-la-libc/
+permalink: /return-to-libc/
+redirect_from:
+  - "/retour-a-la-libc/"
+  - "/retour-a-la-libc"
 disqus_identifier: 0000-0000-0000-0008
 description: "Article about return to libc, with theory and examples"
 cover: assets/uploads/2015/05/retli.jpg
@@ -12,7 +15,7 @@ tags:
   - "User Land"
   - Linux
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/retour-a-la-libc/
 ---
 
 Hello, in the previous series of articles we saw how a process's memory works within a Unix system. With this understanding, we exposed a very well-known vulnerability: stack-based buffer overflow.

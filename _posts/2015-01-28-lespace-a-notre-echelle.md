@@ -4,14 +4,17 @@ date: 2015-01-28
 last_modified_at: 2024-06-04 11:37:10
 author: "Pixis"
 layout: post
-permalink: /lespace-a-notre-echelle/
+permalink: /space-at-our-scale/
+redirect_from:
+  - "/lespace-a-notre-echelle/"
+  - "/lespace-a-notre-echelle"
 disqus_identifier: 0000-0000-0000-000D
 description: "Space is big, very big. As soon as we start talking about the universe, we quickly end up talking in light-years, millions, billions, and more. But in the end, we can't really grasp it, we can't picture it."
 cover: assets/uploads/2015/01/LH_95.jpg
 tags:
   - Misc
 translation:
-  fr: 
+  fr: https://beta.hackndo.com/lespace-a-notre-echelle/
 ---
 
 Space is big, very big. As soon as we start talking about the universe, we quickly end up talking in light-years, millions, billions, and more. But in the end, we can't really grasp it, we can't picture it. What does 15 billion light-years actually mean? And by the way, what is a light-year? To get a clearer idea, all we have to do is divide the distances by a billion, and we quickly realize what it all means. For your information, a light-year is a distance equal to the distance traveled by light in one year, or 9,461 billion kilometers.

@@ -15,13 +15,13 @@ translation:
   fr: 
 ---
 
-We've looked at various vulnerabilities that involved the stack as a result of overflows ([Buffer Overflow](/buffer-overflow/), [Ret2Libc](/retour-a-la-libc/), [ROP](/return-oriented-programming)). Today, we are going to discover together a new memory area, the heap, while detailing a vulnerability that is relatively common in recent programs, called "use-after-free".
+We've looked at various vulnerabilities that involved the stack as a result of overflows ([Buffer Overflow](/buffer-overflow/), [Ret2Libc](/return-to-libc/), [ROP](/return-oriented-programming)). Today, we are going to discover together a new memory area, the heap, while detailing a vulnerability that is relatively common in recent programs, called "use-after-free".
 
 <!--more-->
 
 ## The Heap
 
-Unlike the stack, whose operation was explained in [this article](https://beta.hackndo.com/stack-introduction/), the *heap* is a memory area used for dynamic allocations. To that end, any memory space in the *heap* can be used at any time. There is no longer any notion of push or pop. Any block can be allocated or freed at any time.
+Unlike the stack, whose operation was explained in [this article](/stack-introduction/), the *heap* is a memory area used for dynamic allocations. To that end, any memory space in the *heap* can be used at any time. There is no longer any notion of push or pop. Any block can be allocated or freed at any time.
 
 We understand quite intuitively that this system is much more flexible, but in return, it is slower and more complex, since we need to keep track of the memory's state in order to know whether a block is allocated or not.
 

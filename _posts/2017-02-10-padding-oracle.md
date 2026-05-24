@@ -35,7 +35,7 @@ In this article we are going to look at the CBC mode of block ciphers, which add
 
 ### Padding
 
-Whereas we talked about the padding used by hash functions in the article on [Hash Length Extension](http://beta.hackndo.com/hash-length-extension){:target="blank"}, here we will look at a padding technique mostly used in block ciphers, [PKCS](https://en.wikipedia.org/wiki/PKCS){:target="blank"}7, whose operation is described in [RFC 5652](https://tools.ietf.org/html/rfc5652#section-6.3){:target="blank"}.
+Whereas we talked about the padding used by hash functions in the article on [Hash Length Extension](/hash-length-extension){:target="blank"}, here we will look at a padding technique mostly used in block ciphers, [PKCS](https://en.wikipedia.org/wiki/PKCS){:target="blank"}7, whose operation is described in [RFC 5652](https://tools.ietf.org/html/rfc5652#section-6.3){:target="blank"}.
 
 Let N be the block size in bytes. If M bytes are missing in the last block, we add the character '0xM' M times at the end of the block.
 
