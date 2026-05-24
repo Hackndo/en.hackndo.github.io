@@ -1,40 +1,38 @@
 <!doctype html>
-<html lang="en-us" class="no-js">
+<html lang="en-us">
 
   {% include head.html %}
 
   <body>
-    {% include header.html %}
-    <main class="cd-main-content">
-		<nav class="cd-side-nav">
-            {% include sidebar.html %}
-        </nav>
+    <a class="skip-link" href="#content">Skip to content</a>
 
-        <div class="content-wrapper">
+    {% include header.html %}
+
+    <div class="layout">
+      {% include sidebar.html %}
+
+      <main class="content" id="content">
+        <div class="container">
           {% if page.url == "/" %}
-          <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png" alt="french flag" /></a></p>
-          {% else %}
-            {% for post in site.posts %}
-              {% if post.permalink == page.url %}
-                {% for lang in post.translation %}
-                  {% if lang[0] == "fr" %}
-                    {% if lang[1] == nil %}
-                      <p class="lang"><a href="https://beta.hackndo.com{{ page.url }}"><img src="/assets/icones/fr.png" alt="french flag" /></a></p>
-                    {% else %}
-                      <p class="lang"><a href="{{ lang[1] }}"><img src="/assets/icones/fr.png" alt="french flag" /></a></p>
-                    {% endif %}
-                    {% break %}
-                  {% endif %}
-                {% endfor %}
+            <p class="lang-switch"><a href="https://beta.hackndo.com{{ page.url }}" hreflang="fr" aria-label="Read in French"><img src="/assets/icones/fr.png" alt="French version" /></a></p>
+          {% elsif page.translation %}
+            {% for lang in page.translation %}
+              {% if lang[0] == "fr" %}
+                {% if lang[1] %}
+                  <p class="lang-switch"><a href="{{ lang[1] }}" hreflang="fr" aria-label="Read in French"><img src="/assets/icones/fr.png" alt="French version" /></a></p>
+                {% else %}
+                  <p class="lang-switch"><a href="https://beta.hackndo.com{{ page.url }}" hreflang="fr" aria-label="Read in French"><img src="/assets/icones/fr.png" alt="French version" /></a></p>
+                {% endif %}
+                {% break %}
               {% endif %}
             {% endfor %}
           {% endif %}
           {{ content }}
         </div>
-    </main>
-    <script src="/assets/js/jquery-2.1.4.js"></script>
-    <script src="/assets/js/jquery.menu-aim.js"></script>
-    <script src="/assets/js/anchor.min.js"></script>
-    <script src="/assets/js/main.js"></script> <!-- Resource jQuery -->
+      </main>
+    </div>
+
+    <script src="/assets/js/anchor.min.js" defer></script>
+    <script src="/assets/js/main.js" defer></script>
   </body>
 </html>

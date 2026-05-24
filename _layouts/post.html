@@ -3,59 +3,52 @@ layout: default
 comments: true
 ---
 
-<div class="post">
+<article class="post">
   {% if page.cover %}
-  <div class="post-cover">
-    <img src="/{{ page.cover }}" alt="{{ page.title }}" title="{{ page.title }}" />
-  </div>
+  <figure class="post__cover">
+    <img src="/{{ page.cover }}" alt="{{ page.title }}" decoding="async" />
+  </figure>
   {% endif %}
-  <h1 class="post-title">{{ page.title }}</h1>
-  <div class="post-info">
-    <p class="alignleft">{{ page.date | date_to_string }}{% if page.last_modified_at and page.last_modified_at != page.date %} · Updated: {{ page.last_modified_at | date_to_string }}{% endif %}</p>
-    <p class="alignright">Author : <strong><a href="https://twitter.com/HackAndDo">{{ page.author }}</a></strong></p>
-      <div class="keywords">
-        <span class="post-tags">{% for tag in page.tags %}<a href="/archives/#{{ tag | slugify }}"><i class="fas fa-tags"></i> {{ tag }}</a>{% endfor %}</span>
-      </div>
-</div>
 
-  <article>
-  {{ content }}
-  </article>
-</div>
-<div class="keywords">
-    <span class="post-tags">{% for tag in page.tags %}<a href="/archives/#{{ tag | slugify }}"><i class="fas fa-tags"></i> {{ tag }}</a>{% endfor %}</span>
+  <header class="post__header">
+    <h1 class="post__title">{{ page.title }}</h1>
+    <p class="post__meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_string }}</time>
+      {% if page.last_modified_at and page.last_modified_at != page.date %}<span>· Updated {{ page.last_modified_at | date_to_string }}</span>{% endif %}
+      <span class="post__read">{{ content | number_of_words | divided_by: 200.0 | ceil }} min read</span>
+      <span class="post__author">Author: <a href="https://twitter.com/HackAndDo" rel="author">{{ page.author }}</a></span>
+    </p>
+    {% if page.tags.size > 0 %}
+    <ul class="tags">
+      {% for tag in page.tags %}<li><a href="/archives/#{{ tag | slugify }}">{% include icon-tag.svg %} {{ tag }}</a></li>{% endfor %}
+    </ul>
+    {% endif %}
+  </header>
+
+  <div class="post__content">
+    {{ content }}
   </div>
+</article>
 
 {% if page.author == "Pixis" %}
-<br />
-<div class="box">
-  <div class="dash">
-    <div class="picture">
-      <img src="/assets/icones/pixis_logo.png" alt="hackndo logo" title="logo" />
-    </div>
-    <div class="box_content">
-      <strong>Author</strong> : <a href="/contact/" target="_blank">{{ page.author }}</a><br />
-      Blog author, follow me on <a href="https://twitter.com/HackAndDo/" target="_blank">twitter</a> or <a href="https://discord.hackndo.com" target="blank">discord</a>
-    </div>
-    
+<aside class="author-card" aria-label="About the author">
+  <img class="author-card__avatar" src="/assets/icones/pixis_logo.png" alt="" width="72" height="72" />
+  <div class="author-card__body">
+    <strong>Author</strong>: <a href="/contact/">{{ page.author }}</a><br />
+    Blog author, follow me on <a href="https://twitter.com/HackAndDo/" target="_blank" rel="noopener">twitter</a> or <a href="https://discord.hackndo.com" target="_blank" rel="noopener">discord</a>
   </div>
-</div>
+</aside>
 {% endif %}
 
-<div class="related">
+<section class="related" aria-label="Similar posts">
   <h2>Similar posts</h2>
-  <ul class="related-posts">
+  <ul class="related__list">
     {% for post in site.related_posts limit:3 %}
       <li>
-        <h3>
-          <a href="{{ post.url }}">
-            {{ post.title }}
-            <small>{{ post.date | date_to_string }}</small>
-          </a>
-        </h3>
+        <a href="{{ post.url }}">{{ post.title }} <small><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_string }}</time></small></a>
       </li>
     {% endfor %}
   </ul>
-</div>
+</section>
 
 {% include disqus.html %}
