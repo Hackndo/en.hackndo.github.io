@@ -16,7 +16,7 @@ cover: assets/uploads/2017/09/xss_cover.png
 tags:
   - Web
 translation:
-  fr: https://beta.hackndo.com/la-faille-xss/
+  fr: https://beta.hackndo.com/attaque-xss/
 ---
 
 In this article, we're going to talk about the XSS (Cross Site Scripting) attack, explaining how it works and how it can be truly dangerous. To do this, we'll explain in a very simple way how this attack works, and then we'll run through a complete, concrete example, allowing us to take control of a victim's machine.
