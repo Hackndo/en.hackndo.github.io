@@ -11,26 +11,14 @@ sitemap:
     <loc>{{ site.url }}{{ post.url }}</loc>
 
     {% if post.translation %}
-      {% for lang in post.translation %}
-        {% if lang[1] != nil %}
-        <xhtml:link 
-                 rel="alternate"
-                 hreflang="{{ lang[0] }}"
-                 href="{{ lang[1] }}"/>
-
-        {% else %}
-          <xhtml:link 
-                 rel="alternate"
-                 hreflang="{{ lang[0] }}"
-                 href="https://{{ lang[0] }}.hackndo.com{{ post.url }}"/>
-        {% endif %}
-      
-
-      {% endfor %}
-      <xhtml:link 
-               rel="alternate"
-               hreflang="en"
-               href="{{ site.url }}{{ post.url }}"/>
+      <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}{{ post.url }}"/>
+      {% if post.translation.fr and post.translation.fr != "" %}
+        {% assign fr_url = post.translation.fr %}
+      {% else %}
+        {% capture fr_url %}https://beta.hackndo.com{{ post.url }}{% endcapture %}
+      {% endif %}
+      <xhtml:link rel="alternate" hreflang="fr" href="{{ fr_url }}"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="{{ fr_url }}"/>
     {% endif %}
 
     {% if post.last_modified_at %}
